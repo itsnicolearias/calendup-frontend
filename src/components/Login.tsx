@@ -9,15 +9,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { useRouter } from 'next/navigation';
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+const router = useRouter();
+
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
-
+    
   try {
     const response = await fetch('http://localhost:4000/api/auth/login', {
       method: 'POST',
@@ -35,6 +38,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     const data = await response.json();
     console.log('Registro exitoso:', data);
     // Podés redirigir o mostrar un mensaje de éxito
+    router.push('/dashboard')
   } catch (err) {
     console.error('Error al registrar:', err);
   }
@@ -200,7 +204,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 ¿No tienes una cuenta?{" "}
-                <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+                <a href="/register" className="text-blue-600 hover:text-blue-800 font-medium">
                   Regístrate aquí
                 </a>
               </p>

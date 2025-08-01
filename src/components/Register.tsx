@@ -8,8 +8,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from "lucide-react"
+import { useRouter } from "next/router"
 
 export default function Component() {
+    const router = useRouter();
+    
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
@@ -185,7 +188,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 ¿Ya tienes una cuenta?{" "}
-                <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+                <a href="/login" className="text-blue-600 hover:text-blue-800 font-medium">
                   Inicia sesión aquí
                 </a>
               </p>
