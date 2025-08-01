@@ -38,6 +38,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     const data = await response.json();
     console.log('Registro exitoso:', data);
     // Podés redirigir o mostrar un mensaje de éxito
+    localStorage.setItem('token', data.token);
     router.push('/dashboard')
   } catch (err) {
     console.error('Error al registrar:', err);
