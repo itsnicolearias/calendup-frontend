@@ -259,11 +259,21 @@ useEffect(() => {
               <Button
                 variant="outline"
                 className="flex-1 bg-transparent"
-                onClick={() => {
-                  setAppointments((prev) =>
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem('token')
+
+                    await updateAppointment({ appointmentId: selectedAppointment.appointmentId, status: "confirmed" }, token)
+
+                    setAppointments((prev) =>
                     prev.map((apt) => (apt.appointmentId === selectedAppointment.appointmentId ? { ...apt, status: "confirmed" } : apt)),
                   )
                   setSelectedAppointment(null)
+
+                  } catch (error) {
+                    console.error(error)
+                  }
+                  
                 }}
               >
                 Confirmar
@@ -271,11 +281,20 @@ useEffect(() => {
               <Button
                 variant="outline"
                 className="flex-1 bg-transparent"
-                onClick={() => {
-                  setAppointments((prev) =>
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem('token')
+
+                    await updateAppointment({ appointmentId: selectedAppointment.appointmentId, status: "cancelled" }, token)
+
+                    setAppointments((prev) =>
                     prev.map((apt) => (apt.appointmentId === selectedAppointment.appointmentId ? { ...apt, status: "cancelled" } : apt)),
                   )
                   setSelectedAppointment(null)
+                    
+                  } catch (error) {
+                    console.error(error)
+                  }                       
                 }}
               >
                 Rechazar

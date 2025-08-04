@@ -160,7 +160,6 @@ export default function Component() {
                 placeholder="Ingrese su número de celular"
                 value={formData.phone}
                 onChange={handleInputChange}
-                required
               />
             </div>
 

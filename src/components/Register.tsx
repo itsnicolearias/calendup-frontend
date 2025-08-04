@@ -8,11 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from "lucide-react"
-import { useRouter } from "next/router"
 import { registerUser } from "@/services/auth"
 
 export default function Component() {
-    const router = useRouter();
     
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
