@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useRouter } from 'next/navigation';
+import { loginUser } from "@/services/auth"
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false)
@@ -22,20 +23,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
     
   try {
-    const response = await fetch('http://localhost:4000/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error en el registro');
-    }
-
-    const data = await response.json();
+    const data = await loginUser({email, password})
     console.log('Registro exitoso:', data);
     // Podés redirigir o mostrar un mensaje de éxito
     localStorage.setItem('token', data.token);

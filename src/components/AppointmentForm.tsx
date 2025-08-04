@@ -13,6 +13,7 @@ import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
+import { createAppointment } from "@/services/appointments"
 
 export default function Component() {
 
@@ -65,23 +66,7 @@ export default function Component() {
 
       formData.professionalId = searchParams.get("professionalId") || ""
 
-      console.log("Datos del formulario:", formData);
-
-    const response = await fetch('http://localhost:4000/api/appointments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      toast.error("Error al solicitar el turno")
-      throw new Error(errorData.message || 'Error en el registro');
-    }
-
-    const data = await response.json();
+    const data = await createAppointment(formData);
     console.log('Creacion exitosa:', data);
     // Podés redirigir o mostrar un mensaje de éxito
     toast.success("Turno solicitado con éxito", {

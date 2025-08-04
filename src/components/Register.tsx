@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from "lucide-react"
 import { useRouter } from "next/router"
+import { registerUser } from "@/services/auth"
 
 export default function Component() {
     const router = useRouter();
@@ -33,20 +34,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   try {
-    const response = await fetch('http://localhost:4000/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error en el registro');
-    }
-
-    const data = await response.json();
+    const data = await registerUser(formData)
     console.log('Registro exitoso:', data);
     // Podés redirigir o mostrar un mensaje de éxito
   } catch (err) {
