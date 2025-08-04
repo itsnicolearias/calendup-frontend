@@ -17,4 +17,14 @@ export const createAppointment = async (data: Partial<Appointment>) => {
   })
 }
 
+export const updateAppointment = async (data: Partial<Appointment>, token: string | null ) => {
+  return apiFetch(`/appointments/${data.appointmentId}`, {
+    method: "PUT",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
 
+    },
+    body: JSON.stringify(data),
+  })
+}

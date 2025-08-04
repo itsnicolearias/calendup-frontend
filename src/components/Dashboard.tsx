@@ -40,7 +40,7 @@ import { format, addDays } from "date-fns"
 import { es } from "date-fns/locale"
 import { Appointment, AppointmentStatus } from "@/types/appointments"
 import { useRouter } from "next/navigation"
-import { getAppointments } from "@/services/appointments"
+import { getAppointments, updateAppointment } from "@/services/appointments"
 
 export default function Component() {
 
@@ -122,7 +122,7 @@ useEffect(() => {
     e.dataTransfer.dropEffect = "move"
   }
 
-  const handleDrop = (e: React.DragEvent, newStatus: AppointmentStatus) => {
+  const handleDrop = async (e: React.DragEvent, newStatus: AppointmentStatus) => {
     e.preventDefault()
     if (draggedItem) {
       setAppointments((prev) =>
@@ -130,6 +130,22 @@ useEffect(() => {
           appointment.appointmentId === draggedItem.appointmentId ? { ...appointment, status: newStatus } : appointment,
         ),
       )
+
+      try {
+        const token = localStorage.getItem('token');
+        await updateAppointment({ appointmentId: draggedItem.appointmentId, status: newStatus }, token)
+      } catch (error) {
+        console.error(error);
+
+        // revertir si falló
+      setAppointments((prev) =>
+        prev.map((appointment) =>
+          appointment.appointmentId === draggedItem.appointmentId
+            ? { ...appointment, status: draggedItem.status }
+            : appointment,
+        ),
+      )
+      }
       setDraggedItem(null)
     }
   }
