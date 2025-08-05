@@ -1,5 +1,5 @@
 import { Login, LoginResponse, Register } from "@/types/auth";
-import { apiFetch } from "../app/api"
+import { apiFetch } from "./api"
 
 export const loginUser = async (body: Login) => {
     try {

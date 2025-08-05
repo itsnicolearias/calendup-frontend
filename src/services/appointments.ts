@@ -1,4 +1,4 @@
-import { apiFetch } from "../app/api"
+import { apiFetch } from "./api"
 import { Appointment, AppointmentsResponse } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {

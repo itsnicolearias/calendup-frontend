@@ -63,15 +63,13 @@ export default function Component() {
 
     try {
       formData.date = dateF ? format(dateF, "yyyy-MM-dd") : "";
-
       formData.professionalId = searchParams.get("professionalId") || ""
 
-    const data = await createAppointment(formData);
-    console.log('Creacion exitosa:', data);
-    // Podés redirigir o mostrar un mensaje de éxito
-    toast.success("Turno solicitado con éxito", {
-    description: "Te enviaremos un email con los detalles.",
-    duration: 5000,
+      await createAppointment(formData);
+      // Podés redirigir o mostrar un mensaje de éxito
+      toast.success("Turno solicitado con éxito", {
+      description: "Te enviaremos un email con los detalles.",
+      duration: 5000,
 })
   } catch (err) {
     console.error('Error:', err);
