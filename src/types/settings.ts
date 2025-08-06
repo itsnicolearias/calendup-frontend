@@ -97,3 +97,14 @@ export const JobTitles = [
   "Psicólogo/a", "Nutricionista", "Fisioterapeuta", "Coach", "Médico/a", "Odontólogo/a",
   "Esteticista", "Podólogo/a", "Kinesiólogo/a", "Terapista ocupacional", "Masajista", "Mecanico/a", "Abogado/a", "Contador/a", "Arquitecto/a", "Ingeniero/a", "Diseñador/a gráfico/a"
 ]
+
+
+export const dayLabels: Record<string, string> = {
+  monday: "Lunes",
+  tuesday: "Martes",
+  wednesday: "Miércoles",
+  thursday: "Jueves",
+  friday: "Viernes",
+  saturday: "Sábado",
+  sunday: "Domingo",
+};

@@ -2,12 +2,21 @@ import { apiFetch } from "./api"
 import { Appointment, AppointmentsResponse } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
-  return apiFetch<AppointmentsResponse>("/appointments", {
+  try {
+    if (!token) {
+        throw new Error;
+    }
+
+    return apiFetch<AppointmentsResponse>("/appointments", {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
     }
   })
+  } catch (error) {
+    throw error;
+  }
+  
 }
 
 export const createAppointment = async (data: Partial<Appointment>) => {
@@ -18,7 +27,11 @@ export const createAppointment = async (data: Partial<Appointment>) => {
 }
 
 export const updateAppointment = async (data: Partial<Appointment>, token: string | null ) => {
-  return apiFetch(`/appointments/${data.appointmentId}`, {
+  try {
+    if (!token) {
+        throw new Error;
+    }
+    return apiFetch(`/appointments/${data.appointmentId}`, {
     method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -27,4 +40,8 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
     },
     body: JSON.stringify(data),
   })
+  } catch (error) {
+    throw error;
+  }
+  
 }

@@ -17,6 +17,9 @@ export const getUsers = async (token: string | null ) => {
 
 export const getProfile = async (token: string | null ): Promise<ProfileFormValues | undefined> => {
     try {
+    if (!token) {
+        throw new Error;
+    }
     const user =  await apiFetch<UserWithProfile>("/settings/profile", {
     method: "GET",
     headers: {
@@ -33,6 +36,9 @@ export const getProfile = async (token: string | null ): Promise<ProfileFormValu
 
 export const updateProfile = async (token: string | null, body: ProfileFormValues ) => {
     try {
+    if (!token) {
+        throw new Error;
+    }
     return apiFetch("/settings/profile", {
     method: "PUT",
     headers: {

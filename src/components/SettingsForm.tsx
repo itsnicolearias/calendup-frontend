@@ -1,5 +1,5 @@
 "use client"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { Input } from "@/components/ui/input"
@@ -11,6 +11,7 @@ import { JobTitles, ProfileFormValues, profileSchema } from "@/types/settings"
 import { getProfile, updateProfile } from "@/services/settings"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import AvailabilityEditor from "./AvailabilityEditor"
 
 
 export default function ProfileForm() {
@@ -37,17 +38,19 @@ export default function ProfileForm() {
 
   // Cargar datos del perfil al iniciar
   useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const profile = await getProfile(token)
-        reset(profile)
-      } catch (error) {
-        console.error("Error cargando perfil", error)
-      }
-    }
+  const loadProfile = async () => {
+    if (!token) return;
 
-    loadProfile()
-  }, [reset])
+    try {
+      const profile = await getProfile(token);
+      reset(profile); // Carga los datos al formulario
+    } catch (error) {
+      console.error("Error cargando perfil:", error);
+    }
+  };
+
+  loadProfile();
+}, [token, reset]);
 
   const onSubmit = async (data: ProfileFormValues) => {
     setLoading(true)
@@ -63,6 +66,7 @@ export default function ProfileForm() {
   }
 
   return (
+  <FormProvider {...form}>
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto">
       <div>
         <Label>Nombre</Label>
@@ -108,10 +112,12 @@ export default function ProfileForm() {
 
       {/* Podés insertar aquí un componente visual para editar disponibilidad */}
       {/* Esto requiere un UI específico que trabajaremos si querés */}
+      <AvailabilityEditor />
 
       <Button type="submit" disabled={loading}>
         {loading ? "Guardando..." : "Guardar cambios"}
       </Button>
     </form>
+  </FormProvider>  
   )
 }

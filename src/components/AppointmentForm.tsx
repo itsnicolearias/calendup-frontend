@@ -187,9 +187,6 @@ export default function Component() {
                 className="placeholder:text-blue-600 placeholder:font-semibold border-2 border-black-400 focus:border-blue-600"
               />
             </div>
-
-            
-            
             
             <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white">
               Solicitar Turno
