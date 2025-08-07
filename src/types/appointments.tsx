@@ -20,3 +20,12 @@ export interface AppointmentsResponse {
     pagesQuantity: number;
     rows: []
 }
+
+export type AvailabilityResponse = {
+  [date: string]: string[];
+};
+
+export interface AvailableCalendarProps {
+  onSelect: (date: string, time: string) => void;
+  professionalId: string
+}

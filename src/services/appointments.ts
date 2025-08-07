@@ -1,5 +1,5 @@
 import { apiFetch } from "./api"
-import { Appointment, AppointmentsResponse } from "../types/appointments"
+import { Appointment, AppointmentsResponse, AvailabilityResponse } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
   try {
@@ -39,6 +39,21 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
 
     },
     body: JSON.stringify(data),
+  })
+  } catch (error) {
+    throw error;
+  }
+  
+}
+
+export const getAvailableSlots = async (professionaId: string, year: number, month: number): Promise<AvailabilityResponse> => {
+  try {
+    if (!year || !month || !professionaId){
+      throw new Error('Missing parameters');
+    }
+    
+    return await apiFetch(`/professionals/${professionaId}/available-dates?year=${year}&month=${month}`, {
+    method: "GET"
   })
   } catch (error) {
     throw error;

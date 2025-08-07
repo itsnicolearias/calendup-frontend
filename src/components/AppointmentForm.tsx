@@ -1,35 +1,43 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Calendar } from "@/components/ui/calendar"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Clock } from "lucide-react"
 import { format } from "date-fns"
-import { es } from "date-fns/locale"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { createAppointment } from "@/services/appointments"
+import AvailableCalendar from "./AvailableCalendar"
 
 export default function Component() {
 
   const searchParams = useSearchParams()
-
   if (searchParams === null ) {
      throw new Error();
   }
+  const professionalId = searchParams.get("professionalId") || ""
 
   const [dateF, setDateF] = useState<Date>()
   const [time, setTime] = useState<string>("")
-
+    
+const handleSelect = (date: string, hour: string) => {
+    setDateF(new Date(date))
+    setTime(hour)
+    
+    setFormData((prev) => ({
+    ...prev,
+    date: date,
+    time: hour,
+  }));
+  };
+  
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
-    professionalId: "",
+    professionalId: professionalId,
     email: "",
     reason: "",
     date: "",
@@ -45,25 +53,13 @@ export default function Component() {
       }))
     }
 
-      useEffect(() => {
-    setFormData(prev => ({
-      ...prev,
-      time: time,
-    }));
-  }, [time]);
-
-  const timeSlots = [
-    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-    "12:00", "12:30", "14:00", "14:30", "15:00", "15:30",
-    "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
-  ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
+
       formData.date = dateF ? format(dateF, "yyyy-MM-dd") : "";
-      formData.professionalId = searchParams.get("professionalId") || ""
 
       await createAppointment(formData);
       // Podés redirigir o mostrar un mensaje de éxito
@@ -76,8 +72,6 @@ export default function Component() {
   }
   }
 
-  
-
   return (
     <div className="flex items-start justify-center min-h-screen bg-gray-50 p-4">
       {/* Formulario */}
@@ -88,40 +82,12 @@ export default function Component() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Calendario y hora */}
-      <div className="flex flex-col gap-4">
-        <div>
-          <Label className="mb-2 block">Seleccione una fecha</Label>
-          <Calendar
-            mode="single"
-            selected={dateF}
-            onSelect={setDateF}
-            disabled={(date) => date < new Date()}
-            locale={es}
-            initialFocus
-          />
-          {dateF && <p className="mt-2 text-sm text-gray-600">Fecha seleccionada: {format(dateF, "PPP", { locale: es })}</p>}
-        </div>
+      
+      {/* Calendario y hora */}
+      
+      <AvailableCalendar onSelect={handleSelect} professionalId={formData.professionalId}/>
 
-        <div>
-          <Label className="mb-2 block">Seleccione una hora</Label>
-          <Select value={time} onValueChange={setTime} required>
-            <SelectTrigger className="w-[220px]">
-              <div className="flex items-center">
-                <Clock className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Seleccione una hora" />
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              {timeSlots.map((slot) => (
-                <SelectItem key={slot} value={slot}>
-                  {slot}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+
       <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nombre</Label>
