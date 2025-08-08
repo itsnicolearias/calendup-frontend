@@ -40,6 +40,13 @@ export default function AvailableCalendar({
     fetchSlots();
   }, [currentMonth]);
 
+  useEffect(() => {
+  if (selectedDate && selectedHour) {
+    const dateStr = format(selectedDate, "yyyy-MM-dd");
+    onSelect(dateStr, selectedHour);
+  }
+}, [selectedDate]);
+
   const isDayAvailable = (date: Date) => {
     const formatted = format(date, "yyyy-MM-dd");
     return Object.keys(availability).includes(formatted);

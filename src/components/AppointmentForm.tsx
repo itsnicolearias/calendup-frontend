@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { format } from "date-fns"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { createAppointment } from "@/services/appointments"
@@ -20,11 +19,11 @@ export default function Component() {
   }
   const professionalId = searchParams.get("professionalId") || ""
 
-  const [dateF, setDateF] = useState<Date>()
+  const [dateF, setDateF] = useState<string>()
   const [time, setTime] = useState<string>("")
     
 const handleSelect = (date: string, hour: string) => {
-    setDateF(new Date(date))
+    setDateF(date)
     setTime(hour)
     
     setFormData((prev) => ({
@@ -33,7 +32,7 @@ const handleSelect = (date: string, hour: string) => {
     time: hour,
   }));
   };
-  
+
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
@@ -58,14 +57,13 @@ const handleSelect = (date: string, hour: string) => {
     e.preventDefault()
 
     try {
-
-      formData.date = dateF ? format(dateF, "yyyy-MM-dd") : "";
-
+      formData.date = dateF || ""
+      
       await createAppointment(formData);
       // Podés redirigir o mostrar un mensaje de éxito
       toast.success("Turno solicitado con éxito", {
       description: "Te enviaremos un email con los detalles.",
-      duration: 5000,
+      duration: 5000,  
 })
   } catch (err) {
     console.error('Error:', err);
