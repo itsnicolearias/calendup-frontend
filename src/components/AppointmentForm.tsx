@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import AvailableCalendar from "./AvailableCalendar"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { createAppointment } from "@/services/appointments"
-import AvailableCalendar from "./AvailableCalendar"
 
 export default function Component() {
 
