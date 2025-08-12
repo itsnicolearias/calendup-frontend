@@ -54,7 +54,6 @@ export default function Component() {
     }
 
     const appData = await getAppointments(token)
-    console.log("Turnos obtenidos:", appData)
     return appData.rows;
   } catch (error) {
     console.error(error)

@@ -1,5 +1,5 @@
 import { apiFetch } from "./api"
-import { Appointment, AppointmentsResponse, AvailabilityResponse } from "../types/appointments"
+import { Appointment, AvailabilityResponse, GetAllApiResponse } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
   try {
@@ -7,7 +7,7 @@ export const getAppointments = async (token: string | null ) => {
         throw new Error;
     }
 
-    return apiFetch<AppointmentsResponse>("/appointments", {
+    return apiFetch<GetAllApiResponse<Appointment>>("/appointments", {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`

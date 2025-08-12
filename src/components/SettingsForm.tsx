@@ -12,7 +12,7 @@ import { getProfile, updateProfile } from "@/services/settings"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import AvailabilityEditor from "./AvailabilityEditor"
-
+import UploadImage from "./UploadFiles"
 
 export default function ProfileForm() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function ProfileForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {},
-    mode: "onTouched", // o "onChange"
+    mode: "onChange",
   })
 
   const { register, handleSubmit, reset, formState: { errors } } = form
@@ -87,6 +87,11 @@ export default function ProfileForm() {
         <Label>Teléfono</Label>
         <Input {...register("phone")} />
       </div>
+
+      <UploadImage
+        label="Foto de perfil"
+        onUploadComplete={(url) => console.log("Imagen subida:", url)}
+      />
 
       <div>
         <Label>Biografía</Label>

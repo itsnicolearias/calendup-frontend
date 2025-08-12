@@ -63,7 +63,7 @@ export default function AvailableCalendar({
     availability[format(selectedDate ?? new Date(), "yyyy-MM-dd")] || [];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 items-center">
       <Calendar
         mode="single"
         selected={selectedDate}
@@ -71,7 +71,7 @@ export default function AvailableCalendar({
         onMonthChange={setCurrentMonth}
         locale={es}
         disabled={(date) => !isDayAvailable(date)}
-        className="rounded-md border shadow"
+        className="rounded-md border shadow w-100"
       />
 
       {selectedDate && availableHours.length > 0 && (

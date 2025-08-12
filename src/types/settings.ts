@@ -25,6 +25,12 @@ const availabilitySchema = z.object({
   sunday: z.array(timeRangeSchema).optional(),
 })
 
+const insuranceProviders = z.object({
+  name: z.string().optional(),
+  plan: z.string().optional(),
+  notes: z.string().optional()
+})
+
 export const profileSchema = z.object({
   name: z.string().optional(),
   lastName: z.string().optional(),
@@ -33,7 +39,11 @@ export const profileSchema = z.object({
   bio: z.string().optional(),
   jobTitle: z.string().optional(),
   appointmentDuration: z.number().optional(),
-  availability: availabilitySchema.optional()
+  availability: availabilitySchema.optional(),
+  insuranceProviders: z.array(insuranceProviders).optional(),
+  defaultAppConfirmation: z.boolean().optional(),
+  licenseNumber: z.string().optional(),
+  profilePicture: z.string().optional(),
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
@@ -60,7 +70,11 @@ export interface UserWithProfile {
     appointmentDuration?: number
     //createdAt?: Date
     //updatedAt?: Date
-    availability?: Availability
+    availability?: Availability,
+    insuranceProviders?: [],
+    licenseNumber?: string,
+    defaultAppConfirmation: boolean,
+    profilePicture: string
   }
 }
 
