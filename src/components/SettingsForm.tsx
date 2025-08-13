@@ -43,7 +43,7 @@ export default function ProfileForm() {
 
     try {
       const profile = await getProfile(token);
-      reset(profile); // Carga los datos al formulario
+      reset(profile?.profile); // Carga los datos al formulario
     } catch (error) {
       console.error("Error cargando perfil:", error);
     }

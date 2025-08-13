@@ -1,7 +1,7 @@
 import { apiFetch } from "@/services/api"
 import { ProfileFormValues, UserWithProfile } from "@/types/settings"
 
-export const getProfile = async (token: string | null ): Promise<ProfileFormValues | undefined> => {
+export const getProfile = async (token: string | null ): Promise<UserWithProfile | undefined> => {
     try {
     if (!token) {
         throw new Error;
@@ -13,7 +13,7 @@ export const getProfile = async (token: string | null ): Promise<ProfileFormValu
     }
   })
 
-  return user.profile;    
+  return user;    
     } catch (error) {
         console.log(error)
     }
