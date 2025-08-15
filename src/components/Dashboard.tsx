@@ -115,7 +115,7 @@ useEffect(() => {
 
       try {
         const token = localStorage.getItem('token');
-        await updateAppointment({ appointmentId: draggedItem.appointmentId, status: newStatus }, token)
+        await updateAppointment({ appointmentId: draggedItem.appointmentId, status: newStatus }, token, false)
       } catch (error) {
         console.error(error);
 
@@ -245,7 +245,7 @@ useEffect(() => {
                   try {
                     const token = localStorage.getItem('token')
 
-                    await updateAppointment({ appointmentId: selectedAppointment.appointmentId, status: "confirmed" }, token)
+                    await updateAppointment({ appointmentId: selectedAppointment.appointmentId, status: "confirmed" }, token, false)
 
                     setAppointments((prev) =>
                     prev.map((apt) => (apt.appointmentId === selectedAppointment.appointmentId ? { ...apt, status: "confirmed" } : apt)),
@@ -267,7 +267,7 @@ useEffect(() => {
                   try {
                     const token = localStorage.getItem('token')
 
-                    await updateAppointment({ appointmentId: selectedAppointment.appointmentId, status: "cancelled" }, token)
+                    await updateAppointment({ appointmentId: selectedAppointment.appointmentId, status: "cancelled" }, token, false)
 
                     setAppointments((prev) =>
                     prev.map((apt) => (apt.appointmentId === selectedAppointment.appointmentId ? { ...apt, status: "cancelled" } : apt)),
