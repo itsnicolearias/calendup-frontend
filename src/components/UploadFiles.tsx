@@ -1,57 +1,37 @@
-import { useS3Upload } from "@/services/s3-upload";
+import { useState, ChangeEvent } from "react";
 import Image from "next/image";
-import React, { useState } from "react";
 
-interface UploadImageProps {
+interface ImagePreviewProps {
   label?: string;
-  onUploadComplete?: (url: string) => void; // callback cuando termine
+  onChange: (file: File | null) => void; // pasa el archivo al formulario
+  currentImageUrl?: string; // para mostrar la imagen existente
 }
 
-const UploadImage: React.FC<UploadImageProps> = ({ label = "Subir imagen", onUploadComplete }) => {
-  const [preview, setPreview] = useState<string | null>(null);
-  const { uploadFile, isUploading } = useS3Upload();
+export default function ImagePreview({ label, onChange, currentImageUrl }: ImagePreviewProps) {
+  const [preview, setPreview] = useState<string | null>(currentImageUrl || null);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return;
-
-    const file = e.target.files[0];
-
-    // Vista previa
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
-
-    // Subir archivo
-    const uploadedUrl = await uploadFile(file);
-
-    if (uploadedUrl && onUploadComplete) {
-      onUploadComplete(uploadedUrl);
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    onChange(file); // pasa el archivo al formulario
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+    } else {
+      setPreview(currentImageUrl || null);
     }
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {label && <label className="text-sm font-medium">{label}</label>}
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        disabled={isUploading}
-      />
-
+    <div className="flex flex-col">
+      <input type="file" accept="image/*" onChange={handleFileChange} />
       {preview && (
         <Image
           src={preview}
-          alt="Preview"
-          className="object-cover rounded border"
-          height={32}
-          width={32}
+          alt="Vista previa"
+          width={24}
+          height={24}
+          className="w-24 h-24 rounded-full object-cover mt-2"
         />
       )}
-
-      {isUploading && <p className="text-sm text-gray-500">Subiendo...</p>}
     </div>
   );
-};
-
-export default UploadImage;
+}

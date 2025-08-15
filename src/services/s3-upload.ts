@@ -2,7 +2,7 @@ import { useState } from "react";
 import { apiFetch } from "./api";
 
 interface UseS3UploadResult {
-  uploadFile: (file: File) => Promise<string | null>;
+  uploadFile: (file: File) => Promise<string | undefined>;
   isUploading: boolean;
   error: string | null;
 }
@@ -11,7 +11,7 @@ export function useS3Upload(): UseS3UploadResult {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const uploadFile = async (file: File): Promise<string | null> => {
+  const uploadFile = async (file: File): Promise<string | undefined> => {
     setIsUploading(true);
     setError(null);
 
@@ -37,7 +37,7 @@ export function useS3Upload(): UseS3UploadResult {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
-      return null;
+      return undefined;
     } finally {
       setIsUploading(false);
     }
