@@ -43,6 +43,7 @@ export default function ProfessionalCard({ professionalId }: { professionalId: s
               width={150}
               height={150}
               className="rounded-full object-cover mx-auto"
+              unoptimized={true}
             />
           </div>
 
