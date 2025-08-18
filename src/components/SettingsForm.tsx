@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import AvailabilityEditor from "./AvailabilityEditor";
 import UploadImage from "./UploadFiles";
 import { useS3Upload } from "@/services/s3-upload";
+import { Switch } from "@/components/ui/switch"
 
 export default function ProfileForm() {
   const router = useRouter();
@@ -32,13 +33,14 @@ export default function ProfileForm() {
       bio: "",
       jobTitle: "",
       appointmentDuration: 30,
-      availability: {}
+      availability: {},
+      defaultAppConfirmation: true,
     },
     mode: "onChange",
   });
 
   const { register, setValue, handleSubmit, reset, watch, formState: { errors } } = form;
-  const profilePicture = watch("profilePicture");
+  //const profilePicture = watch("profilePicture");
 
   // Cargar token y redirigir si no existe
   useEffect(() => {
@@ -65,7 +67,8 @@ export default function ProfileForm() {
           bio: profile?.profile?.bio ?? "",
           jobTitle: profile?.profile?.jobTitle ?? "",
           appointmentDuration: profile?.profile?.appointmentDuration ?? 30,
-          availability: profile?.profile?.availability ?? {}
+          availability: profile?.profile?.availability ?? {},
+          defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
         });
       } catch (error) {
         console.error("Error cargando perfil:", error);
@@ -145,6 +148,18 @@ const onSubmit = async (data: ProfileFormValues) => {
             ))}
           </select>
         </div>
+
+         <div className="flex items-center justify-between space-x-2">
+          <Label htmlFor="defaultAppConfirmation" className="text-sm font-medium">
+            Confirmar turnos automáticamente
+          </Label>
+          <Switch
+            id="defaultAppConfirmation"
+            checked={watch("defaultAppConfirmation")}
+            onCheckedChange={(checked) => setValue("defaultAppConfirmation", checked)}
+          />
+        </div>
+
 
         <div>
           <Label>Duración del turno (minutos)</Label>
