@@ -9,8 +9,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Mail, Lock, User, UserPlus } from "lucide-react"
 import { registerUser } from "@/services/auth"
+import { useRouter } from "next/navigation"
 
 export default function Component() {
+
+  const router = useRouter();
     
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -32,9 +35,8 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   try {
-    const data = await registerUser(formData)
-    console.log('Registro exitoso:', data);
-    // Podés redirigir o mostrar un mensaje de éxito
+    await registerUser(formData);
+    router.push("/check-email")
   } catch (err) {
     console.error('Error al registrar:', err);
   }

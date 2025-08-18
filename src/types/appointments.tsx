@@ -15,10 +15,10 @@ export interface Appointment {
     status: AppointmentStatus;
 }
 
-export interface AppointmentsResponse {
+export interface GetAllApiResponse<T> {
     count: number;
     pagesQuantity: number;
-    rows: []
+    rows: T[]
 }
 
 export type AvailabilityResponse = {

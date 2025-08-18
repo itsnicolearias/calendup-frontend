@@ -1,21 +1,7 @@
 import { apiFetch } from "@/services/api"
 import { ProfileFormValues, UserWithProfile } from "@/types/settings"
 
-export const getUsers = async (token: string | null ) => {
-    try {
-    return await apiFetch("/settings/profiles", {
-    method: "GET",
-    headers: {
-        "Authorization": `Bearer ${token}`
-    }
-  })
-        
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const getProfile = async (token: string | null ): Promise<ProfileFormValues | undefined> => {
+export const getProfile = async (token: string | null ): Promise<UserWithProfile | undefined> => {
     try {
     if (!token) {
         throw new Error;
@@ -27,7 +13,7 @@ export const getProfile = async (token: string | null ): Promise<ProfileFormValu
     }
   })
 
-  return user.profile;    
+  return user;    
     } catch (error) {
         console.log(error)
     }
