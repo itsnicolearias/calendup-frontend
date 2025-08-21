@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Appointment } from "@/types/appointments";
-import { AppointmentDetails } from "@/components/AppointmentDetails";
+import { AppointmentDetails } from "@/components/appointments/AppointmentDetails";
 import { getOneAppointment, updateAppointment } from "@/services/appointments";
 import { toast } from "sonner";
-import ProfessionalCard from "@/components/ProfessionalCard";
-import AvailableCalendar from "@/components/AvailableCalendar";
+import ProfessionalCard from "@/components/shared/ProfessionalCard";
+import AvailableCalendar from "@/components/shared/AvailableCalendar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function AppointmentDetailsContainer() {

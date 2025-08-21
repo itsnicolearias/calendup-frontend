@@ -12,11 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import AvailableCalendar from "./AvailableCalendar";
+import AvailableCalendar from "../shared/AvailableCalendar";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { createAppointment } from "@/services/appointments";
-import ProfessionalCard from "./ProfessionalCard";
+import ProfessionalCard from "../shared/ProfessionalCard";
 
 export default function Component() {
   const searchParams = useSearchParams();

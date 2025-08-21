@@ -29,3 +29,12 @@ export interface AvailableCalendarProps {
   onSelect: (date: string, time: string) => void;
   professionalId: string
 }
+
+export interface AppointmentType {
+  appointmentTypeId: string
+  name: string;
+  description?: string;
+  price?: number | null;
+  sessionType: "in person" | "online";
+  deleted: boolean;
+}

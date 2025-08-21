@@ -2,10 +2,10 @@
 
 import type React from "react"
 import { CalendarIcon, ChevronDown, Home, LogOut, Menu, Palette, Search, Settings } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { Button } from "./ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { Input } from "./ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Button } from "../ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { Input } from "../ui/input"
 import { useState } from "react"
 import { useUser } from "@/contexts/UserContext"
 import { useRouter } from "next/navigation"
@@ -104,7 +104,7 @@ export default function Component() {
                         </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => router.push("/settings")}>
+                    <DropdownMenuItem onClick={() => router.push("/settings/personal")}>
                         <Settings className="mr-2 h-4 w-4" />
                         <span >Configuración</span>
                     </DropdownMenuItem>
