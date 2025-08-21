@@ -1,4 +1,5 @@
 import z from "zod"
+import { AppointmentType } from "./appointments"
 
 const timeRangeSchema = z.object({
   start: z
@@ -76,6 +77,7 @@ export interface UserWithProfile {
     defaultAppConfirmation: boolean,
     profilePicture: string
   }
+  AppointmentTypes?: AppointmentType[]
 }
 
 export type WeekDay =
