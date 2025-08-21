@@ -1,3 +1,5 @@
+import { UserWithProfile } from "./settings";
+
 export type AppointmentStatus = "pending" | "confirmed" | "cancelled";
 
 export interface Appointment {
@@ -13,6 +15,7 @@ export interface Appointment {
     createdAt: Date;
     updatedAt: Date;
     status: AppointmentStatus;
+    professional: UserWithProfile
 }
 
 export interface GetAllApiResponse<T> {

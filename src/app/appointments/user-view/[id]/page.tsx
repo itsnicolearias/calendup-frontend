@@ -106,7 +106,7 @@ export default function AppointmentDetailsContainer() {
 
       {/* Columna lateral: profesional */}
       <div>
-        <ProfessionalCard professionalId={professionalId} />
+        <ProfessionalCard profile={appointment.professional.profile} />
       </div>
 
       {/* Modal con calendario de disponibilidad */}
