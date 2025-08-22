@@ -24,10 +24,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     
   try {
     const data = await loginUser({email, password})
-    console.log('Registro exitoso:', data);
     // Podés redirigir o mostrar un mensaje de éxito
     localStorage.setItem('token', data.token);
-    router.push('/dashboard')
+    router.push('/dashboard/appointments')
   } catch (err) {
     console.error('Error al registrar:', err);
   }
