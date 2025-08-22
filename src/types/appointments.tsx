@@ -16,6 +16,7 @@ export interface Appointment {
     updatedAt: Date;
     status: AppointmentStatus;
     professional: UserWithProfile
+    appointmentTypeId: string | null;
 }
 
 export interface GetAllApiResponse<T> {

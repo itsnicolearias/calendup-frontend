@@ -50,7 +50,7 @@ export const profileSchema = z.object({
 export type ProfileFormValues = z.infer<typeof profileSchema>
 
 export interface UserWithProfile {
-  userId?: string
+  userId: string
   email?: string
   password?: string
   role?: UserRole

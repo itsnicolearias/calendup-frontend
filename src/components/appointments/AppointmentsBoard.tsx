@@ -2,6 +2,9 @@ import { Appointment, AppointmentStatus } from "@/types/appointments"
 import { AppointmentCard } from "./AppointmentCard"
 import { updateAppointment } from "@/services/appointments"
 import { getStatusText } from "./status"
+import { Button } from "../ui/button"
+import { useState } from "react"
+import { CreateAppointmentModal } from "./CreateAppointmentModal"
 
 interface Props {
   appointments: Appointment[]
@@ -10,6 +13,8 @@ interface Props {
 }
 
 export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Props) {
+   const [open, setOpen] = useState(false)
+
   const handleDragStart = (e: React.DragEvent, appointment: Appointment) => {
     e.dataTransfer.setData("appointmentId", appointment.appointmentId.toString())
   }
@@ -27,6 +32,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Pro
     }
   }
 
+
   const statuses: { key: AppointmentStatus; color: string; dot: string }[] = [
     { key: "pending", color: "text-yellow-700", dot: "bg-yellow-500" },
     { key: "confirmed", color: "text-green-700", dot: "bg-green-500" },
@@ -40,6 +46,10 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Pro
         <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Mis Turnos
         </h1>
+         {/* Modal para crear */}
+         <Button onClick={() => setOpen(true)}>Nuevo Turno</Button>
+      <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />
+
         <p className="text-gray-600 mt-2">Arrastra los turnos entre columnas para cambiar su estado</p>
       </div>
 
