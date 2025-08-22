@@ -29,7 +29,7 @@ export default function AvailabilityConfig() {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (!storedToken) {
-      router.push("/login");
+      router.push("/auth/login");
       return;
     }
     setToken(storedToken);

@@ -4,31 +4,37 @@ import { UserWithProfile } from '@/types/settings';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface UserContextType {
-  user: UserWithProfile | undefined;
+  user: UserWithProfile | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
+  logout: () => void;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserWithProfile | undefined>(undefined);
+  const [user, setUser] = useState<UserWithProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+   const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
 
   const loadUser = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        setUser(undefined);
+        setUser(null);
         setLoading(false);
         return;
       }
       const fetchedUser = await getProfile(token);
-      setUser(fetchedUser);
+      setUser(fetchedUser ?? null);
     } catch (error) {
       console.error('Error cargando usuario', error);
-      setUser(undefined);
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -39,7 +45,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, loading, refreshUser: loadUser }}>
+    <UserContext.Provider value={{ user, loading, refreshUser: loadUser, logout }}>
       {children}
     </UserContext.Provider>
   );

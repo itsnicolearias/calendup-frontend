@@ -18,7 +18,13 @@ export default function Component() {
       const [currentView, setCurrentView] = useState<typeof VIEWS[keyof typeof VIEWS]>(VIEWS.TURNS);
 
       const [searchTerm, setSearchTerm] = useState("")
-      const { user } = useUser()
+      const userContext = useUser();
+      const user = userContext?.user;
+      
+    const handleLogout = () => {
+            userContext?.logout()
+            router.push("/auth/login");
+        };
 
       const avatarUrl = user?.profile?.profilePicture 
     || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${user?.profile?.name || ""} ${user?.profile?.lastName || ""}`)}&background=197387&color=fff`;
@@ -113,7 +119,7 @@ export default function Component() {
                         <span>Tema</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Cerrar sesión</span>
                     </DropdownMenuItem>

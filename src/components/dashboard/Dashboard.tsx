@@ -34,7 +34,7 @@ export default function Component() {
   try {
     const token = localStorage.getItem('token');
     if (!token || token === null){
-      router.push("/login")
+      router.push("/auth/login")
     }
 
     const appData = await getAppointments(token)
