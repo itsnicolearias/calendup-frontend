@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,11 +12,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import AvailableCalendar from "./AvailableCalendar";
+import AvailableCalendar from "../shared/AvailableCalendar";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { createAppointment } from "@/services/appointments";
-import ProfessionalCard from "./ProfessionalCard";
+import ProfessionalCard from "../shared/ProfessionalCard";
+import { UserWithProfile } from "@/types/settings";
+import { getOneUser } from "@/services/users";
+import AppointmentTypesSelect from "./AppointmentTypesSelect";
 
 export default function Component() {
   const searchParams = useSearchParams();
@@ -27,6 +30,30 @@ export default function Component() {
 
   const [dateF, setDateF] = useState<string>();
   const [time, setTime] = useState<string>("");
+  const [professional, setProfessional] = useState<Partial<UserWithProfile> | undefined>(undefined)
+  const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [formData, setFormData] = useState({
+      name: "",
+      lastName: "",
+      professionalId: professionalId,
+      email: "",
+      reason: "",
+      date: "",
+      time: "",
+      phone: "",
+      appointmentTypeId: "",
+    });
+
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getOneUser(professionalId)
+      setProfessional(data)
+    }
+    fetchData()
+  }, [professionalId])
+
+  if (!professional) return <p>Cargando...</p>
 
   const handleSelect = (date: string, hour: string) => {
     setDateF(date);
@@ -39,16 +66,7 @@ export default function Component() {
     }));
   };
 
-  const [formData, setFormData] = useState({
-    name: "",
-    lastName: "",
-    professionalId: professionalId,
-    email: "",
-    reason: "",
-    date: "",
-    time: "",
-    phone: "",
-  });
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,6 +81,11 @@ export default function Component() {
 
     try {
       formData.date = dateF || "";
+
+      if (selectedType){
+        formData.appointmentTypeId = selectedType
+      }
+      
 
       await createAppointment(formData);
       toast.success("Turno solicitado con éxito", {
@@ -150,14 +173,19 @@ export default function Component() {
                 name="reason"
                 type="text"
                 placeholder="Ingrese el motivo de consulta"
-                required
                 value={formData.reason}
                 onChange={handleInputChange}
                 className="placeholder:text-blue-600 placeholder:font-semibold border-2 border-black-400 focus:border-blue-600"
               />
             </div>
           </CardContent>
-        </Card>
+          <AppointmentTypesSelect
+                  types={professional.AppointmentTypes || []}
+                  selected={selectedType}
+                  onSelect={(appointmentTypeId) => setSelectedType(appointmentTypeId)}
+                /> 
+
+        </Card>     
 
         {/* Calendario dentro del formulario */}
         <Card className="w-full">
@@ -173,9 +201,11 @@ export default function Component() {
             />
           </CardContent>
         </Card>
+      
+        <div className="space-y-6">
+      <ProfessionalCard profile={professional.profile} />
 
-        {/* Info del profesional */}
-        <ProfessionalCard professionalId={professionalId} />
+        </div>
 
         {/* Botón de enviar en toda la fila */}
         <div className="md:col-span-3">

@@ -24,10 +24,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     
   try {
     const data = await loginUser({email, password})
-    console.log('Registro exitoso:', data);
     // Podés redirigir o mostrar un mensaje de éxito
     localStorage.setItem('token', data.token);
-    router.push('/dashboard')
+    router.push('/dashboard/appointments')
   } catch (err) {
     console.error('Error al registrar:', err);
   }
@@ -193,7 +192,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 ¿No tienes una cuenta?{" "}
-                <a href="/register" className="text-blue-600 hover:text-blue-800 font-medium">
+                <a href="/auth/register" className="text-blue-600 hover:text-blue-800 font-medium">
                   Regístrate aquí
                 </a>
               </p>

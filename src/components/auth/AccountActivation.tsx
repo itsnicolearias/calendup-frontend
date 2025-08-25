@@ -19,7 +19,7 @@ export default function AccountActivated() {
         </p>
         <Button
           className="w-full bg-[#197387] hover:bg-[#155d6d]"
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/auth/login")}
         >
           Iniciar sesión
         </Button>

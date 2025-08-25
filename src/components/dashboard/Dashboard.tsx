@@ -24,6 +24,7 @@ import { es } from "date-fns/locale"
 import { Appointment, AppointmentStatus } from "@/types/appointments"
 import { useRouter } from "next/navigation"
 import { getAppointments, updateAppointment } from "@/services/appointments"
+import { parseLocalDate } from "@/utils/date"
 
 export default function Component() {
 
@@ -33,7 +34,7 @@ export default function Component() {
   try {
     const token = localStorage.getItem('token');
     if (!token || token === null){
-      router.push("/login")
+      router.push("/auth/login")
     }
 
     const appData = await getAppointments(token)
@@ -149,7 +150,7 @@ useEffect(() => {
         <div className="space-y-1 text-sm text-gray-600">
           <div className="flex items-center">
             <CalendarIcon className="w-4 h-4 mr-2" />
-            {format(new Date(appointment.date), "dd/MM/yyyy", { locale: es })}
+            {format(parseLocalDate(appointment.date), "dd-MM-yyyy")}
           </div>
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2" />
@@ -215,7 +216,7 @@ useEffect(() => {
                   <div>
                     <p className="text-sm font-medium text-gray-900">Fecha</p>
                     <p className="text-sm text-gray-600">
-                      {format(new Date(selectedAppointment.date), "dd 'de' MMMM, yyyy", { locale: es })}
+                      {format(parseLocalDate(selectedAppointment.date), "dd-MM-yyyy")}
                     </p>
                   </div>
                 </div>

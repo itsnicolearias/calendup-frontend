@@ -1,3 +1,5 @@
+import { UserWithProfile } from "./settings";
+
 export type AppointmentStatus = "pending" | "confirmed" | "cancelled";
 
 export interface Appointment {
@@ -13,6 +15,8 @@ export interface Appointment {
     createdAt: Date;
     updatedAt: Date;
     status: AppointmentStatus;
+    professional: UserWithProfile
+    appointmentTypeId: string | null;
 }
 
 export interface GetAllApiResponse<T> {
@@ -28,4 +32,13 @@ export type AvailabilityResponse = {
 export interface AvailableCalendarProps {
   onSelect: (date: string, time: string) => void;
   professionalId: string
+}
+
+export interface AppointmentType {
+  appointmentTypeId: string
+  name: string;
+  description?: string;
+  price?: number | null;
+  sessionType: "in person" | "online";
+  deleted: boolean;
 }

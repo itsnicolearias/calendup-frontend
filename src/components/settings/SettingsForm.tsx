@@ -3,15 +3,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { JobTitles, ProfileFormValues, profileSchema } from "@/types/settings";
+import { ProfileFormValues, profileSchema } from "@/types/settings";
 import { getProfile, updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import AvailabilityEditor from "./AvailabilityEditor";
-import UploadImage from "./UploadFiles";
+import UploadImage from "../shared/UploadFiles";
 import { useS3Upload } from "@/services/s3-upload";
 
 export default function ProfileForm() {
@@ -29,22 +27,17 @@ export default function ProfileForm() {
       address: "",
       phone: "",
       profilePicture: "",
-      bio: "",
-      jobTitle: "",
-      appointmentDuration: 30,
-      availability: {}
     },
     mode: "onChange",
   });
 
-  const { register, setValue, handleSubmit, reset, watch, formState: { errors } } = form;
-  const profilePicture = watch("profilePicture");
+  const { register, handleSubmit, reset, watch, formState: { errors } } = form;
 
   // Cargar token y redirigir si no existe
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (!storedToken) {
-      router.push("/login");
+      router.push("/auth/login");
       return;
     }
     setToken(storedToken);
@@ -62,10 +55,6 @@ export default function ProfileForm() {
           address: profile?.profile?.address ?? "",
           phone: profile?.profile?.phone ?? "",
           profilePicture: profile?.profile?.profilePicture ?? "",
-          bio: profile?.profile?.bio ?? "",
-          jobTitle: profile?.profile?.jobTitle ?? "",
-          appointmentDuration: profile?.profile?.appointmentDuration ?? 30,
-          availability: profile?.profile?.availability ?? {}
         });
       } catch (error) {
         console.error("Error cargando perfil:", error);
@@ -128,30 +117,6 @@ const onSubmit = async (data: ProfileFormValues) => {
             onChange={(file) => setSelectedFile(file)}
           />
         </div>
-        
-        <div>
-          <Label>Biografía</Label>
-          <Textarea {...register("bio")} />
-        </div>
-
-        <div>
-          <Label>Profesión</Label>
-          <select {...register("jobTitle")} className="w-full border rounded px-3 py-2">
-            <option value="">Seleccionar profesión</option>
-            {JobTitles.map((title) => (
-              <option key={title} value={title}>
-                {title}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <Label>Duración del turno (minutos)</Label>
-          <Input type="number" {...register("appointmentDuration", { valueAsNumber: true })} />
-        </div>
-
-        <AvailabilityEditor />
 
         <Button type="submit" disabled={loading}>
           {loading ? "Guardando..." : "Guardar cambios"}

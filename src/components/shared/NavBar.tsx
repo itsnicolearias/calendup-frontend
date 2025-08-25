@@ -2,10 +2,10 @@
 
 import type React from "react"
 import { CalendarIcon, ChevronDown, Home, LogOut, Menu, Palette, Search, Settings } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { Button } from "./ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { Input } from "./ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Button } from "../ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { Input } from "../ui/input"
 import { useState } from "react"
 import { useUser } from "@/contexts/UserContext"
 import { useRouter } from "next/navigation"
@@ -18,7 +18,13 @@ export default function Component() {
       const [currentView, setCurrentView] = useState<typeof VIEWS[keyof typeof VIEWS]>(VIEWS.TURNS);
 
       const [searchTerm, setSearchTerm] = useState("")
-      const { user } = useUser()
+      const userContext = useUser();
+      const user = userContext?.user;
+      
+    const handleLogout = () => {
+            userContext?.logout()
+            router.push("/auth/login");
+        };
 
       const avatarUrl = user?.profile?.profilePicture 
     || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${user?.profile?.name || ""} ${user?.profile?.lastName || ""}`)}&background=197387&color=fff`;
@@ -41,7 +47,7 @@ export default function Component() {
                     CalendUp
                     </span>
                 </div>
-                <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={() => router.push("/dashboard")}>
+                <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={() => router.push("/dashboard/appointments")}>
                     <Home className="w-4 h-4 mr-2" />
                     Inicio
                 </Button>
@@ -104,7 +110,7 @@ export default function Component() {
                         </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => router.push("/settings")}>
+                    <DropdownMenuItem onClick={() => router.push("/settings/personal")}>
                         <Settings className="mr-2 h-4 w-4" />
                         <span >Configuración</span>
                     </DropdownMenuItem>
@@ -113,7 +119,7 @@ export default function Component() {
                         <span>Tema</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Cerrar sesión</span>
                     </DropdownMenuItem>

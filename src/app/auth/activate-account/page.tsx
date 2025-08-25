@@ -1,4 +1,4 @@
-import AccountActivated from "@/components/AccountActivation";
+import AccountActivated from "@/components/auth/AccountActivation";
 
 export default function Page() {
   return (

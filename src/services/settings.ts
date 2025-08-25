@@ -1,19 +1,20 @@
 import { apiFetch } from "@/services/api"
 import { ProfileFormValues, UserWithProfile } from "@/types/settings"
 
-export const getProfile = async (token: string | null ): Promise<UserWithProfile | undefined> => {
+export const getProfile = async (token: string) => {
     try {
-    if (!token) {
-        throw new Error;
-    }
-    const user =  await apiFetch<UserWithProfile>("/settings/profile", {
-    method: "GET",
-    headers: {
-        "Authorization": `Bearer ${token}`
-    }
-  })
+        if (!token){
+            return null;
+        } 
 
-  return user;    
+        const user =  await apiFetch<UserWithProfile>("/settings/profile", {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
+
+  return user;  
     } catch (error) {
         console.log(error)
     }

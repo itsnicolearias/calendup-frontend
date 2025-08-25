@@ -72,7 +72,7 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
   
 }
 
-export const getOneAppointment = async (token: string | null, isFromUser: boolean ) => {
+export const getOneAppointment = async (token: string | null, isFromUser: boolean, appointmentId?: string ) => {
   try {
     if (!token) {
         throw new Error;
@@ -82,7 +82,7 @@ export const getOneAppointment = async (token: string | null, isFromUser: boolea
     method: "GET"
   })
     } else {
-      return apiFetch<Appointment>("/appointments/from-user", {
+      return apiFetch<Appointment>("/appointments/" + appointmentId, {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
