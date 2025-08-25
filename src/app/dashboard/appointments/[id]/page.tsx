@@ -9,14 +9,14 @@ import { AppointmentModal } from "@/components/appointments/AppointmentModal"
 export default function AppointmentDetailPage() {
   const  id  = useParams()
   const [appointment, setAppointment] = useState<Appointment | null>(null)
-console.log("id", id?.id)
+
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token")
       const data = await getAppointments(token!)
-      console.log("data", data)
+
       const found = data.rows.find((a: Appointment) => a.appointmentId === String(id?.id))
-      console.log("found", found)
+
       if (found) setAppointment(found)
     }
     fetchData()

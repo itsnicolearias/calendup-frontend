@@ -29,7 +29,7 @@ export function useS3Upload(): UseS3UploadResult {
           "Content-Type": file.type,
         },
       });
-      console.log(uploadRes)
+
       if (!uploadRes.ok) throw new Error("Error al subir el archivo");
 
       // 3️⃣ Devolvemos la URL pública del archivo

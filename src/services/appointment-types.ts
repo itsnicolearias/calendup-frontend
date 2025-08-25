@@ -39,7 +39,7 @@ export const getOneAppType = async (id: string, token: string | null) => {
 
 export const createAppointmentType = async (data: Partial<AppointmentType>, token: string | null) => {
     try {
-        console.log(data)
+
        return apiFetch<AppointmentType>("/appointments/appointment-types", {
     method: "POST",
     body: JSON.stringify(data),
