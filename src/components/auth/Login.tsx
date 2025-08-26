@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { loginUser } from "@/services/auth"
 import { Providers } from "@/types/auth"
 import { useUser } from "@/contexts/UserContext"
+import { toast } from "sonner"
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false)
@@ -63,8 +64,19 @@ const handleSubmit = async (e: React.FormEvent) => {
     localStorage.setItem('token', data.token);
     await refreshUser()
     router.push('/dashboard/appointments')
-  } catch (err) {
-    console.error('Error al registrar:', err);
+  } catch (err: any) {
+    if (err.message === "User does not exist"){
+      toast.error("El usuario ingresado no existe")
+    }
+
+    if (err.message === "Invalid email or password"){
+      toast.error("Credenciales invalidas")
+    }
+
+    if (err.message === "You must verify your email before logging in"){
+      toast.error("Debes verificar tu cuenta antes de iniciar sesion")
+    }
+    
   }
 };
 
