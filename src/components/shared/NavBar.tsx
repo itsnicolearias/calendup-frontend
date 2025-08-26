@@ -29,7 +29,7 @@ export default function Component() {
       const avatarUrl = user?.profile?.profilePicture 
     || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${user?.profile?.name || ""} ${user?.profile?.lastName || ""}`)}&background=197387&color=fff`;
 
-    const name = `${user?.profile?.name} ${user?.profile?.lastName}` || "Usuario"
+    const name = `${user?.profile?.name} ${user?.profile?.lastName || ""}` || "Usuario"
 
     return (
         <div>
