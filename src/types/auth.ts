@@ -26,3 +26,5 @@ export interface UserData {
     userId: string;
     verified: boolean;
 }
+
+export type Providers = "google" | "facebook" | "microsoft"

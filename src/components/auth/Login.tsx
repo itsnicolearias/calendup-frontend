@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useRouter } from 'next/navigation';
 import { loginUser } from "@/services/auth"
+import { Providers } from "@/types/auth"
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false)
@@ -18,6 +19,13 @@ export default function Component() {
   const [password, setPassword] = useState("")
 
 const router = useRouter();
+
+const params = new URLSearchParams(window.location.search);
+const socialToken = params.get("social-token");
+if (socialToken) {
+  localStorage.setItem("token", socialToken);
+  router.push('/dashboard/appointments')
+}
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -33,8 +41,10 @@ const handleSubmit = async (e: React.FormEvent) => {
 };
 
 
-  const handleSocialLogin = (provider: string) => {
-    console.log(`Iniciando sesión con ${provider}`)
+  const handleSocialLogin = (provider: Providers) => {
+
+       window.location.href = `${process.env.NEXT_PUBLIC_API_URL}${provider}`
+
   }
 
   return (
@@ -134,7 +144,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("Google")}
+                onClick={() => handleSocialLogin("google")}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -161,7 +171,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("Microsoft")}
+                onClick={() => handleSocialLogin("microsoft")}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -176,7 +186,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("Facebook")}
+                onClick={() => handleSocialLogin("facebook")}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
