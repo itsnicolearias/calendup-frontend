@@ -1,6 +1,6 @@
 import { UserWithProfile } from "./settings";
 
-export type AppointmentStatus = "pending" | "confirmed" | "cancelled";
+export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed";
 
 export interface Appointment {
     appointmentId: string

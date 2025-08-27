@@ -36,6 +36,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Pro
   const statuses: { key: AppointmentStatus; color: string; dot: string }[] = [
     { key: "pending", color: "text-yellow-700", dot: "bg-yellow-500" },
     { key: "confirmed", color: "text-green-700", dot: "bg-green-500" },
+    { key: "completed", color: "text-blue-700", dot: "bg-blue-500" },
     { key: "cancelled", color: "text-red-700", dot: "bg-red-500" },
   ]
 
@@ -61,7 +62,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Pro
     </div>
 
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {statuses.map(({ key, color, dot }) => (
           <div
             key={key}

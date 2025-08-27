@@ -2,6 +2,7 @@ import { AppointmentStatus } from "@/types/appointments"
 
 export const STATUS_CONFIG = {
   confirmed: { color: "bg-green-100 text-green-800 border-green-200", label: "Confirmado" },
+  completed: { color: "bg-blue-100 text-blue-800 border-blue-200", label: "Completado" },
   pending:   { color: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "Pendiente" },
   cancelled: { color: "bg-red-100 text-red-800 border-red-200", label: "Rechazado" }
 } as const

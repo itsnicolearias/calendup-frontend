@@ -52,7 +52,6 @@ export function AppointmentDetailModal({ appointment, onClose }: Props) {
         
                             await updateAppointment({ appointmentId: appointment.appointmentId, status: "confirmed" }, token, false)
                             toast.success("Turno confirmado correctamente")
-                            //appointment.status = "confirmed";
                         } catch (error) {
                             console.error(error)
                             toast.error("Ha ocurrido un error confirmando el turno")
