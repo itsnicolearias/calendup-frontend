@@ -17,7 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { createAppointment } from "@/services/appointments";
 import ProfessionalCard from "../shared/ProfessionalCard";
-import { UserWithProfile } from "@/types/settings";
+import { RatingResponse, UserWithProfile } from "@/types/settings";
 import { getOneUser } from "@/services/users";
 import AppointmentTypesSelect from "./AppointmentTypesSelect";
 
@@ -31,6 +31,7 @@ export default function Component() {
   const [dateF, setDateF] = useState<string>();
   const [time, setTime] = useState<string>("");
   const [professional, setProfessional] = useState<Partial<UserWithProfile> | undefined>(undefined)
+  const [ratingData, setRatingData] = useState<RatingResponse>()
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [formData, setFormData] = useState({
       name: "",
@@ -48,7 +49,9 @@ export default function Component() {
   useEffect(() => {
     async function fetchData() {
       const data = await getOneUser(professionalId)
-      setProfessional(data)
+
+      setProfessional(data?.professional)
+      setRatingData(data?.rating)
     }
     fetchData()
   }, [professionalId])
@@ -203,7 +206,7 @@ export default function Component() {
         </Card>
       
         <div className="space-y-6">
-      <ProfessionalCard profile={professional.profile} />
+      <ProfessionalCard profile={professional.profile} averageRating={ratingData?.averageRating} totalReviews={ratingData?.totalReviews}/>
 
         </div>
 

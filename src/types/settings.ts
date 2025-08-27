@@ -60,8 +60,12 @@ export interface UserWithProfile {
   resetTokenExpires?: Date
   createdAt?: Date
   updatedAt?: Date
-  profile?: {
-    //profileId: string
+  profile?: Profile
+  AppointmentTypes?: AppointmentType[],
+}
+
+export interface Profile {
+  //profileId: string
     //userId: string
     name?: string
     lastName?: string
@@ -78,8 +82,6 @@ export interface UserWithProfile {
     defaultAppConfirmation: boolean,
     profilePicture: string,
     markAppAsCompleted: boolean
-  }
-  AppointmentTypes?: AppointmentType[]
 }
 
 export type WeekDay =
@@ -126,3 +128,13 @@ export const dayLabels: Record<string, string> = {
   saturday: "Sábado",
   sunday: "Domingo",
 };
+
+export interface GetProfessionalResponse {
+  professional: UserWithProfile,
+  rating: RatingResponse
+}
+
+export interface RatingResponse {
+  averageRating: number | undefined,
+  totalReviews: number | undefined,
+}
