@@ -43,6 +43,7 @@ export const profileSchema = z.object({
   availability: availabilitySchema.optional(),
   insuranceProviders: z.array(insuranceProviders).optional(),
   defaultAppConfirmation: z.boolean().optional(),
+  markAppAsCompleted: z.boolean().optional(),
   licenseNumber: z.string().optional(),
   profilePicture: z.string().optional(),
 })
@@ -75,7 +76,8 @@ export interface UserWithProfile {
     insuranceProviders?: [],
     licenseNumber?: string,
     defaultAppConfirmation: boolean,
-    profilePicture: string
+    profilePicture: string,
+    markAppAsCompleted: boolean
   }
   AppointmentTypes?: AppointmentType[]
 }

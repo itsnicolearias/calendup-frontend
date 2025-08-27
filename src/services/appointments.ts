@@ -7,7 +7,7 @@ export const getAppointments = async (token: string | null ) => {
         throw new Error;
     }
 
-    return apiFetch<GetAllApiResponse<Appointment>>("/appointments", {
+    return apiFetch<GetAllApiResponse<Appointment>>("/appointments?all=true", {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
