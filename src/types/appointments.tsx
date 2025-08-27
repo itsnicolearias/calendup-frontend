@@ -42,3 +42,14 @@ export interface AppointmentType {
   sessionType: "in person" | "online";
   deleted: boolean;
 }
+
+export interface ReviewBody {
+  reviewId?: string;
+  professionalId: string;
+  appointmentId: string;
+  rating: number; // 1 a 5
+  comment?: string | null;
+  deleted?: boolean;
+  createdAt?: string; // ISO date
+  updatedAt?: string; // ISO date
+}
