@@ -1,18 +1,29 @@
 "use client"
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, Clock, Mail, Phone, User } from "lucide-react"
 import { format } from "date-fns"
 import { parseLocalDate } from "@/utils/date"
-import { Appointment } from "@/types/appointments"
+import { Appointment, AppointmentStatus } from "@/types/appointments"
 import { useRouter } from "next/navigation"
-import { getStatusColor, getStatusText } from "./status"
 import { updateAppointment } from "@/services/appointments"
+import { StatusDropdown } from "./StatusDropdown"
+import { useState } from "react"
 
 export function AppointmentModal({ appointment }: { appointment: Appointment }) {
   const router = useRouter()
+
+   const [currentStatus, setCurrentStatus] = useState(appointment.status)
+
+   const handleChangeStatus = async (newStatus: AppointmentStatus) => {
+    try {
+      const token = localStorage.getItem("token")
+      await updateAppointment({ appointmentId: appointment.appointmentId, status: newStatus }, token, false)
+      setCurrentStatus(newStatus)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const handleClose = () => {
     router.push("/dashboard/appointments")
@@ -34,9 +45,11 @@ export function AppointmentModal({ appointment }: { appointment: Appointment }) 
               <h3 className="text-lg font-semibold">
                 {appointment.name} {appointment.lastName}
               </h3>
-              <Badge className={getStatusColor(appointment.status)}>
-                {getStatusText(appointment.status)}
-              </Badge>
+              <StatusDropdown
+                          currentStatus={currentStatus}
+                          statuses={["cancelled", "completed", "confirmed", "pending"]}
+                          onChange={handleChangeStatus}
+                        />
             </div>
 
             <div className="space-y-3">
@@ -92,44 +105,7 @@ export function AppointmentModal({ appointment }: { appointment: Appointment }) 
               )}
             </div>
 
-            <div className="flex space-x-2 pt-4">
-              <Button
-                variant="default"
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                onClick={async () => {
-                  try {
-                    const token = localStorage.getItem("token")
-                    await updateAppointment(
-                      { appointmentId: appointment.appointmentId, status: "confirmed" },
-                      token,
-                      false
-                    )
-                  } catch (error) {
-                    console.error(error)
-                  }
-                }}
-              >
-                Confirmar
-              </Button>
-              <Button
-                variant="default"
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-                onClick={async () => {
-                  try {
-                    const token = localStorage.getItem("token")
-                    await updateAppointment(
-                      { appointmentId: appointment.appointmentId, status: "cancelled" },
-                      token,
-                      false
-                    )
-                  } catch (error) {
-                    console.error(error)
-                  }
-                }}
-              >
-                Rechazar
-              </Button>
-            </div>
+
           </div>
         )}
       </DialogContent>
