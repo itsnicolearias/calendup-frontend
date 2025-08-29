@@ -33,9 +33,16 @@ export function AppointmentModal({ appointment }: { appointment: Appointment }) 
     <Dialog open={!!appointment} onOpenChange={handleClose}>
       <DialogContent className="max-w-md rounded-2xl shadow-lg">
         <DialogHeader>
+          <div className="flex justify-between items-center">
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Detalles del Turno
+            Detalles del Turno                 
           </DialogTitle>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              #{appointment.appointmentCode}
+          </h1>
+                      
+          </div>
+          
           <DialogDescription>Información completa del turno seleccionado</DialogDescription>
         </DialogHeader>
 
