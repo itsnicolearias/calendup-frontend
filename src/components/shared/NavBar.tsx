@@ -20,6 +20,17 @@ export default function Component() {
       const [searchTerm, setSearchTerm] = useState("")
       const userContext = useUser();
       const user = userContext?.user;
+
+    const handleAgenda = () => {
+        router.push("/dashboard/agenda")
+        setCurrentView(VIEWS.AGENDA)
+    }
+
+    const handleAppointments = () => {
+        router.push("/dashboard/appointments")
+        setCurrentView(VIEWS.TURNS)
+
+    }
       
     const handleLogout = () => {
             userContext?.logout()
@@ -29,7 +40,7 @@ export default function Component() {
       const avatarUrl = user?.profile?.profilePicture 
     || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${user?.profile?.name || ""} ${user?.profile?.lastName || ""}`)}&background=197387&color=fff`;
 
-    const name = `${user?.profile?.name} ${user?.profile?.lastName}` || "Usuario"
+    const name = `${user?.profile?.name} ${user?.profile?.lastName || ""}` || "Usuario"
 
     return (
         <div>
@@ -74,16 +85,16 @@ export default function Component() {
                     <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="flex items-center space-x-2 bg-transparent">
                         <Menu className="w-4 h-4" />
-                        <span>{currentView === "turnos" ? "Mis Turnos" : "Agenda"}</span>
+                        <span>{currentView === VIEWS.TURNS ? "Mis Turnos" : VIEWS.AGENDA}</span>
                         <ChevronDown className="w-4 h-4" />
                     </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setCurrentView("turnos")}>
+                    <DropdownMenuItem onClick={() => handleAppointments()}>
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         Mis Turnos
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setCurrentView("agenda")}>
+                    <DropdownMenuItem onClick={() => handleAgenda()}>
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         Agenda
                     </DropdownMenuItem>

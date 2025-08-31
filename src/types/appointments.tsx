@@ -1,6 +1,6 @@
 import { UserWithProfile } from "./settings";
 
-export type AppointmentStatus = "pending" | "confirmed" | "cancelled";
+export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed";
 
 export interface Appointment {
     appointmentId: string
@@ -17,6 +17,7 @@ export interface Appointment {
     status: AppointmentStatus;
     professional: UserWithProfile
     appointmentTypeId: string | null;
+    appointmentCode: string;
 }
 
 export interface GetAllApiResponse<T> {
@@ -41,4 +42,15 @@ export interface AppointmentType {
   price?: number | null;
   sessionType: "in person" | "online";
   deleted: boolean;
+}
+
+export interface ReviewBody {
+  reviewId?: string;
+  professionalId: string;
+  appointmentId: string;
+  rating: number; // 1 a 5
+  comment?: string | null;
+  deleted?: boolean;
+  createdAt?: string; // ISO date
+  updatedAt?: string; // ISO date
 }

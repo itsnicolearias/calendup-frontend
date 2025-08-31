@@ -43,6 +43,7 @@ export const profileSchema = z.object({
   availability: availabilitySchema.optional(),
   insuranceProviders: z.array(insuranceProviders).optional(),
   defaultAppConfirmation: z.boolean().optional(),
+  markAppAsCompleted: z.boolean().optional(),
   licenseNumber: z.string().optional(),
   profilePicture: z.string().optional(),
 })
@@ -59,8 +60,12 @@ export interface UserWithProfile {
   resetTokenExpires?: Date
   createdAt?: Date
   updatedAt?: Date
-  profile?: {
-    //profileId: string
+  profile?: Profile
+  AppointmentTypes?: AppointmentType[],
+}
+
+export interface Profile {
+  //profileId: string
     //userId: string
     name?: string
     lastName?: string
@@ -75,9 +80,8 @@ export interface UserWithProfile {
     insuranceProviders?: [],
     licenseNumber?: string,
     defaultAppConfirmation: boolean,
-    profilePicture: string
-  }
-  AppointmentTypes?: AppointmentType[]
+    profilePicture: string,
+    markAppAsCompleted: boolean
 }
 
 export type WeekDay =
@@ -124,3 +128,13 @@ export const dayLabels: Record<string, string> = {
   saturday: "Sábado",
   sunday: "Domingo",
 };
+
+export interface GetProfessionalResponse {
+  professional: UserWithProfile,
+  rating: RatingResponse
+}
+
+export interface RatingResponse {
+  averageRating: number | undefined,
+  totalReviews: number | undefined,
+}

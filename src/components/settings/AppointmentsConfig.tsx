@@ -25,6 +25,7 @@ export default function ProfileConfig() {
       jobTitle: "",
       appointmentDuration: 30,
       defaultAppConfirmation: true,
+      markAppAsCompleted: true
     },
     mode: "onChange",
   });
@@ -50,6 +51,7 @@ export default function ProfileConfig() {
           jobTitle: profile?.profile?.jobTitle ?? "",
           appointmentDuration: profile?.profile?.appointmentDuration ?? 30,
           defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
+          markAppAsCompleted: profile?.profile?.markAppAsCompleted ?? true,
         });
       } catch (error) {
         console.error("Error cargando perfil:", error);
@@ -112,6 +114,18 @@ export default function ProfileConfig() {
               id="defaultAppConfirmation"
               checked={watch("defaultAppConfirmation")}
               onCheckedChange={(checked) => setValue("defaultAppConfirmation", checked)}
+            />
+          </div>
+
+          {/* marcar turno como completado */}
+          <div className="flex items-center justify-between space-x-2">
+            <Label htmlFor="markAppAsCompleted" className="text-sm font-medium">
+              Marcar turnos como completados automaticamente
+            </Label>
+            <Switch
+              id="markAppAsCompleted"
+              checked={watch("markAppAsCompleted")}
+              onCheckedChange={(checked) => setValue("markAppAsCompleted", checked)}
             />
           </div>
 

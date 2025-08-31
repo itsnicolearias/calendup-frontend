@@ -11,6 +11,9 @@ import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useRouter } from 'next/navigation';
 import { loginUser } from "@/services/auth"
+import { Providers } from "@/types/auth"
+import { useUser } from "@/contexts/UserContext"
+import { toast } from "sonner"
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false)
@@ -19,6 +22,39 @@ export default function Component() {
 
 const router = useRouter();
 
+  const { refreshUser } = useUser();
+
+  const handleSocialLogin = async (provider: Providers) => {
+
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+
+    const popup = window.open(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}`,
+      "GoogleLogin",
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+
+    // Escuchar respuesta del popup
+    const listener = async (event: MessageEvent) => {
+      
+      const { token } = event.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        //update global context
+        await refreshUser()
+        router.push("/dashboard/appointments");
+        popup?.close();
+        window.removeEventListener("message", listener);
+      }
+    };
+    
+    window.addEventListener("message", listener);
+  };
+
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
     
@@ -26,16 +62,25 @@ const handleSubmit = async (e: React.FormEvent) => {
     const data = await loginUser({email, password})
     // Podés redirigir o mostrar un mensaje de éxito
     localStorage.setItem('token', data.token);
+    await refreshUser()
     router.push('/dashboard/appointments')
-  } catch (err) {
-    console.error('Error al registrar:', err);
+  } catch (err: any) {
+    if (err.message === "User does not exist"){
+      toast.error("El usuario ingresado no existe")
+    }
+
+    if (err.message === "Invalid email or password"){
+      toast.error("Credenciales invalidas")
+    }
+
+    if (err.message === "You must verify your email before logging in"){
+      toast.error("Debes verificar tu cuenta antes de iniciar sesion")
+    }
+    
   }
 };
 
 
-  const handleSocialLogin = (provider: string) => {
-    console.log(`Iniciando sesión con ${provider}`)
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
@@ -134,7 +179,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("Google")}
+                onClick={() => handleSocialLogin("google")}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -161,7 +206,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("Microsoft")}
+                onClick={() => handleSocialLogin("microsoft")}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -176,7 +221,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("Facebook")}
+                onClick={() => handleSocialLogin("facebook")}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
