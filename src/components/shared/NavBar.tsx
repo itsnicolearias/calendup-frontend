@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { CalendarIcon, ChevronDown, Home, LogOut, Menu, Palette, Search, Settings } from "lucide-react"
+import { Calendar, CalendarIcon, ChevronDown, Home, LogOut, Menu, Palette, Search, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
@@ -14,7 +14,7 @@ export default function Component() {
 
       const router = useRouter();
 
-      const VIEWS = { TURNS: "turnos", AGENDA: "agenda" } as const;
+      const VIEWS = { TURNS: "turnos", AGENDA: "Agenda" } as const;
       const [currentView, setCurrentView] = useState<typeof VIEWS[keyof typeof VIEWS]>(VIEWS.TURNS);
 
       const [searchTerm, setSearchTerm] = useState("")
@@ -52,7 +52,7 @@ export default function Component() {
                 <div className="flex items-center space-x-8">
                 <div className="flex items-center">
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                    <Home className="w-5 h-5 text-white" />
+                    <Calendar className="w-6 h-6 text-white" />
                     </div>
                     <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     CalendUp
