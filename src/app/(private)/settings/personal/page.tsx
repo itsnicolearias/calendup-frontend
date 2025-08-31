@@ -1,4 +1,4 @@
-import SettingsPage from "../../../components/settings/SettingsForm";
+import SettingsPage from "../../../../components/settings/SettingsForm";
 
 export default function Page() {
   return (
