@@ -1,11 +1,11 @@
 import React from 'react'
-import { Card, CardContent } from '../ui/card'
+import { Card, CardContent } from '../../ui/card'
 import { Clock, Grid, List, MapPin, Search } from 'lucide-react'
-import { Input } from '../ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Button } from '../ui/button'
+import { Input } from '../../ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select'
+import { Button } from '../../ui/button'
 import { categories } from '@/lib/mock-data'
-import { Badge } from '../ui/badge'
+import { Badge } from '../../ui/badge'
 
 interface SearchAndFiltersProps {
     searchTerm: string

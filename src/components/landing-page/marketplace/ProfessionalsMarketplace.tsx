@@ -14,7 +14,7 @@ import ProfessionalModal from "./ProfessionalModal"
 import BookingModal from "./BookingModal"
 import { professionals, categories, timeSlots } from "@/lib/mock-data" 
 import ResultsHeader from "./ResultsHeader"
-import SearchAndFilters from "../SearchAndFilters"
+import SearchAndFilters from "./SearchAndFilters"
 
 
 
