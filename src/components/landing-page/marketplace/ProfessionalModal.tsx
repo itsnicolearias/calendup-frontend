@@ -1,0 +1,119 @@
+import { Clock, Mail, MapPin, Phone, Star } from "lucide-react";
+import { Card } from "../../ui/card";
+import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
+import { Calendar } from "../../ui/calendar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../../ui/dialog";
+import { professionals } from "@/lib/mock-data";
+
+interface ProfessionalModalProps {
+  professional: typeof professionals[number] | null | undefined;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function ProfessionalModal({ professional, open, onOpenChange }: ProfessionalModalProps) {
+    return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">Perfil Profesional</DialogTitle>
+          <DialogDescription>Información completa del profesional</DialogDescription>
+        </DialogHeader>
+        {professional && (
+          <div className="space-y-6">
+            <div className="flex items-center space-x-4">
+              <Avatar className="w-20 h-20">
+                <AvatarImage src={professional.image || "/placeholder.svg"} alt={professional.name} />
+                <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xl">
+                  {professional.name
+                    .split(" ")
+                    .map((n: string) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">{professional.name}</h3>
+                <p className="text-blue-600 font-medium text-lg">{professional.specialty}</p>
+                <div className="flex items-center mt-2">
+                  <Star className="w-5 h-5 text-yellow-400 fill-current mr-1" />
+                  <span className="text-sm font-medium">{professional.rating}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="p-4">
+                <h4 className="font-semibold mb-3 flex items-center">
+                  <MapPin className="w-5 h-5 mr-2 text-blue-600" />
+                  Ubicación
+                </h4>
+                <p className="text-gray-600">{professional.location}</p>
+              </Card>
+
+              <Card className="p-4">
+                <h4 className="font-semibold mb-3 flex items-center">
+                  <Clock className="w-5 h-5 mr-2 text-blue-600" />
+                  Horarios
+                </h4>
+                <p className="text-gray-600">{professional.schedule}</p>
+              </Card>
+
+              <Card className="p-4">
+                <h4 className="font-semibold mb-3 flex items-center">
+                  <Phone className="w-5 h-5 mr-2 text-blue-600" />
+                  Teléfono
+                </h4>
+                <p className="text-gray-600">{professional.phone}</p>
+              </Card>
+
+              <Card className="p-4">
+                <h4 className="font-semibold mb-3 flex items-center">
+                  <Mail className="w-5 h-5 mr-2 text-blue-600" />
+                  Email
+                </h4>
+                <p className="text-gray-600">{professional.email}</p>
+              </Card>
+            </div>
+
+            <Card className="p-4">
+              <h4 className="font-semibold mb-3">Descripción</h4>
+              <p className="text-gray-600 leading-relaxed">{professional.description}</p>
+            </Card>
+
+            <Card className="p-4">
+              <h4 className="font-semibold mb-3">Servicios</h4>
+              <div className="flex flex-wrap gap-2">
+                {professional.services.map((service: string, index: number) => (
+                  <Badge key={index} className="bg-blue-100 text-blue-800 border-blue-200">
+                    {service}
+                  </Badge>
+                ))}
+              </div>
+            </Card>
+
+            <div className="flex space-x-4 pt-4">
+              <Button
+                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                size="lg"
+              >
+                <Calendar className="w-5 h-5 mr-2" />
+                Reservar Turno
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent"
+              >
+                <Phone className="w-5 h-5 mr-2" />
+                Contactar
+              </Button>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+
+    )
+}

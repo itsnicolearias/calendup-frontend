@@ -94,6 +94,10 @@ export default function Component() {
   const handleNavClick = (section: string) => {
     setCurrentSection(section)
     setMobileMenuOpen(false)
+
+    if (section === "profesionales"){
+      router.push("/professionals-marketplace")
+    }
   }
 
   const renderContent = () => {
@@ -472,9 +476,9 @@ export default function Component() {
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleNavClick("contacto")} className="hover:text-white transition-colors">
+                  <Button onClick={() => handleNavClick("contacto")} className="hover:text-white transition-colors">
                     Contacto
-                  </button>
+                  </Button>
                 </li>
                 <li>
                   <a href="#" className="hover:text-white transition-colors">
