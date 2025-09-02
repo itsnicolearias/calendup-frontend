@@ -14,6 +14,7 @@ import { useS3Upload } from "@/services/s3-upload";
 import { MultiValue } from "react-select";
 import { useFieldArray } from "react-hook-form";
 import dynamic from "next/dynamic";
+import LocationSelect from "../shared/LocationSelect";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
 
@@ -133,20 +134,7 @@ const onSubmit = async (data: ProfileFormValues) => {
           />
         </div>
 
-        <div>
-          <Label>Pais</Label>
-          <Input {...register("country")} />
-        </div>
-
-        <div>
-          <Label>Provincia</Label>
-          <Input {...register("province")} />
-        </div>
-
-        <div>
-          <Label>Ciudad</Label>
-          <Input {...register("city")} />
-        </div>
+        <LocationSelect />
         
         <div>
           <Label>Dirección</Label>
