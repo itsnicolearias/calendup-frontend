@@ -5,26 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-interface NavbarProps {
-  currentSection: string;
-  onNavClick: (section: string) => void;
-}
-
-export default function Navbar({ currentSection, onNavClick }: NavbarProps) {
+export default function PublicNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
 
   const navItems = [
-    { label: "Inicio", section: "inicio" },
-    { label: "Buscar Profesionales", section: "profesionales" },
-    { label: "Precios", section: "precios" },
-    { label: "Contacto", section: "contacto" },
+    { label: "Inicio", section: "" },
+    { label: "Buscar Profesionales", section: "professionals-marketplace" },
+    { label: "Precios", section: "pricing" },
+    { label: "Contacto", section: "contact" },
   ];
-
-  const handleClick = (section: string) => {
-    onNavClick(section);
-    setMobileMenuOpen(false);
-  };
 
   return (
     <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
@@ -33,7 +23,7 @@ export default function Navbar({ currentSection, onNavClick }: NavbarProps) {
           {/* Logo */}
           <div
             className="flex items-center cursor-pointer"
-            onClick={() => handleClick("inicio")}
+            onClick={() => router.push("/")}
           >
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
               <Calendar className="w-6 h-6 text-white" />
@@ -48,12 +38,8 @@ export default function Navbar({ currentSection, onNavClick }: NavbarProps) {
             {navItems.map((item) => (
               <button
                 key={item.section}
-                onClick={() => handleClick(item.section)}
-                className={`font-medium transition-colors ${
-                  currentSection === item.section
-                    ? "text-blue-600"
-                    : "text-gray-700 hover:text-blue-600"
-                }`}
+                onClick={() => router.push(`/${item.section}`)}
+                className="font-medium transition-color text-blue-600 hover:text-gray-600"
               >
                 {item.label}
               </button>
@@ -86,7 +72,7 @@ export default function Navbar({ currentSection, onNavClick }: NavbarProps) {
               {navItems.map((item) => (
                 <button
                   key={item.section}
-                  onClick={() => handleClick(item.section)}
+                  onClick={() => router.push(`/${item.section}`)}
                   className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
                 >
                   {item.label}
