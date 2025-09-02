@@ -46,6 +46,16 @@ export const profileSchema = z.object({
   markAppAsCompleted: z.boolean().optional(),
   licenseNumber: z.string().optional(),
   profilePicture: z.string().optional(),
+  languages: z.array(z.string()).optional(),
+  education: z.array(
+  z.object({
+    title: z.string().min(1, "Título requerido"),
+    institution: z.string().min(1, "Institución requerida"),
+  })
+  ).optional(),
+  country: z.string().optional(),
+  province: z.string().optional(),
+  city: z.string().optional()
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
@@ -82,6 +92,16 @@ export interface Profile {
     defaultAppConfirmation: boolean,
     profilePicture: string,
     markAppAsCompleted: boolean
+    country: string
+    province: string
+    city: string
+    education: Education[]
+    languages: string[]
+}
+
+export type Education = {
+  title: string
+  institution: string
 }
 
 export type WeekDay =
@@ -138,3 +158,12 @@ export interface RatingResponse {
   averageRating: number | undefined,
   totalReviews: number | undefined,
 }
+
+export const languageOptions = [
+  { value: "es", label: "Español" },
+  { value: "en", label: "Inglés" },
+  { value: "fr", label: "Francés" },
+  { value: "de", label: "Alemán" },
+  { value: "pt", label: "Portugués" },
+  // podés usar una librería como `iso-639-1` para traer todos los idiomas
+];
