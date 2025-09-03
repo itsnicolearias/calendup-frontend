@@ -28,8 +28,7 @@ export default function ProfessionalCard({
 
   const rating = getAverageRating(professional?.Reviews)
 
-  const avatarUrl = professional?.profile?.profilePicture
-    || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`)}&background=197387&color=fff`;
+ 
 
 
   useEffect(() => {
@@ -52,7 +51,7 @@ export default function ProfessionalCard({
       <CardContent className={`p-6 ${isListView ? "flex items-center space-x-6 w-full" : ""}`}>
         <div className={`${isListView ? "flex-shrink-0" : "text-center mb-4"}`}>
           <Avatar className={`${isListView ? "w-16 h-16" : "w-20 h-20 mx-auto mb-3"}`}>
-            <AvatarImage src={professional.profile?.profilePicture || avatarUrl} alt={professional.profile?.name} />
+            <AvatarImage src={professional.profile?.profilePicture || "placeholder.svg"} alt={professional.profile?.name} />
             <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg">
               {professional?.profile?.name?.split(" ")
                 .map((n: string) => n[0])

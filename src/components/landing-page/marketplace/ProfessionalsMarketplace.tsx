@@ -11,11 +11,11 @@ import {
 import ProfessionalCard from "./ProfessionalCard"
 import ProfessionalModal from "./ProfessionalModal"
 import BookingModal from "./BookingModal"
-import { categories  } from "@/lib/mock-data" 
 import ResultsHeader from "./ResultsHeader"
 import SearchAndFilters from "./SearchAndFilters"
 import { UserWithProfile } from "@/types/settings"
 import { getUsers } from "@/services/users"
+import { categoryMap, getCategories } from "@/types/landing-page"
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -42,16 +42,28 @@ export default function Component() {
     }, [])
 
 
-  const filteredProfessionals = professionals?.filter((professional) => {
-    const matchesSearch =
-      professional?.profile?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      professional?.profile?.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "todos" || professional.profile?.jobTitle === selectedCategory
-    const matchesLocation =
-      selectedLocation === "" || selectedLocation === "todas" || professional.profile?.city.includes(selectedLocation) || professional.profile?.province.includes(selectedLocation)
+    const filteredProfessionals = professionals?.filter((professional) => {
+      const jobTitle = professional.profile?.jobTitle ?? ""
+      const name = professional.profile?.name ?? ""
 
-    return matchesSearch && matchesCategory && matchesLocation
-  })
+      const matchesSearch =
+        name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+
+      const matchesCategory =
+        selectedCategory === "todos" ||
+        categoryMap[selectedCategory]?.includes(jobTitle)
+
+      const matchesLocation =
+        selectedLocation === "" ||
+        selectedLocation === "todas" ||
+        professional.profile?.city?.toLowerCase().includes(selectedLocation.toLowerCase()) ||
+        professional.profile?.province?.toLowerCase().includes(selectedLocation.toLowerCase())
+
+      return matchesSearch && matchesCategory && matchesLocation
+    })
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-20">
@@ -82,7 +94,7 @@ export default function Component() {
           setSelectedLocation={setSelectedLocation}
           viewMode={viewMode}
           setViewMode={setViewMode}
-          categories={categories}
+          categories={getCategories(professionals || [])}
         />
 
         {/* Results */}

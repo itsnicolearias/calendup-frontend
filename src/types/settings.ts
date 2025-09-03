@@ -136,9 +136,44 @@ export enum UserRole {
 }
 
 export const JobTitles = [
-  "Psicólogo/a", "Nutricionista", "Fisioterapeuta", "Coach", "Médico/a", "Odontólogo/a",
-  "Esteticista", "Podólogo/a", "Kinesiólogo/a", "Terapista ocupacional", "Masajista", "Mecanico/a", "Abogado/a", "Contador/a", "Arquitecto/a", "Ingeniero/a", "Diseñador/a gráfico/a"
-]
+  // Salud
+  "Medico",
+  "Odontologo",
+  "Psicologo",
+  "Nutricionista",
+  "Fisioterapeuta",
+  "Kinesiologo",
+  "Enfermero",
+  "Terapista ocupacional",
+
+  // Belleza
+  "Esteticista",
+  "Podologo",
+  "Masajista",
+  "Peluquero",
+  "Cosmetologo",
+
+  // Legal & Finanzas
+  "Abogado",
+  "Contador",
+  "Escribano",
+  "Asesor financiero",
+
+  // Fitness & Bienestar
+  "Entrenador personal",
+  "Coach",
+  "Instructor de yoga",
+  "Profesor de pilates",
+
+  // Educación & Creatividad
+  "Profesor",
+  "Arquitecto",
+  "Ingeniero",
+  "Diseñador grafico",
+  "Desarrollador",
+  "Consultor",
+];
+
 
 
 export const dayLabels: Record<string, string> = {

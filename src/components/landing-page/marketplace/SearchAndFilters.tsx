@@ -4,8 +4,7 @@ import { Clock, Grid, List, MapPin, Search } from 'lucide-react'
 import { Input } from '../../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select'
 import { Button } from '../../ui/button'
-import { categories } from '@/lib/mock-data'
-import { Badge } from '../../ui/badge'
+import { CategoryType } from '@/types/landing-page'
 
 interface SearchAndFiltersProps {
     searchTerm: string
@@ -16,7 +15,7 @@ interface SearchAndFiltersProps {
     setSelectedLocation: (location: string) => void
     viewMode: "grid" | "list"
     setViewMode: (mode: "grid" | "list") => void
-    categories: typeof categories
+    categories: CategoryType[]
 }
 
 
@@ -100,29 +99,23 @@ function SearchAndFilters({
     
                 {/* Categories */}
                 <div className="flex flex-wrap gap-3">
-                  {categories.map((category) => (
-                    <Button
-                      key={category.id}
-                      variant={selectedCategory === category.id ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setSelectedCategory(category.id)}
-                      className={`flex items-center space-x-2 ${
-                        selectedCategory === category.id
-                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                          : "border-gray-300 hover:border-blue-500"
+                  {categories.map((cat) => {
+                    const Icon = cat.icon
+                    return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
+                        selectedCategory === cat.id ? "bg-blue-500 text-white" : "bg-white text-gray-700"
                       }`}
                     >
-                      <category.icon className="w-4 h-4" />
-                      <span>{category.name}</span>
-                      <Badge
-                        className={`ml-1 ${
-                          selectedCategory === category.id ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {category.count}
-                      </Badge>
-                    </Button>
-                  ))}
+                      <Icon className="w-4 h-4" />
+                      <span>{cat.name}</span>
+                      <span className="ml-1 text-sm text-gray-500">({cat.count})</span>
+                    </button>
+                    )
+                    })}
+
                 </div>
               </CardContent>
             </Card>
