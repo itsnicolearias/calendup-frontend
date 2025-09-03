@@ -1,51 +1,87 @@
-import { Clock, MapPin, Star, User } from "lucide-react";
-import { Card, CardContent } from "../../ui/card";
+import { MapPin, Star, User } from "lucide-react";
+import { Card, CardContent, CardTitle } from "../../ui/card";
 import { Button } from "../../ui/button";
-import { Calendar } from "../../ui/calendar";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { es } from "date-fns/locale";
 import { useState } from "react";
-import { professionals, timeSlots } from "@/lib/mock-data";
+import { UserWithProfile } from "@/types/settings";
+import { getAverageRating } from "@/utils/getAverageRating";
+import AvailableCalendar from "@/components/shared/AvailableCalendar";
+import { createAppointment } from "@/services/appointments";
+import { toast } from "sonner";
 
 
 interface BookingModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    professional: typeof professionals[number] | null;
-    timeSlots: typeof timeSlots;
+    professional: UserWithProfile | null;
+
 
 }
 
-export default function BookingModal({ open, onOpenChange, professional, timeSlots }: BookingModalProps) {
-    const [selectedDate, setSelectedDate] = useState<Date>()
-    const [selectedTime, setSelectedTime] = useState("")
+export default function BookingModal({ open, onOpenChange, professional }: BookingModalProps) {
 
+    const location = `${professional?.profile?.city}, ${professional?.profile?.province}`
+
+    const rating = getAverageRating(professional?.Reviews)
+
+    const avatarUrl = professional?.profile?.profilePicture
+    || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`)}&background=197387&color=fff`;
+
+    const [selectedDate, setSelectedDate] = useState<string>()
+    const [selectedTime, setSelectedTime] = useState<string>("")
     const [bookingForm, setBookingForm] = useState({
-        nombre: "",
-        apellido: "",
-        email: "",
-        telefono: "",
-        notas: "",
+      name: "",
+      lastName: "",
+      professionalId: professional?.userId,
+      email: "",
+      reason: "",
+      date: "",
+      time: "",
+      phone: "",
+      appointmentTypeId: null,
       })
 
     const handleBookingFormChange = (field: string, value: string) => {
         setBookingForm((prev) => ({ ...prev, [field]: value }))
       }
-    
-      const handleBookingSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        console.log("Booking submitted:", {
-          professional: professional,
-          date: selectedDate,
-          time: selectedTime,
-          form: bookingForm,
-        })
+
+      const handleCancel = () => {
+        setSelectedDate(undefined)
+        setSelectedTime("")
         onOpenChange(false)
       }
+    
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+         e.preventDefault();
 
+    try {
+      bookingForm.date = selectedDate || "";
+
+      /*if (selectedType){
+        bookingForm.appointmentTypeId = selectedType
+      }*/
+     bookingForm.appointmentTypeId = null
+
+      await createAppointment(bookingForm);
+      toast.success("Turno solicitado con éxito", {
+        description: "Te enviaremos un email con los detalles.",
+        duration: 5000,
+      });
+
+      onOpenChange(false)
+    } catch (err) {
+      console.error("Error:", err);
+    }
+      }
+
+      const handleSelect = (date: string, hour: string) => {
+      setSelectedDate(date)
+      setSelectedTime(hour)
+      setBookingForm((prev) => ({ ...prev, date, time: hour }))
+    }
       
 
     return (
@@ -63,27 +99,26 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                       <CardContent className="p-4">
                         <div className="flex items-center space-x-4">
                           <Avatar className="w-16 h-16">
-                            <AvatarImage src={professional.image || "/placeholder.svg"} alt={professional.name} />
+                            <AvatarImage src={professional.profile?.profilePicture || avatarUrl} alt={professional.profile?.name} />
                             <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg">
-                              {professional.name
-                                .split(" ")
+                              {professional.profile?.name?.split(" ")
                                 .map((n: string) => n[0])
                                 .join("")}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-grow">
-                            <h3 className="text-xl font-bold text-gray-900">{professional.name}</h3>
-                            <p className="text-blue-600 font-medium">{professional.specialty}</p>
+                            <h3 className="text-xl font-bold text-gray-900">{professional.profile?.name}</h3>
+                            <p className="text-blue-600 font-medium">{professional.profile?.jobTitle}</p>
                             <div className="flex items-center mt-1">
                               <MapPin className="w-4 h-4 text-gray-500 mr-1" />
-                              <span className="text-gray-600 text-sm">{professional.location}</span>
+                              <span className="text-gray-600 text-sm">{location}</span>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-2xl font-bold text-gray-900">{professional.price}</div>
+
                             <div className="flex items-center">
                               <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                              <span className="text-sm font-medium">{professional.rating}</span>
+                              <span className="text-sm font-medium">{rating}</span>
                             </div>
                           </div>
                         </div>
@@ -91,74 +126,18 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                     </Card>
         
                     <form onSubmit={handleBookingSubmit} className="space-y-6">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
                         {/* Calendar and Time Selection */}
                         <div className="space-y-6">
                           <Card>
+                             <CardTitle className="text-lg font-semibold text-center">Selecciona fecha y hora</CardTitle>
                             <CardContent className="p-6">
-                              <h4 className="text-lg font-semibold mb-4 flex items-center">
-                                <Calendar className="w-5 h-5 mr-2 text-blue-600" />
-                                Seleccionar Fecha
-                              </h4>
-                              <div className="flex justify-center">
-                                <Calendar
-                                  mode="single"
-                                  selected={selectedDate}
-                                  onSelect={setSelectedDate}
-                                  disabled={(date) => date < new Date() || date.getDay() === 0}
-                                  className="rounded-md border shadow-sm"
-                                  locale={es}
-                                />
-                              </div>
-                              {selectedDate && (
-                                <div className="mt-4 p-3 bg-blue-50 rounded-lg text-center">
-                                  <p className="text-sm text-blue-800">
-                                    Fecha seleccionada:{" "}
-                                    {selectedDate.toLocaleDateString("es-ES", {
-                                      weekday: "long",
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                    })}
-                                  </p>
-                                </div>
-                              )}
+                                <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId} />
+
                             </CardContent>
                           </Card>
         
-                          {selectedDate && (
-                            <Card>
-                              <CardContent className="p-6">
-                                <h4 className="text-lg font-semibold mb-4 flex items-center">
-                                  <Clock className="w-5 h-5 mr-2 text-blue-600" />
-                                  Horarios Disponibles
-                                </h4>
-                                <div className="grid grid-cols-3 gap-2">
-                                  {timeSlots.map((time) => (
-                                    <Button
-                                      key={time}
-                                      type="button"
-                                      variant={selectedTime === time ? "default" : "outline"}
-                                      size="sm"
-                                      onClick={() => setSelectedTime(time)}
-                                      className={
-                                        selectedTime === time
-                                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
-                                          : "hover:border-blue-500 hover:text-blue-600"
-                                      }
-                                    >
-                                      {time}
-                                    </Button>
-                                  ))}
-                                </div>
-                                {selectedTime && (
-                                  <div className="mt-4 p-3 bg-green-50 rounded-lg text-center">
-                                    <p className="text-sm text-green-800">Hora seleccionada: {selectedTime}</p>
-                                  </div>
-                                )}
-                              </CardContent>
-                            </Card>
-                          )}
+
                         </div>
         
                         {/* Form Fields */}
@@ -175,19 +154,19 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                                     <Label htmlFor="booking-nombre">Nombre *</Label>
                                     <Input
                                       id="booking-nombre"
-                                      value={bookingForm.nombre}
-                                      onChange={(e) => handleBookingFormChange("nombre", e.target.value)}
+                                      value={bookingForm.name}
+                                      onChange={(e) => handleBookingFormChange("name", e.target.value)}
                                       placeholder="Tu nombre"
                                       required
                                       className="mt-1"
                                     />
                                   </div>
                                   <div>
-                                    <Label htmlFor="booking-apellido">Apellido *</Label>
+                                    <Label htmlFor="booking-lastName">Apellido *</Label>
                                     <Input
-                                      id="booking-apellido"
-                                      value={bookingForm.apellido}
-                                      onChange={(e) => handleBookingFormChange("apellido", e.target.value)}
+                                      id="booking-lastName"
+                                      value={bookingForm.lastName}
+                                      onChange={(e) => handleBookingFormChange("lastName", e.target.value)}
                                       placeholder="Tu apellido"
                                       required
                                       className="mt-1"
@@ -213,10 +192,9 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                                   <Input
                                     id="booking-telefono"
                                     type="tel"
-                                    value={bookingForm.telefono}
-                                    onChange={(e) => handleBookingFormChange("telefono", e.target.value)}
+                                    value={bookingForm.phone}
+                                    onChange={(e) => handleBookingFormChange("phone", e.target.value)}
                                     placeholder="+54 11 1234-5678"
-                                    required
                                     className="mt-1"
                                   />
                                 </div>
@@ -225,8 +203,8 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                                   <Label htmlFor="booking-notas">Notas adicionales</Label>
                                   <Input
                                     id="booking-notas"
-                                    value={bookingForm.notas}
-                                    onChange={(e) => handleBookingFormChange("notas", e.target.value)}
+                                    value={bookingForm.reason}
+                                    onChange={(e) => handleBookingFormChange("reason", e.target.value)}
                                     placeholder="Información adicional sobre tu consulta (opcional)"
                                     className="mt-1"
                                     //rows={3}
@@ -240,25 +218,20 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                           {selectedDate && selectedTime && (
                             <Card className="bg-green-50 border-green-200">
                               <CardContent className="p-4">
-                                <h4 className="font-semibold text-green-800 mb-2">Resumen de la Cita</h4>
+                                <h4 className="font-semibold text-green-800 mb-2">Resumen del turno</h4>
                                 <div className="space-y-1 text-sm text-green-700">
                                   <p>
                                     <strong>Fecha:</strong>{" "}
-                                    {selectedDate.toLocaleDateString("es-ES", {
-                                      weekday: "long",
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                    })}
+                                    {selectedDate}
                                   </p>
                                   <p>
                                     <strong>Hora:</strong> {selectedTime}
                                   </p>
                                   <p>
-                                    <strong>Profesional:</strong> {professional.name}
+                                    <strong>Profesional:</strong> {professional.profile?.name}
                                   </p>
                                   <p>
-                                    <strong>Servicio:</strong> {professional.specialty}
+                                    <strong>Servicio:</strong> {professional.profile?.jobTitle}
                                   </p>
                                 </div>
                               </CardContent>
@@ -269,7 +242,7 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
         
                       {/* Action Buttons */}
                       <div className="flex space-x-4 pt-6 border-t">
-                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
+                        <Button type="button" variant="outline" onClick={() => handleCancel()} className="flex-1">
                           Cancelar
                         </Button>
                         <Button
@@ -277,14 +250,13 @@ export default function BookingModal({ open, onOpenChange, professional, timeSlo
                           disabled={
                             !selectedDate ||
                             !selectedTime ||
-                            !bookingForm.nombre ||
-                            !bookingForm.apellido ||
-                            !bookingForm.email ||
-                            !bookingForm.telefono
+                            !bookingForm.name ||
+                            !bookingForm.lastName ||
+                            !bookingForm.email
                           }
                           className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                         >
-                          Confirmar Reserva
+                          Confirmar turno
                         </Button>
                       </div>
                     </form>

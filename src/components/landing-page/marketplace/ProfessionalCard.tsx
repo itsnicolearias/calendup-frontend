@@ -4,13 +4,16 @@ import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Dialog, DialogTrigger } from "../../ui/dialog";
-import { professionals } from "@/lib/mock-data";
+import { UserWithProfile } from "@/types/settings";
+import { getAverageRating } from "@/utils/getAverageRating";
+import { obtainAvailability } from "@/utils/availabilityButton";
+import { useEffect, useState } from "react";
 
 interface ProfessionalCardProps {
-  professional: typeof professionals[number];
+  professional: UserWithProfile;
   isListView?: boolean;
-  onViewProfile: (professional: typeof professionals[number]) => void;
-  onBook: (professional: typeof professionals[number]) => void;
+  onViewProfile: (professional: UserWithProfile) => void;
+  onBook: (professional: UserWithProfile) => void;
 }
 
 export default function ProfessionalCard({
@@ -19,6 +22,26 @@ export default function ProfessionalCard({
   onViewProfile,
   onBook,
 }: ProfessionalCardProps) {
+  const [availability, setAvailability] = useState<string>("")
+
+  const location = `${professional.profile?.city}, ${professional.profile?.province}`
+
+  const rating = getAverageRating(professional?.Reviews)
+
+  const avatarUrl = professional?.profile?.profilePicture
+    || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`)}&background=197387&color=fff`;
+
+
+  useEffect(() => {
+    async function fetchData() {
+      const data =  await obtainAvailability(professional.userId)
+      setAvailability(data!)
+    }
+
+    fetchData()
+  }, [professional.userId])
+   
+
     return (
         
     <Card
@@ -29,10 +52,9 @@ export default function ProfessionalCard({
       <CardContent className={`p-6 ${isListView ? "flex items-center space-x-6 w-full" : ""}`}>
         <div className={`${isListView ? "flex-shrink-0" : "text-center mb-4"}`}>
           <Avatar className={`${isListView ? "w-16 h-16" : "w-20 h-20 mx-auto mb-3"}`}>
-            <AvatarImage src={professional.image || "/placeholder.svg"} alt={professional.name} />
+            <AvatarImage src={professional.profile?.profilePicture || avatarUrl} alt={professional.profile?.name} />
             <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg">
-              {professional.name
-                .split(" ")
+              {professional?.profile?.name?.split(" ")
                 .map((n: string) => n[0])
                 .join("")}
             </AvatarFallback>
@@ -42,26 +64,26 @@ export default function ProfessionalCard({
         <div className={`${isListView ? "flex-grow" : ""}`}>
           <div className={`${isListView ? "flex justify-between items-start" : ""}`}>
             <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">{professional.name}</h3>
-              <p className="text-blue-600 font-medium mb-2">{professional.specialty}</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{professional?.profile?.name}</h3>
+              <p className="text-blue-600 font-medium mb-2">{professional.profile?.jobTitle}</p>
               <div className="flex items-center text-gray-600 text-sm mb-2">
                 <MapPin className="w-4 h-4 mr-1" />
-                {professional.location}
+                {location}
               </div>
               <div className="flex items-center mb-3">
                 <div className="flex items-center mr-4">
                   <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                  <span className="font-semibold">{professional.rating}</span>
-                  <span className="text-gray-500 text-sm ml-1">({professional.reviews} reseñas)</span>
+                  <span className="font-semibold">{rating}</span>
+                  <span className="text-gray-500 text-sm ml-1">({professional.Reviews?.length} reseñas)</span>
                 </div>
                 <Badge
                   className={`text-xs ${
-                    professional.availability.includes("hoy")
+                    availability!.includes("hoy")
                       ? "bg-green-100 text-green-800 border-green-200"
                       : "bg-yellow-100 text-yellow-800 border-yellow-200"
                   }`}
                 >
-                  {professional.availability}
+                  {availability}
                 </Badge>
               </div>
             </div>

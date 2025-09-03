@@ -15,9 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <>
-    <PublicNavbar />
-    {children}
-    <Toaster richColors position="bottom-right" />
+      <html lang="en">
+      <body>
+        <PublicNavbar />
+        {children}
+        <Toaster richColors position="bottom-right" />
+      </body>
+    </html>
     </>
   );
 }

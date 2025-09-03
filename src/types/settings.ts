@@ -1,5 +1,6 @@
 import z from "zod"
 import { AppointmentType } from "./appointments"
+import { Review } from "./review"
 
 const timeRangeSchema = z.object({
   start: z
@@ -72,6 +73,7 @@ export interface UserWithProfile {
   updatedAt?: Date
   profile?: Profile
   AppointmentTypes?: AppointmentType[],
+  Reviews?: Review[]
 }
 
 export interface Profile {
@@ -148,16 +150,6 @@ export const dayLabels: Record<string, string> = {
   saturday: "Sábado",
   sunday: "Domingo",
 };
-
-export interface GetProfessionalResponse {
-  professional: UserWithProfile,
-  rating: RatingResponse
-}
-
-export interface RatingResponse {
-  averageRating: number | undefined,
-  totalReviews: number | undefined,
-}
 
 export const languageOptions = [
   { value: "es", label: "Español" },

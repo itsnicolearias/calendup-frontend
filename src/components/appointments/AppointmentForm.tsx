@@ -17,9 +17,10 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { createAppointment } from "@/services/appointments";
 import ProfessionalCard from "../shared/ProfessionalCard";
-import { RatingResponse, UserWithProfile } from "@/types/settings";
+import { UserWithProfile } from "@/types/settings";
 import { getOneUser } from "@/services/users";
 import AppointmentTypesSelect from "./AppointmentTypesSelect";
+import { RatingResponse } from "@/types/review";
 
 export default function Component() {
   const searchParams = useSearchParams();

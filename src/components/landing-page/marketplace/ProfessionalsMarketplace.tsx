@@ -2,8 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
-
+import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import {
   Search,
@@ -12,31 +11,44 @@ import {
 import ProfessionalCard from "./ProfessionalCard"
 import ProfessionalModal from "./ProfessionalModal"
 import BookingModal from "./BookingModal"
-import { professionals, categories, timeSlots } from "@/lib/mock-data" 
+import { categories  } from "@/lib/mock-data" 
 import ResultsHeader from "./ResultsHeader"
 import SearchAndFilters from "./SearchAndFilters"
-
-
-
+import { UserWithProfile } from "@/types/settings"
+import { getUsers } from "@/services/users"
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("todos")
   const [selectedLocation, setSelectedLocation] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [selectedProfessional, setSelectedProfessional] = useState<typeof professionals[number] | null>()
+  const [selectedProfessional, setSelectedProfessional] = useState<UserWithProfile | null>()
+  const [bookingProfessional, setBookingProfessional] = useState<UserWithProfile | null>(null)
+  const [professionals, setProfessionals] = useState<UserWithProfile[] | undefined>([])
 
-  const [bookingProfessional, setBookingProfessional] = useState<typeof professionals[number] | null>(null)
+  // cargar profesionales
+    useEffect(() => {
+      const getProfessionals = async () => {
+        try {
+          const appData = await getUsers()
+          setProfessionals(appData?.rows)
+        } catch (error) {
+          console.error(error)
+          return undefined
+        }
+      }
+  
+      getProfessionals()
+    }, [])
 
 
-
-  const filteredProfessionals = professionals.filter((professional) => {
+  const filteredProfessionals = professionals?.filter((professional) => {
     const matchesSearch =
-      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      professional.specialty.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "todos" || professional.category === selectedCategory
+      professional?.profile?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional?.profile?.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "todos" || professional.profile?.jobTitle === selectedCategory
     const matchesLocation =
-      selectedLocation === "" || selectedLocation === "todas" || professional.location.includes(selectedLocation)
+      selectedLocation === "" || selectedLocation === "todas" || professional.profile?.city.includes(selectedLocation) || professional.profile?.province.includes(selectedLocation)
 
     return matchesSearch && matchesCategory && matchesLocation
   })
@@ -74,24 +86,24 @@ export default function Component() {
         />
 
         {/* Results */}
-        <ResultsHeader count={filteredProfessionals.length} />
+        <ResultsHeader count={Number(professionals?.length)} />
 
         {/* Professional Cards */}
         <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
-          {filteredProfessionals.map((professional) => (
+          {filteredProfessionals?.map((professional) => (
             <ProfessionalCard 
-            key={professional.id} 
+            key={professional.userId} 
             professional={professional} 
             isListView={viewMode === "list"}
             onViewProfile={setSelectedProfessional}
-            onBook={(p: typeof professionals[number]) => {
+            onBook={(p: UserWithProfile) => {
                 setBookingProfessional(p)
               }} 
             />
           ))}
         </div>
 
-        {filteredProfessionals.length === 0 && (
+        {filteredProfessionals?.length === 0 && (
           <div className="text-center py-12">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-12 h-12 text-gray-400" />
@@ -114,7 +126,6 @@ export default function Component() {
           open={!!bookingProfessional}
           onOpenChange={(open) => !open && setBookingProfessional(null)}
           professional={bookingProfessional}
-          timeSlots={timeSlots}
       />
     </div>
   )
