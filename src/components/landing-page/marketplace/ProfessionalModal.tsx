@@ -17,7 +17,7 @@ interface ProfessionalModalProps {
 export default function ProfessionalModal({ professional, open, onOpenChange }: ProfessionalModalProps) {
   
   const location = `${professional?.profile?.city}, ${professional?.profile?.province}`
-
+  const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
   const rating = getAverageRating(professional?.Reviews)
 
   return (
@@ -33,8 +33,10 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
               <Avatar className="w-20 h-20">
                 <AvatarImage src={professional.profile?.profilePicture || "placeholder.svg"} alt={professional.profile?.name} />
                 <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xl">
-                  {professional.profile?.name?.split(" ")
-                    .map((n: string) => n[0])
+                   {name
+                    .split(" ")
+                    .filter(n => n.length > 0) // evitar strings vacíos
+                    .map(n => n[0].toUpperCase())
                     .join("")}
                 </AvatarFallback>
               </Avatar>

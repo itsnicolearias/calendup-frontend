@@ -24,11 +24,8 @@ interface BookingModalProps {
 export default function BookingModal({ open, onOpenChange, professional }: BookingModalProps) {
 
     const location = `${professional?.profile?.city}, ${professional?.profile?.province}`
-
+    const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
     const rating = getAverageRating(professional?.Reviews)
-
-    const avatarUrl = professional?.profile?.profilePicture
-    || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`)}&background=197387&color=fff`;
 
     const [selectedDate, setSelectedDate] = useState<string>()
     const [selectedTime, setSelectedTime] = useState<string>("")
@@ -99,10 +96,12 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                       <CardContent className="p-4">
                         <div className="flex items-center space-x-4">
                           <Avatar className="w-16 h-16">
-                            <AvatarImage src={professional.profile?.profilePicture || avatarUrl} alt={professional.profile?.name} />
+                            <AvatarImage src={professional.profile?.profilePicture || "placeholder.svg"} alt={professional.profile?.name} />
                             <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg">
-                              {professional.profile?.name?.split(" ")
-                                .map((n: string) => n[0])
+                               {name
+                                .split(" ")
+                                .filter(n => n.length > 0) // evitar strings vacíos
+                                .map(n => n[0].toUpperCase())
                                 .join("")}
                             </AvatarFallback>
                           </Avatar>
