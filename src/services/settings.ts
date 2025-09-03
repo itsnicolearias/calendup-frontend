@@ -40,3 +40,22 @@ export const updateProfile = async (token: string | null, body: ProfileFormValue
     }
   
 }
+
+export const changePassword = async (token: string, body: { password: string; newPassword: string }) => {
+    try {
+        if (!token){
+            return null;
+        } 
+
+        return apiFetch("/settings/change-password", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -194,3 +194,8 @@ export const languageOptions = [
   { value: "pt", label: "Portugués" },
   // podés usar una librería como `iso-639-1` para traer todos los idiomas
 ];
+
+export type ChangePassword = {
+  password: string;
+  newPassword: string;
+}
