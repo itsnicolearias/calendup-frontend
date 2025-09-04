@@ -12,7 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { ChangePassword } from "@/types/settings";
+import { ChangePassword, PasswordSchema } from "@/types/settings";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface ChangePasswordFormProps {
   onSubmit: (data: { password: string; newPassword: string }) => Promise<void>;
@@ -20,6 +21,7 @@ interface ChangePasswordFormProps {
 
 export default function ChangePasswordForm({ onSubmit }: ChangePasswordFormProps) {
   const form = useForm({
+    resolver: zodResolver(PasswordSchema),
     defaultValues: {
       password: "",
       newPassword: "",
@@ -35,9 +37,14 @@ export default function ChangePasswordForm({ onSubmit }: ChangePasswordFormProps
       });
       toast.success("Contraseña cambiada con éxito");
       form.reset();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error("Error al cambiar la contraseña");
+      if (err.message === "Invalid password"){
+            toast.error("La contraseña ingresada es incorrecta")
+          } else {
+            toast.error("Error al cambiar la contraseña");
+          }
+      
     }
   };
 

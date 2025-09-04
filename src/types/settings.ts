@@ -199,3 +199,17 @@ export type ChangePassword = {
   password: string;
   newPassword: string;
 }
+
+// ✅ Zod schema
+export const PasswordSchema = z
+  .object({
+    password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+    newPassword: z.string().min(6, "La nueva contraseña debe tener al menos 6 caracteres"),
+    confirmPassword: z.string().min(6, "Debes confirmar la contraseña"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Las contraseñas no coinciden",
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof PasswordSchema>;
