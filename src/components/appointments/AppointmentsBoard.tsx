@@ -23,7 +23,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
     e.dataTransfer.setData("appointmentId", appointment.appointmentId.toString())
   }
 
-  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create/${professional.userId}` : '';
+  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional.userId}` : '';
 
   const handleDrop = async (e: React.DragEvent, status: AppointmentStatus) => {
     const appointmentId = e.dataTransfer.getData("appointmentId")

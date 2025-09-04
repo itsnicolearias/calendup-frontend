@@ -90,11 +90,11 @@ export default function AppointmentTypesList() {
         {/* Modal para crear */}
         <Dialog open={isCreating} onOpenChange={setIsCreating}>
           <DialogTrigger asChild>
-            <Button>+ Nuevo tipo</Button>
+            <Button>+ Nuevo servicio</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle>Crear nuevo tipo de turno</DialogTitle>
+              <DialogTitle>Crear nuevo servicio</DialogTitle>
             </DialogHeader>
             <AppointmentTypeForm onSubmit={handleCreate} onCancel={() => setIsCreating(false)} />
           </DialogContent>
@@ -121,7 +121,7 @@ export default function AppointmentTypesList() {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
                     <DialogHeader>
-                        <DialogTitle>Editar tipo de turno</DialogTitle>
+                        <DialogTitle>Editar servicio</DialogTitle>
                     </DialogHeader>
                     <AppointmentTypeForm
                         initialData={type}

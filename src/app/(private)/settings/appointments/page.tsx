@@ -22,7 +22,7 @@ export default function AppointmentSettingsPage() {
 
       {/* Sección Tipos de Turnos */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold mb-2">Tipos de turnos</h2>
+        <h2 className="text-xl font-semibold mb-2">Servicios</h2>
         <AppointmentTypesList />
       </section>
     </div>
