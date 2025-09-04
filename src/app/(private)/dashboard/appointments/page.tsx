@@ -5,9 +5,12 @@ import { useRouter } from "next/navigation"
 import { AppointmentsBoard } from "@/components/appointments/AppointmentsBoard"
 import { Appointment } from "@/types/appointments"
 import { getAppointments } from "@/services/appointments"
+import { useUser } from "@/contexts/UserContext"
 
 export default function AppointmentsPage() {
   const router = useRouter()
+
+  const { user } = useUser()
 
   const [appointments, setAppointments] = useState<Appointment[]>([])
 
@@ -44,6 +47,7 @@ export default function AppointmentsPage() {
         appointments={appointments} 
         onOpen={openAppointment} 
         setAppointments={setAppointments} // para drag & drop
+        professional={user}
       />
     </>
   )

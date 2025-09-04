@@ -5,19 +5,25 @@ import { getStatusText } from "./status"
 import { Button } from "../ui/button"
 import { useState } from "react"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
+import { CopyCheck } from "lucide-react"
+import { UserWithProfile } from "@/types/settings"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 
 interface Props {
   appointments: Appointment[]
   onOpen: (appointment: Appointment) => void
   setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>
+  professional: UserWithProfile | null;
 }
 
-export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Props) {
+export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional }: Props) {
    const [open, setOpen] = useState(false)
 
   const handleDragStart = (e: React.DragEvent, appointment: Appointment) => {
     e.dataTransfer.setData("appointmentId", appointment.appointmentId.toString())
   }
+
+  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create/${professional.userId}` : '';
 
   const handleDrop = async (e: React.DragEvent, status: AppointmentStatus) => {
     const appointmentId = e.dataTransfer.getData("appointmentId")
@@ -48,10 +54,27 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments }: Pro
         <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Mis Turnos
         </h1>
+
+         <div className="flex items-center gap-2">
+          { professional && professional.profile?.profileCompleted && (
+              <Tooltip>
+              <TooltipTrigger asChild>
+                <button className="p-2 rounded-full  hover:bg-gray-100" onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}>
+                  <CopyCheck className="w-5 h-5 text-gray-600"  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Comparte tu link de agendamiento</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+         
         {/* Botón para abrir modal */}
         <Button className="sm:ml-4 px-4 py-2" onClick={() => setOpen(true)}>
           Nuevo Turno
         </Button>
+         </div>
+        
       </div>
 
       <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />

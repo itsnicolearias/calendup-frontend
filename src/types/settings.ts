@@ -99,6 +99,7 @@ export interface Profile {
     city: string
     education: Education[]
     languages: string[]
+    profileCompleted: boolean
 }
 
 export type Education = {
