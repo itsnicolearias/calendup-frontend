@@ -7,13 +7,9 @@ import {
   AvailabilityResponse,
   AvailableCalendarProps,
 } from "@/types/appointments";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { CalendarIcon } from "lucide-react";
 
 export default function AvailableCalendar({
   onSelect,
@@ -63,37 +59,64 @@ export default function AvailableCalendar({
     availability[format(selectedDate ?? new Date(), "yyyy-MM-dd")] || [];
 
   return (
-    <div className="flex flex-col gap-4 items-center">
-      <Calendar
-        mode="single"
-        selected={selectedDate}
-        onSelect={setSelectedDate}
-        onMonthChange={setCurrentMonth}
-        locale={es}
-        disabled={(date) => !isDayAvailable(date)}
-        className="rounded-md border shadow w-100"
-      />
-
-      {selectedDate && availableHours.length > 0 && (
-        <div className="mt-2 w-full">
-          <h4 className="text-base font-medium mb-1">
-            Seleccioná un horario disponible para el{" "}
-            {format(selectedDate, "PPP", { locale: es })}:
-          </h4>
-          <Select onValueChange={handleTimeChange} value={selectedHour}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Seleccionar horario" />
-            </SelectTrigger>
-            <SelectContent>
+    <div>
+    <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-xl flex items-center">
+          <CalendarIcon className="w-5 h-5 mr-2 text-blue-600" />
+          Selecciona fecha y hora
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Calendar */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Fecha</h3>
+            <div className="flex justify-center">
+              <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              onMonthChange={setCurrentMonth}
+              locale={es}
+              disabled={(date) => !isDayAvailable(date)}
+              className="rounded-md border shadow w-100"
+            />
+            </div>
+          </div>
+          
+            
+            <div>
+            <h4 className="text-lg font-semibold mb-4">Hora</h4>
+            {selectedDate && availableHours.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2"> 
               {availableHours.map((hour) => (
-                <SelectItem key={hour} value={hour}>
-                  {hour}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                  <Button
+                    key={hour}
+                    type="button"
+                    variant={selectedHour === hour ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleTimeChange(hour)}
+                    className={
+                      selectedHour === hour
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                        : "hover:border-blue-500 hover:text-blue-600"
+                    }
+                  >
+                    {hour}
+                  </Button>
+                ))}
+              </div>
+              
+            ) : (
+              <p className="text-gray-500 text-center py-8">Primero selecciona una fecha</p>
+            )}
+            </div>
         </div>
-      )}
+      </CardContent>
+    </Card>
+    
+      
     </div>
   );
 }

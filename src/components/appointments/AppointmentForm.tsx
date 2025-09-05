@@ -3,24 +3,18 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import AvailableCalendar from "../shared/AvailableCalendar";
 import { useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import { createAppointment } from "@/services/appointments";
-import ProfessionalCard from "../shared/ProfessionalCard";
 import { UserWithProfile } from "@/types/settings";
 import { getOneUser } from "@/services/users";
-import AppointmentTypesSelect from "./AppointmentTypesSelect";
 import { RatingResponse } from "@/types/review";
+import ProfessionalProfileCard from "../shared/ProfessionalProfileCard";
+import ServiceSelection from "../shared/ServiceSelection";
+import { ArrowRight, CalendarIcon } from "lucide-react";
+import PersonalInformation from "./PersonalInformation";
+import BookingSummary from "./BookingSummary";
+import BookingConfirmed from "./BookingConfirmed";
 
 export default function Component() {
   const searchParams = useSearchParams();
@@ -34,6 +28,7 @@ export default function Component() {
   const [professional, setProfessional] = useState<Partial<UserWithProfile> | undefined>(undefined)
   const [ratingData, setRatingData] = useState<RatingResponse>()
   const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [bookingConfirmed, setBookingConfirmed] = useState(false)
   const [formData, setFormData] = useState({
       name: "",
       lastName: "",
@@ -78,6 +73,7 @@ export default function Component() {
       ...prev,
       [name]: value,
     }));
+    setBookingConfirmed(false)
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,140 +83,109 @@ export default function Component() {
       formData.date = dateF || "";
 
       if (selectedType){
-        formData.appointmentTypeId = selectedType
+        formData.appointmentTypeId = selectedType;
       }
-      
+
+      formData.appointmentTypeId = selectedType!;
 
       await createAppointment(formData);
-      toast.success("Turno solicitado con éxito", {
-        description: "Te enviaremos un email con los detalles.",
-        duration: 5000,
-      });
+      setBookingConfirmed(true)
     } catch (err) {
       console.error("Error:", err);
     }
   };
 
+  const isFormValid = () => {
+    return formData.name && formData.lastName && formData.email && dateF && time
+  }
+
+  const resetBooking = () => {
+    setDateF(undefined)
+    setTime("")
+    setSelectedType("")
+    setFormData({
+      name: "",
+      lastName: "",
+      professionalId: professionalId,
+      email: "",
+      reason: "",
+      date: "",
+      time: "",
+      phone: "",
+      appointmentTypeId: "",
+    })
+    setBookingConfirmed(false)
+  }
+
+  if (bookingConfirmed){
+    return (
+      <BookingConfirmed professional={professional} selectedDate={dateF!} selectedTime={time} selectedService={selectedType!} resetBooking={resetBooking}  />
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="grid gap-6 grid-cols-1 md:grid-cols-3 items-start"
-      >
-        {/* Formulario */}
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">
-              Solicitar Turno
-            </CardTitle>
-            <CardDescription className="text-center">
-              Complete el formulario para reservar su cita
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder="Ingrese su nombre"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <CalendarIcon className="w-5 h-5 text-white" />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="apellido">Apellido</Label>
-                <Input
-                  id="apellido"
-                  name="lastName"
-                  type="text"
-                  placeholder="Ingrese su apellido"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
+              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                CalendUp - Solicitar Turno
+              </span>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="celular">Celular</Label>
-              <Input
-                id="celular"
-                name="phone"
-                type="tel"
-                placeholder="Ingrese su número de celular"
-                value={formData.phone}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Ingrese su email"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="motivo">Motivo de consulta</Label>
-              <Input
-                id="motivo"
-                name="reason"
-                type="text"
-                placeholder="Ingrese el motivo de consulta"
-                value={formData.reason}
-                onChange={handleInputChange}
-                className="placeholder:text-blue-600 placeholder:font-semibold border-2 border-black-400 focus:border-blue-600"
-              />
-            </div>
-          </CardContent>
-          <AppointmentTypesSelect
-                  types={professional.AppointmentTypes || []}
-                  selected={selectedType}
-                  onSelect={(appointmentTypeId) => setSelectedType(appointmentTypeId)}
-                /> 
-
-        </Card>     
-
-        {/* Calendario dentro del formulario */}
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-center">
-              Selecciona fecha y hora
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AvailableCalendar
-              onSelect={handleSelect}
-              professionalId={formData.professionalId}
-            />
-          </CardContent>
-        </Card>
-      
-        <div className="space-y-6">
-      <ProfessionalCard profile={professional.profile} averageRating={ratingData?.averageRating} totalReviews={ratingData?.totalReviews}/>
-
+          </div>
         </div>
+      </div>
 
-        {/* Botón de enviar en toda la fila */}
-        <div className="md:col-span-3">
-          <Button
-            type="submit"
-            className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Solicitar Turno
-          </Button>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Professional Profile - Left Column */}
+          <ProfessionalProfileCard professional={professional} rating={ratingData} />
+
+          {/* Main Form - Right Columns */}
+          <div className="lg:col-span-2">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Service Selection */}
+              { professional.AppointmentTypes && professional.AppointmentTypes.length > 0 && (
+                <ServiceSelection appointmentTypes={professional.AppointmentTypes} selectedTypeId={selectedType ? selectedType : null} setSelectedType={setSelectedType}/>
+              )}
+              
+
+             
+              {/* Date and Time Selection */}
+              <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId!}  />
+
+              {/* Personal Information */}
+              <PersonalInformation formData={formData} handleInputChange={handleInputChange} />
+
+              {/* Booking Summary */}
+              {dateF && time && (
+                <BookingSummary professional={professional} selectedType={selectedType} selectedDate={dateF!} selectedTime={time} />
+              )}
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                disabled={!isFormValid()}
+                className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold rounded-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isFormValid() ? (
+                  <>
+                    Confirmar Turno
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </>
+                ) : (
+                  "Completa todos los campos requeridos"
+                )}
+              </Button>
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
-  );
+  )
 }

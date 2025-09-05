@@ -11,6 +11,7 @@ import { getAverageRating } from "@/utils/getAverageRating";
 import AvailableCalendar from "@/components/shared/AvailableCalendar";
 import { createAppointment } from "@/services/appointments";
 import { toast } from "sonner";
+import { State } from "country-state-city";
 
 
 interface BookingModalProps {
@@ -23,7 +24,8 @@ interface BookingModalProps {
 
 export default function BookingModal({ open, onOpenChange, professional }: BookingModalProps) {
 
-    const location = `${professional?.profile?.city}, ${professional?.profile?.province}`
+    const province = State.getStateByCodeAndCountry(professional?.profile?.country || "", professional?.profile?.province || "" )
+    const location = `${professional?.profile?.city}, ${province?.name}`
     const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
     const rating = getAverageRating(professional?.Reviews)
 

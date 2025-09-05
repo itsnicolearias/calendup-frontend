@@ -60,7 +60,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
               <Tooltip>
               <TooltipTrigger asChild>
                 <button className="p-2 rounded-full  hover:bg-gray-100" onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}>
-                  <CopyCheck className="w-5 h-5 text-gray-600"  />
+                  <CopyCheck className="w-5 h-5 text-black"  />
                 </button>
               </TooltipTrigger>
               <TooltipContent>

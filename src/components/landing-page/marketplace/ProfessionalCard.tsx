@@ -8,6 +8,7 @@ import { UserWithProfile } from "@/types/settings";
 import { getAverageRating } from "@/utils/getAverageRating";
 import { obtainAvailability } from "@/utils/availabilityButton";
 import { useEffect, useState } from "react";
+import { State } from "country-state-city";
 
 interface ProfessionalCardProps {
   professional: UserWithProfile;
@@ -24,7 +25,8 @@ export default function ProfessionalCard({
 }: ProfessionalCardProps) {
   const [availability, setAvailability] = useState<string>("")
 
-  const location = `${professional.profile?.city}, ${professional.profile?.province}`
+  const province = State.getStateByCodeAndCountry(professional.profile?.province || "", professional.profile?.country || "" )
+  const location = `${professional.profile?.city}, ${province?.name}`
   const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
   const rating = getAverageRating(professional?.Reviews)
 
