@@ -19,7 +19,7 @@ function BookingConfirmed({ professional, selectedDate, selectedService, selecte
     const name = `${user?.name || ""} ${user?.lastName || ""}`
 
     const getSelectedServiceDetails = () => { 
-        return professional?.AppointmentTypes?.find((type) => type.name === selectedService) 
+        return professional?.AppointmentTypes?.find((type) => type.appointmentTypeId === selectedService) 
     }
   return (
     <div>

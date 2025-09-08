@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import AvailableCalendar from "../shared/AvailableCalendar"
@@ -114,17 +114,14 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
 
       {/* Calendario abajo */}
       <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-center">Selecciona fecha y hora</CardTitle>
-        </CardHeader>
         <CardContent>
-          <AvailableCalendar onSelect={handleSelect} professionalId={user?.userId ?? ""} />
+          <AvailableCalendar onSelect={handleSelect} professionalId={user?.userId ?? ""} isModal={true} />
         </CardContent>
       </Card>
 
       {/* Botón */}
       <div>
-        <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white">
+        <Button type="submit" className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:bg-blue-700 text-white">
           Solicitar Turno
         </Button>
       </div>

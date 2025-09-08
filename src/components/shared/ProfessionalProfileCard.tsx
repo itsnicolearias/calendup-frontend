@@ -1,8 +1,8 @@
 import React from 'react'
 import { Card, CardContent } from '../ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { Award, Badge, Mail, MapPin, Phone, Star } from 'lucide-react'
-import { UserWithProfile } from '@/types/settings'
+import { Award, LanguagesIcon, Mail, MapPin, Phone, Star } from 'lucide-react'
+import { languageOptions, UserWithProfile } from '@/types/settings'
 import { RatingResponse } from '@/types/review'
 import { Separator } from '../ui/separator'
 import { State } from 'country-state-city'
@@ -13,6 +13,8 @@ function ProfessionalProfileCard({ professional, rating }: { professional: Parti
   const province = State.getStateByCodeAndCountry(user?.province || "", user?.country || "" )
 
   const location = `${user?.city}, ${province?.name}`
+
+  const languageMap = Object.fromEntries(languageOptions.map(l => [l.value, l.label]))
 
     return (
     <div className="lg:col-span-1">
@@ -101,13 +103,22 @@ function ProfessionalProfileCard({ professional, rating }: { professional: Parti
                 { user?.languages && user.languages.length > 0 && (
                   <>
                   <div className="mb-6">
-                  <h3 className="font-semibold mb-3">Idiomas</h3>
+                    
+                  <h3 className="font-semibold mb-3 flex items-center">
+                    <LanguagesIcon className="w-4 h-4 mr-2 text-blue-600" />
+                    Idiomas
+                    </h3>
                   <div className="flex flex-wrap gap-2">
-                    {user?.languages.map((lang, index) => (
-                      <Badge key={index} className="bg-blue-100 text-blue-800 border-blue-200">
-                        {lang}
-                      </Badge>
-                    ))}
+                    <ul className="space-y-1">
+                      {user?.languages.map((lang, index) => (
+                      <>
+                      
+                      <li key={index} className="text-gray-600 text-sm">
+                        • {languageMap[lang] || lang}
+                      </li>
+                      </>
+                      ))}
+                    </ul>                          
                   </div>
                 </div>
                   </>

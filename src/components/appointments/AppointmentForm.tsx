@@ -151,13 +151,13 @@ export default function Component() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Service Selection */}
               { professional.AppointmentTypes && professional.AppointmentTypes.length > 0 && (
-                <ServiceSelection appointmentTypes={professional.AppointmentTypes} selectedTypeId={selectedType ? selectedType : null} setSelectedType={setSelectedType}/>
+                <ServiceSelection appointmentTypes={professional.AppointmentTypes} selectedTypeId={selectedType ? selectedType : null} setSelectedType={setSelectedType} isModal={false} />
               )}
               
 
              
               {/* Date and Time Selection */}
-              <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId!}  />
+              <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId!} isModal={false}  />
 
               {/* Personal Information */}
               <PersonalInformation formData={formData} handleInputChange={handleInputChange} />

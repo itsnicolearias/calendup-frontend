@@ -7,9 +7,10 @@ interface ServiceSelectionProps {
   appointmentTypes: AppointmentType[] | undefined;
   selectedTypeId: string | null;
   setSelectedType: (typeId: string) => void;
+  isModal: boolean
 }
 
-function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType }: ServiceSelectionProps) {
+function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType, isModal }: ServiceSelectionProps) {
   return (
     <div>
         <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
@@ -19,8 +20,8 @@ function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType }:
                     Selecciona un servicio
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6">
-                  <div className="grid gap-3">
+                <CardContent className={isModal ? "p-1" : "p-6"}>
+                  <div className={isModal ? "grid gap-1" : "grid gap-3"}>
                     {appointmentTypes?.map((type) => (
                       <Card
                         key={type.appointmentTypeId}
@@ -31,7 +32,7 @@ function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType }:
                         }`}
                         onClick={() => setSelectedType(type.appointmentTypeId)}
                       >
-                        <CardContent className="p-4">
+                        <CardContent className={isModal ? "" : "p-4"}>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
                               <input
@@ -42,11 +43,11 @@ function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType }:
                               />
                               <div>
                                 <p className="font-semibold text-gray-900">{type.name}</p>
-                                <p className="text-sm text-gray-600">Consulta profesional</p>
+                                <p className="text-sm text-gray-600">{type.description}</p>
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="text-xl font-bold text-gray-900">${type.price}</p>
+                                <p className="text-xl font-bold text-gray-900">${type.price}</p>                              
                             </div>
                           </div>
                         </CardContent>

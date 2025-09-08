@@ -2,12 +2,13 @@ import { Mail, MapPin, Phone, Star } from "lucide-react";
 import { Card } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
-import { Calendar } from "../../ui/calendar";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../../ui/dialog";
 import { UserWithProfile } from "@/types/settings";
 import { getAverageRating } from "@/utils/getAverageRating";
 import { State } from "country-state-city";
+import { useState } from "react";
+import BookingModal from "./BookingModal";
 
 interface ProfessionalModalProps {
   professional: UserWithProfile | null | undefined;
@@ -17,13 +18,16 @@ interface ProfessionalModalProps {
 
 export default function ProfessionalModal({ professional, open, onOpenChange }: ProfessionalModalProps) {
   
+  const [openBookingModal, setOpenBookingModal] = useState(false)
+
   const province = State.getStateByCodeAndCountry(professional?.profile?.province || "", professional?.profile?.country || "" )
   const location = `${professional?.profile?.city}, ${province?.name}`
   const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
   const rating = getAverageRating(professional?.Reviews)
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Perfil Profesional</DialogTitle>
@@ -48,6 +52,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
                 <div className="flex items-center mt-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current mr-1" />
                   <span className="text-sm font-medium">{rating}</span>
+                  <span className="text-gray-500 text-sm ml-1">({professional.Reviews?.length} reseñas)</span>
                 </div>
               </div>
             </div>
@@ -83,7 +88,8 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
               <p className="text-gray-600 leading-relaxed">{professional.profile?.bio}</p>
             </Card>
 
-            <Card className="p-4">
+            {professional.AppointmentTypes && professional.AppointmentTypes.length > 0 && (
+              <Card className="p-4">
               <h4 className="font-semibold mb-3">Servicios</h4>
               <div className="flex flex-wrap gap-2">
                 {professional?.AppointmentTypes?.map((appType) => (
@@ -93,13 +99,15 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
                 ))}
               </div>
             </Card>
+            )}
+            
 
             <div className="flex space-x-4 pt-4">
               <Button
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 size="lg"
+                onClick={() => setOpenBookingModal(true)}
               >
-                <Calendar className="w-5 h-5 mr-2" />
                 Reservar Turno
               </Button>
               <Button
@@ -114,7 +122,10 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
           </div>
         )}
       </DialogContent>
-    </Dialog>
+      </Dialog>
+      <BookingModal open={openBookingModal} onOpenChange={setOpenBookingModal} professional={professional!} />
+    </>
+    
 
     )
 }

@@ -14,6 +14,7 @@ import { CalendarIcon } from "lucide-react";
 export default function AvailableCalendar({
   onSelect,
   professionalId,
+  isModal,
 }: AvailableCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -21,6 +22,8 @@ export default function AvailableCalendar({
   const [availability, setAvailability] = useState<AvailabilityResponse>({});
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [selectedHour, setSelectedHour] = useState<string>("");
+
+  const cols = isModal ? "grid grid-cols-2 md:grid-cols-1 gap-8" : "grid grid-cols-2 md:grid-cols-2 gap-8"
 
   useEffect(() => {
     const month = currentMonth.getMonth() + 1;
@@ -68,7 +71,7 @@ export default function AvailableCalendar({
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className={cols}>
           {/* Calendar */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Fecha</h3>

@@ -70,7 +70,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
           )}
          
         {/* Botón para abrir modal */}
-        <Button className="sm:ml-4 px-4 py-2" onClick={() => setOpen(true)}>
+        <Button className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " onClick={() => setOpen(true)}>
           Nuevo Turno
         </Button>
          </div>

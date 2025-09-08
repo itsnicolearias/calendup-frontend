@@ -33,6 +33,7 @@ export type AvailabilityResponse = {
 export interface AvailableCalendarProps {
   onSelect: (date: string, time: string) => void;
   professionalId: string
+  isModal: boolean
 }
 
 export interface AppointmentType {

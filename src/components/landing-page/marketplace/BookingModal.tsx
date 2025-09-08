@@ -1,5 +1,5 @@
 import { MapPin, Star, User } from "lucide-react";
-import { Card, CardContent, CardTitle } from "../../ui/card";
+import { Card, CardContent } from "../../ui/card";
 import { Button } from "../../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../../ui/dialog";
@@ -12,7 +12,7 @@ import AvailableCalendar from "@/components/shared/AvailableCalendar";
 import { createAppointment } from "@/services/appointments";
 import { toast } from "sonner";
 import { State } from "country-state-city";
-
+import ServiceSelection from "@/components/shared/ServiceSelection";
 
 interface BookingModalProps {
     open: boolean;
@@ -24,13 +24,14 @@ interface BookingModalProps {
 
 export default function BookingModal({ open, onOpenChange, professional }: BookingModalProps) {
 
-    const province = State.getStateByCodeAndCountry(professional?.profile?.country || "", professional?.profile?.province || "" )
+    const province = State.getStateByCodeAndCountry(professional?.profile?.province || "",  professional?.profile?.country || "")
     const location = `${professional?.profile?.city}, ${province?.name}`
     const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
     const rating = getAverageRating(professional?.Reviews)
 
     const [selectedDate, setSelectedDate] = useState<string>()
     const [selectedTime, setSelectedTime] = useState<string>("")
+    const [selectedType, setSelectedType] = useState<string | null>(null)
     const [bookingForm, setBookingForm] = useState({
       name: "",
       lastName: "",
@@ -40,7 +41,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       date: "",
       time: "",
       phone: "",
-      appointmentTypeId: null,
+      appointmentTypeId: "",
       })
 
     const handleBookingFormChange = (field: string, value: string) => {
@@ -50,6 +51,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       const handleCancel = () => {
         setSelectedDate(undefined)
         setSelectedTime("")
+        setSelectedType(null)
         onOpenChange(false)
       }
     
@@ -59,10 +61,13 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
     try {
       bookingForm.date = selectedDate || "";
 
-      /*if (selectedType){
+      if (selectedType){
         bookingForm.appointmentTypeId = selectedType
-      }*/
-     bookingForm.appointmentTypeId = null
+      } else {
+        bookingForm.appointmentTypeId = selectedType!
+      }
+
+      bookingForm.professionalId = professional?.userId || ""
 
       await createAppointment(bookingForm);
       toast.success("Turno solicitado con éxito", {
@@ -71,6 +76,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       });
 
       onOpenChange(false)
+      handleCancel()
     } catch (err) {
       console.error("Error:", err);
     }
@@ -128,17 +134,22 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
         
                     <form onSubmit={handleBookingSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+                        {professional?.AppointmentTypes && professional?.AppointmentTypes.length > 0 && (
+                          <div>
+                            <ServiceSelection  appointmentTypes={professional.AppointmentTypes} selectedTypeId={selectedType} setSelectedType={setSelectedType} isModal={true} />
+                          </div>
+                        )}
+                         
+                        
                         {/* Calendar and Time Selection */}
                         <div className="space-y-6">
                           <Card>
-                             <CardTitle className="text-lg font-semibold text-center">Selecciona fecha y hora</CardTitle>
-                            <CardContent className="p-6">
-                                <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId} />
+                            <CardContent className="">
+                                <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId} isModal={true} />
 
                             </CardContent>
-                          </Card>
+                          </Card>                         
         
-
                         </div>
         
                         {/* Form Fields */}
