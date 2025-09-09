@@ -8,6 +8,7 @@ import { CreateAppointmentModal } from "./CreateAppointmentModal"
 import { CopyCheck } from "lucide-react"
 import { UserWithProfile } from "@/types/settings"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
+import { OnboardingChecklist } from "./OnboardingChecklist"
 
 interface Props {
   appointments: Appointment[]
@@ -48,78 +49,83 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
 
   return (
     <div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Contenedor flex para título y botón */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Mis Turnos
-        </h1>
+      { professional && !professional.profile?.profileCompleted && (
+        <OnboardingChecklist profile={professional?.profile || {}} />
+      )}
+      
 
-         <div className="flex items-center gap-2">
-              <Tooltip>
-              <TooltipTrigger asChild>
-                <button 
-                  className="p-2 rounded-full  hover:bg-gray-100" 
-                  onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
-                  disabled={!professional || !professional.profile?.profileCompleted} 
-                  >
-                  <CopyCheck className="w-5 h-5 text-black"  />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Comparte tu link de agendamiento</p>
-              </TooltipContent>
-            </Tooltip>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Contenedor flex para título y botón */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Mis Turnos
+          </h1>
 
-         
-        {/* Botón para abrir modal */}
-        <Button 
-          className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " 
-          onClick={() => setOpen(true)} 
-          disabled={!professional || !professional.profile?.profileCompleted}>
-          Nuevo Turno
-        </Button>
-         </div>
-        
+          <div className="flex items-center gap-2">
+                <Tooltip>
+                <TooltipTrigger asChild>
+                  <button 
+                    className="p-2 rounded-full  hover:bg-gray-100" 
+                    onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
+                    disabled={!professional || !professional.profile?.profileCompleted} 
+                    >
+                    <CopyCheck className="w-5 h-5 text-black"  />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Comparte tu link de agendamiento</p>
+                </TooltipContent>
+              </Tooltip>
+
+          
+          {/* Botón para abrir modal */}
+          <Button 
+            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " 
+            onClick={() => setOpen(true)} 
+            disabled={!professional || !professional.profile?.profileCompleted}>
+            Nuevo Turno
+          </Button>
+          </div>
+          
+        </div>
+
+        <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />
+
+        <p className="text-gray-600 mt-2">
+          Arrastra los turnos entre columnas para cambiar su estado
+        </p>
       </div>
 
-      <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />
 
-      <p className="text-gray-600 mt-2">
-        Arrastra los turnos entre columnas para cambiar su estado
-      </p>
-    </div>
-
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {statuses.map(({ key, color, dot }) => (
-          <div
-            key={key}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e, key)}
-            className="min-h-[400px] transition-colors duration-200"
-          >
-            <div className="h-full bg-white shadow rounded-xl p-4">
-              <h3 className={`font-semibold flex items-center mb-3 ${color}`}>
-                <div className={`w-3 h-3 rounded-full mr-2 ${dot}`}></div>
-                {getStatusText(key)}
-              </h3>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {appointments
-                  .filter((a) => a.status === key)
-                  .map((a) => (
-                    <AppointmentCard
-                      key={a.appointmentId}
-                      appointment={a}
-                      onOpen={onOpen}
-                      onDragStart={handleDragStart}
-                    />
-                  ))}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {statuses.map(({ key, color, dot }) => (
+            <div
+              key={key}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, key)}
+              className="min-h-[400px] transition-colors duration-200"
+            >
+              <div className="h-full bg-white shadow rounded-xl p-4">
+                <h3 className={`font-semibold flex items-center mb-3 ${color}`}>
+                  <div className={`w-3 h-3 rounded-full mr-2 ${dot}`}></div>
+                  {getStatusText(key)}
+                </h3>
+                <div className="space-y-2 max-h-96 overflow-y-auto">
+                  {appointments
+                    .filter((a) => a.status === key)
+                    .map((a) => (
+                      <AppointmentCard
+                        key={a.appointmentId}
+                        appointment={a}
+                        onOpen={onOpen}
+                        onDragStart={handleDragStart}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>        
+    </div>    
   )
 }
