@@ -1,8 +1,8 @@
 "use client"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { AppointmentForm } from "./CreateAppointmentForm"
 import { Appointment } from "@/types/appointments"
+import { AppointmentForm } from "./CreateAppointmentForm"
 
 interface Props {
   open: boolean

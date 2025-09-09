@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label"
 import AvailableCalendar from "../shared/AvailableCalendar"
 import { toast } from "sonner"
 import { createAppointment } from "@/services/appointments"
-import AppointmentTypesSelect from "./AppointmentTypesSelect"
 import { Appointment } from "@/types/appointments"
 import { useUser } from "@/contexts/UserContext"
+import AppointmentTypesSelect from "../appointments/AppointmentTypesSelect"
 
 interface Props {
   onCreated?: (appointment: Appointment) => void

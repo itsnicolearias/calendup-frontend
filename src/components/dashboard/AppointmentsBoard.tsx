@@ -1,7 +1,7 @@
 import { Appointment, AppointmentStatus } from "@/types/appointments"
 import { AppointmentCard } from "./AppointmentCard"
 import { updateAppointment } from "@/services/appointments"
-import { getStatusText } from "./status"
+import { getStatusText } from "../../types/status"
 import { Button } from "../ui/button"
 import { useState } from "react"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
@@ -56,10 +56,13 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
         </h1>
 
          <div className="flex items-center gap-2">
-          { professional && professional.profile?.profileCompleted && (
               <Tooltip>
               <TooltipTrigger asChild>
-                <button className="p-2 rounded-full  hover:bg-gray-100" onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}>
+                <button 
+                  className="p-2 rounded-full  hover:bg-gray-100" 
+                  onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
+                  disabled={!professional || !professional.profile?.profileCompleted} 
+                  >
                   <CopyCheck className="w-5 h-5 text-black"  />
                 </button>
               </TooltipTrigger>
@@ -67,10 +70,13 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
                 <p>Comparte tu link de agendamiento</p>
               </TooltipContent>
             </Tooltip>
-          )}
+
          
         {/* Botón para abrir modal */}
-        <Button className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " onClick={() => setOpen(true)}>
+        <Button 
+          className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " 
+          onClick={() => setOpen(true)} 
+          disabled={!professional || !professional.profile?.profileCompleted}>
           Nuevo Turno
         </Button>
          </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import AppointmentForm from '@/components/appointments/AppointmentForm';
+import { AppointmentForm } from "@/components/dashboard/CreateAppointmentForm";
 
 export default function CreateAppointmentPage() {
   return (

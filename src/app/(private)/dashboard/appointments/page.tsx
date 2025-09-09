@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { AppointmentsBoard } from "@/components/appointments/AppointmentsBoard"
+import { AppointmentsBoard } from "@/components/dashboard/AppointmentsBoard"
 import { Appointment } from "@/types/appointments"
 import { getAppointments } from "@/services/appointments"
 import { useUser } from "@/contexts/UserContext"

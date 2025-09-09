@@ -6,7 +6,7 @@ import { CalendarIcon, Clock, Phone } from "lucide-react"
 import { format } from "date-fns"
 import { parseLocalDate } from "@/utils/date"
 import { Appointment } from "@/types/appointments"
-import { getStatusColor, getStatusText } from "./status"
+import { getStatusColor, getStatusText } from "../../types/status"
 
 interface Props {
   appointment: Appointment

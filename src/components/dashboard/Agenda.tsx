@@ -10,7 +10,7 @@ import { format} from "date-fns"
 import { es } from "date-fns/locale"
 import { Appointment } from "@/types/appointments"
 import { useRouter } from "next/navigation"
-import { getStatusColor, getStatusText } from "../appointments/status"
+import { getStatusColor, getStatusText } from "../../types/status"
 import { getAppointments } from "@/services/appointments"
 
 export default function AgendaView() {

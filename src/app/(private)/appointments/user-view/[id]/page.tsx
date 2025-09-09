@@ -8,7 +8,7 @@ import { getOneAppointment, updateAppointment } from "@/services/appointments";
 import { toast } from "sonner";
 import ProfessionalCard from "@/components/shared/ProfessionalCard";
 import AvailableCalendar from "@/components/shared/AvailableCalendar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export default function AppointmentDetailsContainer() {
   const params = useParams();
@@ -112,12 +112,10 @@ export default function AppointmentDetailsContainer() {
       {/* Modal con calendario de disponibilidad */}
       <Dialog open={showCalendar} onOpenChange={setShowCalendar}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Seleccionar nueva fecha y hora</DialogTitle>
-          </DialogHeader>
           <AvailableCalendar
             onSelect={handleDateTimeSelect}
             professionalId={professionalId}
+            isModal={true}
           />
         </DialogContent>
       </Dialog>
