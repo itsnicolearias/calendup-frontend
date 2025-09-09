@@ -41,10 +41,14 @@ export function AppointmentCard({ appointment, onOpen, onDragStart }: Props) {
             <Clock className="w-4 h-4 mr-2" />
             {appointment.time}
           </div>
-          <div className="flex items-center">
+
+          {appointment.phone && (
+            <div className="flex items-center">
             <Phone className="w-4 h-4 mr-2" />
             {appointment.phone}
-          </div>
+            </div>
+          )}
+          
         </div>
       </CardContent>
     </Card>

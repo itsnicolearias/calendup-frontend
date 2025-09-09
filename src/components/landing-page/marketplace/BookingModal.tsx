@@ -18,8 +18,6 @@ interface BookingModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     professional: UserWithProfile | null;
-
-
 }
 
 export default function BookingModal({ open, onOpenChange, professional }: BookingModalProps) {

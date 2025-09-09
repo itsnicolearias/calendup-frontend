@@ -30,8 +30,6 @@ export default function ProfessionalCard({
   const name = `${professional?.profile?.name || ""} ${professional?.profile?.lastName || ""}`
   const rating = getAverageRating(professional?.Reviews)
 
- 
-
 
   useEffect(() => {
     async function fetchData() {
