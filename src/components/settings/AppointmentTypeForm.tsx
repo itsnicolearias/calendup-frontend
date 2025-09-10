@@ -74,7 +74,7 @@ export default function AppointmentTypeForm({ initialData, onSubmit, onCancel }:
 
       {/* Botones */}
       <div className="flex gap-2">
-        <Button type="submit">{initialData ? "Guardar cambios" : "Crear tipo de turno"}</Button>
+        <Button type="submit">{initialData ? "Guardar cambios" : "Crear servicio"}</Button>
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancelar

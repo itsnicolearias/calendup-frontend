@@ -5,13 +5,11 @@ import { CalendarIcon, Clock, Mail, Phone, User } from "lucide-react"
 import { format } from "date-fns"
 import { parseLocalDate } from "@/utils/date"
 import { Appointment, AppointmentStatus } from "@/types/appointments"
-import { useRouter } from "next/navigation"
 import { updateAppointment } from "@/services/appointments"
 import { StatusDropdown } from "./StatusDropdown"
 import { useState } from "react"
 
-export function AppointmentModal({ appointment }: { appointment: Appointment }) {
-  const router = useRouter()
+export function AppointmentModal({ appointment, handleClose }: { appointment: Appointment, handleClose: () => void }) {
 
    const [currentStatus, setCurrentStatus] = useState(appointment.status)
 
@@ -25,9 +23,6 @@ export function AppointmentModal({ appointment }: { appointment: Appointment }) 
     }
   }
 
-  const handleClose = () => {
-    router.push("/dashboard/appointments")
-  }
 
   return (
     <Dialog open={!!appointment} onOpenChange={handleClose}>
@@ -53,9 +48,9 @@ export function AppointmentModal({ appointment }: { appointment: Appointment }) 
                 {appointment.name} {appointment.lastName}
               </h3>
               <StatusDropdown
-                          currentStatus={currentStatus}
-                          statuses={["cancelled", "completed", "confirmed", "pending"]}
-                          onChange={handleChangeStatus}
+                currentStatus={currentStatus}
+                statuses={["cancelled", "completed", "confirmed", "pending"]}
+                onChange={handleChangeStatus}
                         />
             </div>
 

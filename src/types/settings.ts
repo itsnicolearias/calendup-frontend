@@ -1,5 +1,6 @@
 import z from "zod"
 import { AppointmentType } from "./appointments"
+import { Review } from "./review"
 
 const timeRangeSchema = z.object({
   start: z
@@ -46,6 +47,17 @@ export const profileSchema = z.object({
   markAppAsCompleted: z.boolean().optional(),
   licenseNumber: z.string().optional(),
   profilePicture: z.string().optional(),
+  languages: z.array(z.string()).optional(),
+  education: z.array(
+  z.object({
+    title: z.string().min(1, "Título requerido"),
+    institution: z.string().min(1, "Institución requerida"),
+  })
+  ).optional(),
+  country: z.string().optional(),
+  province: z.string().optional(),
+  city: z.string().optional(),
+  isNewUser: z.boolean().optional(),
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
@@ -62,6 +74,7 @@ export interface UserWithProfile {
   updatedAt?: Date
   profile?: Profile
   AppointmentTypes?: AppointmentType[],
+  Reviews?: Review[]
 }
 
 export interface Profile {
@@ -82,6 +95,18 @@ export interface Profile {
     defaultAppConfirmation: boolean,
     profilePicture: string,
     markAppAsCompleted: boolean
+    country: string
+    province: string
+    city: string
+    education: Education[]
+    languages: string[]
+    profileCompleted: boolean
+    isNewUser: boolean
+}
+
+export type Education = {
+  title: string
+  institution: string
 }
 
 export type WeekDay =
@@ -114,9 +139,44 @@ export enum UserRole {
 }
 
 export const JobTitles = [
-  "Psicólogo/a", "Nutricionista", "Fisioterapeuta", "Coach", "Médico/a", "Odontólogo/a",
-  "Esteticista", "Podólogo/a", "Kinesiólogo/a", "Terapista ocupacional", "Masajista", "Mecanico/a", "Abogado/a", "Contador/a", "Arquitecto/a", "Ingeniero/a", "Diseñador/a gráfico/a"
-]
+  // Salud
+  "Medico",
+  "Odontologo",
+  "Psicologo",
+  "Nutricionista",
+  "Fisioterapeuta",
+  "Kinesiologo",
+  "Enfermero",
+  "Terapista ocupacional",
+
+  // Belleza
+  "Esteticista",
+  "Podologo",
+  "Masajista",
+  "Peluquero",
+  "Cosmetologo",
+
+  // Legal & Finanzas
+  "Abogado",
+  "Contador",
+  "Escribano",
+  "Asesor financiero",
+
+  // Fitness & Bienestar
+  "Entrenador personal",
+  "Coach",
+  "Instructor de yoga",
+  "Profesor de pilates",
+
+  // Educación & Creatividad
+  "Profesor",
+  "Arquitecto",
+  "Ingeniero",
+  "Diseñador grafico",
+  "Desarrollador",
+  "Consultor",
+];
+
 
 
 export const dayLabels: Record<string, string> = {
@@ -129,12 +189,30 @@ export const dayLabels: Record<string, string> = {
   sunday: "Domingo",
 };
 
-export interface GetProfessionalResponse {
-  professional: UserWithProfile,
-  rating: RatingResponse
+export const languageOptions = [
+  { value: "es", label: "Español" },
+  { value: "en", label: "Inglés" },
+  { value: "fr", label: "Francés" },
+  { value: "de", label: "Alemán" },
+  { value: "pt", label: "Portugués" },
+  // podés usar una librería como `iso-639-1` para traer todos los idiomas
+];
+
+export type ChangePassword = {
+  password: string;
+  newPassword: string;
 }
 
-export interface RatingResponse {
-  averageRating: number | undefined,
-  totalReviews: number | undefined,
-}
+// ✅ Zod schema
+export const PasswordSchema = z
+  .object({
+    password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+    newPassword: z.string().min(6, "La nueva contraseña debe tener al menos 6 caracteres"),
+    confirmPassword: z.string().min(6, "Debes confirmar la contraseña"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Las contraseñas no coinciden",
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof PasswordSchema>;

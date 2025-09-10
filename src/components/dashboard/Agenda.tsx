@@ -10,8 +10,9 @@ import { format} from "date-fns"
 import { es } from "date-fns/locale"
 import { Appointment } from "@/types/appointments"
 import { useRouter } from "next/navigation"
-import { getStatusColor, getStatusText } from "../appointments/status"
+import { getStatusColor, getStatusText } from "../../types/status"
 import { getAppointments } from "@/services/appointments"
+import { AppointmentModal } from "../appointments/AppointmentModal"
 
 export default function AgendaView() {
 
@@ -35,6 +36,7 @@ export default function AgendaView() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
+  const [open, setOpen] = useState(false)
 
 useEffect(() => {
   const fetchAppointments = async () => {
@@ -47,6 +49,20 @@ useEffect(() => {
   fetchAppointments()
 }, [])
 
+  const selectApp = (app: Appointment) => {
+    setSelectedAppointment(app)
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  if (open){
+    return (
+      <AppointmentModal appointment={selectedAppointment!} handleClose={handleClose} />
+    )
+  }
 
   return (
   <div className="h-screen p-6">
@@ -76,7 +92,7 @@ useEffect(() => {
                 <Card
                   key={appointment.appointmentId}
                   className="p-4 cursor-pointer hover:shadow-md transition-shadow duration-200"
-                  onClick={() => setSelectedAppointment(appointment)}
+                  onClick={() => selectApp(appointment)}
                 >
                   <div className="flex justify-between items-center">
                     <div>

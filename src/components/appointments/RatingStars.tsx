@@ -1,4 +1,4 @@
-import { RatingResponse } from "@/types/settings";
+import { RatingResponse } from "@/types/review";
 import { Star } from "lucide-react";
 
 

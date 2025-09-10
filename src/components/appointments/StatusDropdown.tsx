@@ -2,7 +2,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
 import { AppointmentStatus } from "@/types/appointments"
-import { getStatusText } from "./status"
+import { getStatusText } from "../../types/status"
 
 interface StatusDropdownProps {
   currentStatus: AppointmentStatus

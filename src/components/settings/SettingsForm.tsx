@@ -5,12 +5,18 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ProfileFormValues, profileSchema } from "@/types/settings";
+import { languageOptions, ProfileFormValues, profileSchema } from "@/types/settings";
 import { getProfile, updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import UploadImage from "../shared/UploadFiles";
 import { useS3Upload } from "@/services/s3-upload";
+import { MultiValue } from "react-select";
+import { useFieldArray } from "react-hook-form";
+import dynamic from "next/dynamic";
+import LocationSelect from "../shared/LocationSelect";
+const Select = dynamic(() => import("react-select"), { ssr: false });
+
 
 export default function ProfileForm() {
   const router = useRouter();
@@ -27,11 +33,21 @@ export default function ProfileForm() {
       address: "",
       phone: "",
       profilePicture: "",
+      country:  "",
+      province:  "",
+      city: "",
+      education:  [{ title: "", institution: "" }],
+      languages: [],
     },
     mode: "onChange",
   });
 
   const { register, handleSubmit, reset, watch, formState: { errors } } = form;
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "education",
+  });
 
   // Cargar token y redirigir si no existe
   useEffect(() => {
@@ -55,6 +71,11 @@ export default function ProfileForm() {
           address: profile?.profile?.address ?? "",
           phone: profile?.profile?.phone ?? "",
           profilePicture: profile?.profile?.profilePicture ?? "",
+          country: profile?.profile?.country ?? "",
+          province: profile?.profile?.province ?? "",
+          city: profile?.profile?.city ?? "",
+          education: profile?.profile?.education ?? [],
+          languages: profile?.profile?.languages ?? [],
         });
       } catch (error) {
         console.error("Error cargando perfil:", error);
@@ -100,11 +121,6 @@ const onSubmit = async (data: ProfileFormValues) => {
         </div>
 
         <div>
-          <Label>Dirección</Label>
-          <Input {...register("address")} />
-        </div>
-
-        <div>
           <Label>Teléfono</Label>
           <Input {...register("phone")} />
         </div>
@@ -117,6 +133,50 @@ const onSubmit = async (data: ProfileFormValues) => {
             onChange={(file) => setSelectedFile(file)}
           />
         </div>
+
+        <LocationSelect />
+        
+        <div>
+          <Label>Dirección</Label>
+          <Input {...register("address")} />
+        </div>
+
+        <div>
+          <Label>Idiomas</Label>
+          <Select
+            isMulti
+            options={languageOptions}
+            value={languageOptions.filter(opt => watch("languages")?.includes(opt.value))}
+            onChange={(newValue) => {
+              const selected = newValue as MultiValue<{ value: string; label: string }>;
+              form.setValue("languages", selected.map((opt) => opt.value), { shouldValidate: true });
+            }}
+          />
+        </div>
+
+        <div>
+          <Label>Educación</Label>
+          {fields.map((field, index) => (
+            <div key={field.id} className="flex gap-2 mb-2">
+              <Input
+                placeholder="Título"
+                {...register(`education.${index}.title` as const)}
+              />
+              <Input
+                placeholder="Institución"
+                {...register(`education.${index}.institution` as const)}
+              />
+              <Button type="button" variant="destructive" onClick={() => remove(index)}>
+                Eliminar
+              </Button>
+            </div>
+          ))}
+
+          <Button type="button" onClick={() => append({ title: "", institution: "" })}>
+            + Agregar educación
+          </Button>
+        </div>
+
 
         <Button type="submit" disabled={loading}>
           {loading ? "Guardando..." : "Guardar cambios"}
