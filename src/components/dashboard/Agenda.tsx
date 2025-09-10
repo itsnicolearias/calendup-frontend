@@ -13,10 +13,17 @@ import { useRouter } from "next/navigation"
 import { getStatusColor, getStatusText } from "../../types/status"
 import { getAppointments } from "@/services/appointments"
 import { AppointmentModal } from "../appointments/AppointmentModal"
+import { CreateAppointmentModal } from "./CreateAppointmentModal"
+import { Button } from "../ui/button"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
+import { CopyCheck } from "lucide-react"
+import { useUser } from "@/contexts/UserContext"
 
 export default function AgendaView() {
 
   const router = useRouter();
+
+  const { user } = useUser()
 
   const getAppointmentsRows = async (): Promise<Appointment[]> => {
   try {
@@ -37,6 +44,7 @@ export default function AgendaView() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
   const [open, setOpen] = useState(false)
+  const [openAppModal, setOpenAppModal] = useState(false)
 
 useEffect(() => {
   const fetchAppointments = async () => {
@@ -64,9 +72,54 @@ useEffect(() => {
     )
   }
 
+  const appointmentLink = user ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${user.userId}` : '';
+
   return (
-  <div className="h-screen p-6">
-  <Card className="h-full">
+  <div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Contenedor flex para título y botón */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Mi Agenda
+          </h1>
+
+          <div className="flex items-center gap-2">
+                <Tooltip>
+                <TooltipTrigger asChild>
+                  <button 
+                    className="p-2 rounded-full  hover:bg-gray-100" 
+                    onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
+                    disabled={!user || !user.profile?.profileCompleted} 
+                    >
+                    <CopyCheck className="w-5 h-5 text-black"  />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Comparte tu link de agendamiento</p>
+                </TooltipContent>
+              </Tooltip>
+
+          
+          {/* Botón para abrir modal */}
+          <Button 
+            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " 
+            onClick={() => setOpenAppModal(true)} 
+            disabled={!user || !user.profile?.profileCompleted}>
+            Nuevo Turno
+          </Button>
+          </div>
+          
+        </div>
+
+        <CreateAppointmentModal open={openAppModal} onClose={() => setOpenAppModal(false)} />
+
+        <p className="text-gray-600 mt-2">
+          Puedes visualizar y abrir el detalle de cada turno haciendo click sobre él.
+        </p>
+    </div>
+
+    <div className="h-screen p-6">
+      <Card className="h-full">
     <CardContent className="h-full">
       <div className="grid grid-cols-2 gap-6 h-full">
         {/* Calendario */}
@@ -111,7 +164,9 @@ useEffect(() => {
         </div>
       </div>
     </CardContent>
-  </Card>
+      </Card>
+    </div>
+  
 </div>
 
   )
