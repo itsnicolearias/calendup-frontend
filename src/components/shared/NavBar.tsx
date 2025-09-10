@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Calendar, CalendarIcon, ChevronDown, Home, LogOut, Menu, Palette, Search, Settings } from "lucide-react"
+import { Calendar, CalendarIcon,  Home, Info, LogOut, Palette, Search, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
@@ -9,27 +9,19 @@ import { Input } from "../ui/input"
 import { useState } from "react"
 import { useUser } from "@/contexts/UserContext"
 import { useRouter } from "next/navigation"
+import WelcomeWizard from "../dashboard/WelcomeWizard"
 
 export default function Component() {
 
       const router = useRouter();
 
-      const VIEWS = { TURNS: "turnos", AGENDA: "Agenda" } as const;
-      const [currentView, setCurrentView] = useState<typeof VIEWS[keyof typeof VIEWS]>(VIEWS.TURNS);
-
       const [searchTerm, setSearchTerm] = useState("")
+      const [openWizard, setOpenWizard] = useState(false);
       const userContext = useUser();
       const user = userContext?.user;
 
     const handleAgenda = () => {
         router.push("/dashboard/agenda")
-        setCurrentView(VIEWS.AGENDA)
-    }
-
-    const handleAppointments = () => {
-        router.push("/dashboard/appointments")
-        setCurrentView(VIEWS.TURNS)
-
     }
       
     const handleLogout = () => {
@@ -62,10 +54,15 @@ export default function Component() {
                     <Home className="w-4 h-4 mr-2" />
                     Inicio
                 </Button>
+
+                <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={() => handleAgenda()}>
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                        Agenda
+                </Button>
                 </div>
 
                 {/* Center - Search */}
-                <div className="flex-1 max-w-md mx-8">
+                <div className="flex-3 max-w-md mx-10">
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <Input
@@ -80,26 +77,7 @@ export default function Component() {
 
                 {/* Right side - Menu and Profile */}
                 <div className="flex items-center space-x-4">
-                {/* View Selector Dropdown */}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex items-center space-x-2 bg-transparent">
-                        <Menu className="w-4 h-4" />
-                        <span>{currentView === VIEWS.TURNS ? "Mis Turnos" : VIEWS.AGENDA}</span>
-                        <ChevronDown className="w-4 h-4" />
-                    </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => handleAppointments()}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        Mis Turnos
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleAgenda()}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        Agenda
-                    </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+ 
 
                 {/* Profile Dropdown */}
                 <DropdownMenu>
@@ -129,6 +107,10 @@ export default function Component() {
                         <Palette className="mr-2 h-4 w-4" />
                         <span>Tema</span>
                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => setOpenWizard(true)}>
+                        <Info className="mr-2 h-4 w-4" />
+                        <span>Ayuda</span>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
                         <LogOut className="mr-2 h-4 w-4" />
@@ -140,6 +122,13 @@ export default function Component() {
             </div>
             </div>
         </nav>
+
+        <WelcomeWizard 
+            open={openWizard} 
+            setOpen={setOpenWizard} 
+            isNewUser={user?.profile?.isNewUser} 
+            handleFinish={() => setOpenWizard(false)} 
+            isFromHelp={true} />
         </div>
     )
 }

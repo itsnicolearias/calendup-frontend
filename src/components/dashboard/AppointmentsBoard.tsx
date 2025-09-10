@@ -9,6 +9,8 @@ import { CopyCheck } from "lucide-react"
 import { UserWithProfile } from "@/types/settings"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 import { OnboardingChecklist } from "./OnboardingChecklist"
+import WelcomeWizard from "./WelcomeWizard"
+import { updateProfile } from "@/services/settings"
 
 interface Props {
   appointments: Appointment[]
@@ -19,6 +21,7 @@ interface Props {
 
 export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional }: Props) {
    const [open, setOpen] = useState(false)
+   const [openWizard, setOpenWizard] = useState(false);
 
   const handleDragStart = (e: React.DragEvent, appointment: Appointment) => {
     e.dataTransfer.setData("appointmentId", appointment.appointmentId.toString())
@@ -47,12 +50,27 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
     { key: "cancelled", color: "text-red-700", dot: "bg-red-500" },
   ]
 
+  const handleFinishWizard = async () => {
+    setOpenWizard(false);
+     
+    try {
+      const token = localStorage.getItem("token")
+      await updateProfile(token, { isNewUser: false })
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+
   return (
     <div>
       { professional && !professional.profile?.profileCompleted && (
         <OnboardingChecklist profile={professional?.profile || {}} />
       )}
-      
+
+      { professional && professional.profile?.isNewUser && (
+        <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={professional?.profile?.isNewUser} handleFinish={handleFinishWizard} />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Contenedor flex para título y botón */}
