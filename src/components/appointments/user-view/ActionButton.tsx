@@ -5,7 +5,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger }
 import { Save, Trash2 } from 'lucide-react'
 import React from 'react'
 
-function ActionButton({ onSaveChanges, hasChanges, onCancel }: { onSaveChanges: () => void, hasChanges: boolean, onCancel: () => void }) {
+function ActionButton({ onSaveChanges, hasChanges, onCancel, disableButton }: { onSaveChanges: () => void, hasChanges: boolean, onCancel: () => void, disableButton: boolean }) {
   return (
     <div>
         <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
@@ -13,7 +13,7 @@ function ActionButton({ onSaveChanges, hasChanges, onCancel }: { onSaveChanges: 
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button
                       onClick={onSaveChanges}
-                      disabled={!hasChanges}
+                      disabled={!hasChanges || disableButton}
                       className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold disabled:opacity-50"
                     >
                       <Save className="w-4 h-4 mr-2" />
@@ -24,6 +24,7 @@ function ActionButton({ onSaveChanges, hasChanges, onCancel }: { onSaveChanges: 
                       <AlertDialogTrigger asChild>
                         <Button
                           variant="destructive"
+                          disabled={disableButton}
                           className="flex-1 h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 font-semibold"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />

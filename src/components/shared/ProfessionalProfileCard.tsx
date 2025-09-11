@@ -29,7 +29,7 @@ function ProfessionalProfileCard({ professional, rating }: { professional: Parti
                       {user?.lastName![0]}
                     </AvatarFallback>
                   </Avatar>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-2">{user?.name}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-2">{user?.name} {user?.lastName}</h1>
                   <p className="text-blue-600 font-medium text-lg mb-2">{user?.jobTitle}</p>
                   <div className="flex items-center justify-center mb-4">
                     <Star className="w-5 h-5 text-yellow-400 fill-current mr-1" />

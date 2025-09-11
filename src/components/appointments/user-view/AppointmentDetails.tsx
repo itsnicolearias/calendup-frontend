@@ -31,6 +31,8 @@ function AppointmentDetails({
 
       const hasChanges = Object.keys(draft).length > 0
 
+      const isCancelled = appointment.status === "cancelled";
+
   return (
     <div>
          <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -40,24 +42,43 @@ function AppointmentDetails({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Professional Profile - Left Column */}
-          <ProfessionalProfileCard professional={appointment.professional} rating={rating} />
+          <ProfessionalProfileCard 
+            professional={appointment.professional} 
+            rating={rating} 
+            />
 
           {/* Appointment Details - Right Columns */}
           <div className="lg:col-span-2">
             <div className="space-y-6">
               {/* Appointment Summary Card */}
-              <AppointmentSummary appointment={appointment} onEdit={onEdit} />
+              <AppointmentSummary 
+                appointment={appointment} 
+                onEdit={onEdit}
+                disableButton={isCancelled} 
+                />
 
               {/* Patient Information */}
-              <PatientInformation val={val} onDraftChange={onDraftChange} />
+              <PatientInformation 
+                val={val} 
+                onDraftChange={onDraftChange}
+                disableInput={isCancelled} 
+                />
 
               {/* Changes Indicator */}
               {hasChanges && (
-                <ChangesIndicator onDraftChange={onDraftChange} onSaveChanges={onSaveChanges} />
+                <ChangesIndicator 
+                    onDraftChange={onDraftChange} 
+                    onSaveChanges={onSaveChanges} 
+                    />
               )}
 
               {/* Action Buttons */}
-              <ActionButton onSaveChanges={onSaveChanges} hasChanges={hasChanges} onCancel={onCancel} />
+              <ActionButton 
+                onSaveChanges={onSaveChanges} 
+                hasChanges={hasChanges} 
+                onCancel={onCancel}
+                disableButton={isCancelled} 
+                />
             </div>
           </div>
         </div>

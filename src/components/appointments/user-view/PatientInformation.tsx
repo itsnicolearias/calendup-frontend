@@ -4,7 +4,7 @@ import { Appointment } from '@/types/appointments'
 import { FileText, Mail, Phone, User } from 'lucide-react'
 import React from 'react'
 
-function PatientInformation({val, onDraftChange}: {val: <K extends keyof Appointment>(k: K) => Appointment[K], onDraftChange: (patch: Partial<Appointment>) => void}) {
+function PatientInformation({val, onDraftChange, disableInput}: {val: <K extends keyof Appointment>(k: K) => Appointment[K], onDraftChange: (patch: Partial<Appointment>) => void, disableInput: boolean}) {
   return (
     <div>
         <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
@@ -22,6 +22,7 @@ function PatientInformation({val, onDraftChange}: {val: <K extends keyof Appoint
                         <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                         <Input
                           value={String(val("name") ?? "")}
+                          disabled={disableInput}
                           onChange={(e) => onDraftChange({ name: e.target.value })}
                           className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                         />
@@ -34,6 +35,7 @@ function PatientInformation({val, onDraftChange}: {val: <K extends keyof Appoint
                         <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                         <Input
                           value={String(val("lastName") ?? "")}
+                          disabled={disableInput}
                           onChange={(e) => onDraftChange({ lastName: e.target.value })}
                           className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                         />
@@ -47,6 +49,7 @@ function PatientInformation({val, onDraftChange}: {val: <K extends keyof Appoint
                         <Input
                           type="email"
                           value={String(val("email") ?? "")}
+                          disabled={disableInput}
                           onChange={(e) => onDraftChange({ email: e.target.value })}
                           className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                         />
@@ -59,6 +62,7 @@ function PatientInformation({val, onDraftChange}: {val: <K extends keyof Appoint
                         <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                         <Input
                           value={String(val("phone") ?? "")}
+                          disabled={disableInput}
                           onChange={(e) => onDraftChange({ phone: e.target.value })}
                           className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                         />
@@ -71,6 +75,7 @@ function PatientInformation({val, onDraftChange}: {val: <K extends keyof Appoint
                         <FileText className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                         <Input
                           value={String(val("reason") ?? "")}
+                          disabled={disableInput}
                           onChange={(e) => onDraftChange({ reason: e.target.value })}
                           className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                         />
