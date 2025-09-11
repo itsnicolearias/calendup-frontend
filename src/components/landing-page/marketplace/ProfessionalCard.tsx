@@ -77,7 +77,9 @@ export default function ProfessionalCard({
                   <span className="font-semibold">{rating}</span>
                   <span className="text-gray-500 text-sm ml-1">({professional.Reviews?.length} reseñas)</span>
                 </div>
-                <Badge
+
+                {availability && (
+                  <Badge
                   className={`text-xs ${
                     availability!.includes("hoy")
                       ? "bg-green-100 text-green-800 border-green-200"
@@ -86,6 +88,8 @@ export default function ProfessionalCard({
                 >
                   {availability}
                 </Badge>
+                )}
+                
               </div>
             </div>
 
