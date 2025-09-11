@@ -1,5 +1,5 @@
 import { apiFetch } from "./api"
-import { Appointment, AvailabilityResponse, GetAllApiResponse } from "../types/appointments"
+import { Appointment, AvailabilityResponse, GetAllApiResponse, GetOneAppointment } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
   try {
@@ -72,23 +72,34 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
   
 }
 
-export const getOneAppointment = async (token: string | null, isFromUser: boolean, appointmentId?: string ) => {
+export const getOneAppointment = async (token: string | null, appointmentId?: string ) => {
   try {
     if (!token) {
         throw new Error;
     }
-    if (isFromUser){
-      return apiFetch<Appointment>(`/appointments/from-user?token=${token}`, {
-    method: "GET"
-  })
-    } else {
       return apiFetch<Appointment>("/appointments/" + appointmentId, {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
     }
   })
+
+  } catch (error) {
+    throw error;
+  }
+  
+}
+
+export const getOneAppFromUser = async (token: string | null) => {
+  try {
+    if (!token) {
+        throw new Error;
     }
+
+      return apiFetch<GetOneAppointment>(`/appointments/from-user?token=${token}`, {
+    method: "GET"
+  })
+
   } catch (error) {
     throw error;
   }

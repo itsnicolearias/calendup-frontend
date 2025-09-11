@@ -1,3 +1,4 @@
+import { RatingResponse } from "./review";
 import { UserWithProfile } from "./settings";
 
 export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed";
@@ -18,6 +19,12 @@ export interface Appointment {
     professional: UserWithProfile
     appointmentTypeId: string | null;
     appointmentCode: string;
+    AppointmentType?: AppointmentType | null;
+}
+
+export interface GetOneAppointment {
+  appointment: Appointment
+  rating: RatingResponse
 }
 
 export interface GetAllApiResponse<T> {
