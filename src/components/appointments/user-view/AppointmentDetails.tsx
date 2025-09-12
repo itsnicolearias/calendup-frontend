@@ -15,6 +15,7 @@ interface AppointmentDetailsProps {
   onEdit: (field: keyof Appointment) => void
   onCancel: () => void
   onSaveChanges: () => void
+  handleDiscardChanges: () => void
   rating: RatingResponse
 }
 
@@ -25,6 +26,7 @@ function AppointmentDetails({
   onEdit,
   onCancel,
   onSaveChanges,
+  handleDiscardChanges,
   rating
  }: AppointmentDetailsProps) {
       const val = <K extends keyof Appointment>(k: K) => (draft[k] ?? appointment[k]) as Appointment[K]
@@ -67,7 +69,7 @@ function AppointmentDetails({
               {/* Changes Indicator */}
               {hasChanges && (
                 <ChangesIndicator 
-                    onDraftChange={onDraftChange} 
+                    onDraftChange={handleDiscardChanges} 
                     onSaveChanges={onSaveChanges} 
                     />
               )}
