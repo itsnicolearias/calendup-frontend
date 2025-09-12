@@ -15,6 +15,7 @@ import { ArrowRight, CalendarIcon } from "lucide-react";
 import PersonalInformation from "./PersonalInformation";
 import BookingSummary from "./BookingSummary";
 import BookingConfirmed from "./BookingConfirmed";
+import ErrorModal from "../shared/ErrorModal";
 
 export default function Component() {
   const searchParams = useSearchParams();
@@ -29,6 +30,7 @@ export default function Component() {
   const [ratingData, setRatingData] = useState<RatingResponse>()
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
       name: "",
       lastName: "",
@@ -44,15 +46,27 @@ export default function Component() {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getOneUser(professionalId)
+      try {
+        const data = await getOneUser(professionalId)
 
-      setProfessional(data?.professional)
-      setRatingData(data?.rating)
+        setProfessional(data?.professional)
+        setRatingData(data?.rating)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        setError("No se pudo cargar la información del profesional. Por favor, intenta nuevamente más tarde.")     
+      }
+      
     }
     fetchData()
   }, [professionalId])
 
-  if (!professional) return <p>Cargando...</p>
+  //if (!professional) return <p>Cargando...</p>
+
+  if (professional && !professional?.profile?.profileCompleted) {
+    return (
+      <ErrorModal title="Perfil Incompleto" message="El profesional seleccionado no ha completado su perfil. Por favor, intenta con otro profesional." />
+    )
+  }
 
   const handleSelect = (date: string, hour: string) => {
     setDateF(date);
@@ -119,11 +133,22 @@ export default function Component() {
 
   if (bookingConfirmed){
     return (
-      <BookingConfirmed professional={professional} selectedDate={dateF!} selectedTime={time} selectedService={selectedType!} resetBooking={resetBooking}  />
+      <BookingConfirmed professional={professional!} selectedDate={dateF!} selectedTime={time} selectedService={selectedType!} resetBooking={resetBooking}  />
     )
   }
 
   return (
+    <>
+    { error && (
+      
+      <ErrorModal 
+        title="Profesional no encontrado" 
+        message={error}
+        />
+
+    )}
+
+    { !error && professional && (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
@@ -186,6 +211,9 @@ export default function Component() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    )}
+    </>
+      
   )
 }

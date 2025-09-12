@@ -21,6 +21,6 @@ export const getOneUser = async (professionalId: string): Promise<GetProfessiona
   
   return data;
     } catch (error) {
-        console.log(error)
+        throw error
     }
 }
