@@ -111,7 +111,7 @@ export default function ChangePasswordForm({ onSubmit }: ChangePasswordFormProps
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full bg-[#0388bd]" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Guardando..." : "Cambiar contraseña"}
         </Button>
       </form>

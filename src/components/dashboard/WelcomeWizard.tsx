@@ -75,9 +75,9 @@ export default function WelcomeWizard({ open, setOpen,isNewUser, handleFinish, i
           )}
 
           {step < steps.length - 1 ? (
-            <Button onClick={nextStep} className="bg-gradient-to-r from-blue-600 to-purple-600" >Siguiente</Button>
+            <Button onClick={nextStep} className="bg-gradient-to-r from-[#ac043f] to-[#0388bd]" >Siguiente</Button>
           ) : (
-            <Button onClick={() => handleFinish()} className="bg-gradient-to-r from-blue-600 to-purple-600" >¡Listo!</Button>
+            <Button onClick={() => handleFinish()} className="bg-gradient-to-r from-[#ac043f] to-[#0388bd]" >¡Listo!</Button>
           )}
         </div>
       </DialogContent>

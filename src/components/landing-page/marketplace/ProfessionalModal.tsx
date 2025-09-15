@@ -38,7 +38,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
             <div className="flex items-center space-x-4">
               <Avatar className="w-20 h-20">
                 <AvatarImage src={professional.profile?.profilePicture || "placeholder.svg"} alt={professional.profile?.name} />
-                <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xl">
+                <AvatarFallback className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white text-xl">
                    {name
                     .split(" ")
                     .filter(n => n.length > 0) // evitar strings vacíos
@@ -48,7 +48,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
               </Avatar>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">{professional.profile?.name}</h3>
-                <p className="text-blue-600 font-medium text-lg">{professional.profile?.jobTitle}</p>
+                <p className="text-[#0388bd] font-medium text-lg">{professional.profile?.jobTitle}</p>
                 <div className="flex items-center mt-2">
                   <Star className="w-5 h-5 text-yellow-400 fill-current mr-1" />
                   <span className="text-sm font-medium">{rating}</span>
@@ -60,7 +60,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center">
-                  <MapPin className="w-5 h-5 mr-2 text-blue-600" />
+                  <MapPin className="w-5 h-5 mr-2 text-[#0388bd]" />
                   Ubicación
                 </h4>
                 <p className="text-gray-600">{location}</p>
@@ -68,7 +68,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
 
               <Card className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center">
-                  <Phone className="w-5 h-5 mr-2 text-blue-600" />
+                  <Phone className="w-5 h-5 mr-2 text-[#0388bd]" />
                   Teléfono
                 </h4>
                 <p className="text-gray-600">{professional.profile?.phone}</p>
@@ -76,7 +76,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
 
               <Card className="p-4">
                 <h4 className="font-semibold mb-3 flex items-center">
-                  <Mail className="w-5 h-5 mr-2 text-blue-600" />
+                  <Mail className="w-5 h-5 mr-2 text-[#0388bd]" />
                   Email
                 </h4>
                 <p className="text-gray-600">{professional.email}</p>
@@ -104,7 +104,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
 
             <div className="flex space-x-4 pt-4">
               <Button
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                className="flex-1 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                 size="lg"
                 onClick={() => setOpenBookingModal(true)}
               >
@@ -113,7 +113,7 @@ export default function ProfessionalModal({ professional, open, onOpenChange }: 
               <Button
                 variant="outline"
                 size="lg"
-                className="border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent"
+                className="border-blue-500 text-[#0388bd] hover:bg-blue-50 bg-transparent"
               >
                 <Phone className="w-5 h-5 mr-2" />
                 Contactar

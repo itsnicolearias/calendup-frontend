@@ -89,11 +89,11 @@ const handleSubmit = async (e: React.FormEvent) => {
         <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-6">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-emerald-400 to-emerald-700 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-full flex items-center justify-center">
                 <Lock className="w-8 h-8 text-white" />
               </div>
             </div>
-            <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-emerald-400 to-emerald-700 bg-clip-text text-transparent">
+            <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
               Iniciar Sesión
             </CardTitle>
             <CardDescription className="text-center text-gray-600">Ingresa a tu cuenta para continuar</CardDescription>
@@ -112,7 +112,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     placeholder="tu@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 h-12 border-gray-200 focus:border-[#0388bd] focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -130,7 +130,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 pr-10 h-12 border-gray-200 focus:border-[#0388bd] focus:ring-blue-500"
                     required
                   />
                   <button
@@ -148,20 +148,20 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <input
                     id="remember"
                     type="checkbox"
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-[#0388bd] border-gray-300 rounded focus:ring-blue-500"
                   />
                   <Label htmlFor="remember" className="text-sm text-gray-600">
                     Recordarme
                   </Label>
                 </div>
-                <a href="#" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                <a href="#" className="text-sm text-[#0388bd] hover:text-gray-900 font-medium">
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-emerald-400 to-emerald-700 hover:from-emerald-500 hover:to-emerald-800 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full h-12 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
               >
                 Iniciar Sesión
               </Button>
@@ -238,7 +238,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 ¿No tienes una cuenta?{" "}
-                <a href="/auth/register" className="text-blue-600 hover:text-blue-800 font-medium">
+                <a href="/auth/register" className="text-[#0388bd] hover:text-gray-900 font-medium">
                   Regístrate aquí
                 </a>
               </p>

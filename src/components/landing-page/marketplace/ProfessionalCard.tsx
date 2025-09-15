@@ -52,7 +52,7 @@ export default function ProfessionalCard({
         <div className={`${isListView ? "flex-shrink-0" : "text-center mb-4"}`}>
           <Avatar className={`${isListView ? "w-16 h-16" : "w-20 h-20 mx-auto mb-3"}`}>
             <AvatarImage src={professional.profile?.profilePicture || "placeholder.svg"} alt={professional.profile?.name} />
-            <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg">
+            <AvatarFallback className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white text-lg">
               {name
                 .split(" ")
                 .filter(n => n.length > 0) // evitar strings vacíos
@@ -66,7 +66,7 @@ export default function ProfessionalCard({
           <div className={`${isListView ? "flex justify-between items-start" : ""}`}>
             <div>
               <h3 className="text-xl font-bold text-gray-900 mb-1">{professional?.profile?.name}</h3>
-              <p className="text-blue-600 font-medium mb-2">{professional.profile?.jobTitle}</p>
+              <p className="text-[#0388bd] font-medium mb-2">{professional.profile?.jobTitle}</p>
               <div className="flex items-center text-gray-600 text-sm mb-2">
                 <MapPin className="w-4 h-4 mr-1" />
                 {location}
@@ -100,7 +100,7 @@ export default function ProfessionalCard({
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 bg-transparent"
+                      className="w-full border-blue-500 text-[#0388bd] hover:bg-blue-50 bg-transparent"
                       onClick={() => onViewProfile(professional)}
                     >
                       Ver Perfil
@@ -109,7 +109,7 @@ export default function ProfessionalCard({
                 </Dialog>
                 <Button
                   size="sm"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                  className="w-full bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                   onClick={() => onBook(professional)}
                 >
                   Reservar Turno

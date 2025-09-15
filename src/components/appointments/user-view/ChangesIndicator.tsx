@@ -25,7 +25,7 @@ function ChangesIndicator({onDraftChange, onSaveChanges}: { onDraftChange: () =>
                         <Button
                           size="sm"
                           onClick={onSaveChanges}
-                          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                          className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                         >
                           <Save className="w-4 h-4 mr-1" />
                           Guardar

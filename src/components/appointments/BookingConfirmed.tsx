@@ -74,7 +74,7 @@ function BookingConfirmed({ professional, selectedDate, selectedService, selecte
               <div className="space-y-4">
                 <Button
                   onClick={resetBooking}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                  className="w-full bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                 >
                   Reservar Otro Turno
                 </Button>

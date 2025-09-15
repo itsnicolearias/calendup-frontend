@@ -16,7 +16,7 @@ function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType, i
         <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center">
-                    <Sparkles className="w-5 h-5 mr-2 text-blue-600" />
+                    <Sparkles className="w-5 h-5 mr-2 text-[#0388bd]" />
                     Selecciona un servicio
                   </CardTitle>
                 </CardHeader>
@@ -39,7 +39,7 @@ function ServiceSelection({ appointmentTypes, selectedTypeId, setSelectedType, i
                                 type="radio"
                                 checked={selectedTypeId === type.appointmentTypeId}
                                 onChange={() => setSelectedType(type.appointmentTypeId)}
-                                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                className="w-4 h-4 text-[#0388bd] border-gray-300 focus:ring-blue-500"
                               />
                               <div>
                                 <p className="font-semibold text-gray-900">{type.name}</p>
