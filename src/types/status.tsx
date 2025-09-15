@@ -1,0 +1,21 @@
+import { AppointmentStatus } from "@/types/appointments"
+import { CalendarCheck, CheckCircle, Clock, X } from "lucide-react"
+
+export const STATUS_CONFIG = {
+  confirmed: { color: "bg-green-100 text-green-800 border-green-200", label: "Confirmado", icon: <CheckCircle className="w-4 h-4" /> },
+  completed: { color: "bg-blue-100 text-blue-800 border-blue-200", label: "Completado", icon: <CalendarCheck className="w-4 h-4" /> },
+  pending:   { color: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "Pendiente", icon: <Clock className="w-4 h-4" />  },
+  cancelled: { color: "bg-red-100 text-red-800 border-red-200", label: "Rechazado", icon: <X className="w-4 h-4" /> }
+} as const
+
+export function getStatusColor(status: AppointmentStatus) {
+  return STATUS_CONFIG[status]?.color ?? "bg-gray-100 text-gray-800 border-gray-200"
+}
+
+export function getStatusText(status: AppointmentStatus) {
+  return STATUS_CONFIG[status]?.label ?? status
+}
+
+export function getStatusIcon(status: AppointmentStatus) {
+  return STATUS_CONFIG[status]?.icon ?? status
+}

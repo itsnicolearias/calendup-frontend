@@ -1,20 +1,22 @@
-"use client";
+"use client"
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react"
+import AppointmentDetails from "@/components/appointments/user-view/AppointmentDetails"
+import { Appointment, GetOneAppointment } from "@/types/appointments"
 import { useParams, useSearchParams } from "next/navigation";
-import { Appointment } from "@/types/appointments";
-import { AppointmentDetails } from "@/components/appointments/AppointmentDetails";
-import { getOneAppointment, updateAppointment } from "@/services/appointments";
-import { toast } from "sonner";
-import ProfessionalCard from "@/components/shared/ProfessionalCard";
-import AvailableCalendar from "@/components/shared/AvailableCalendar";
+import { getOneAppFromUser, updateAppointment } from "@/services/appointments";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import AvailableCalendar from "@/components/shared/AvailableCalendar";
+import { toast } from "sonner";
+import { RatingResponse } from "@/types/review";
 
-export default function AppointmentDetailsContainer() {
+
+export default function Component() {
   const params = useParams();
   const searchParams = useSearchParams();
 
   const [appointment, setAppointment] = useState<Appointment | null>(null);
+  const [ratingData, setRatingData] = useState<RatingResponse | null>(null);
   const [draft, setDraft] = useState<Partial<Appointment>>({});
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -27,21 +29,26 @@ export default function AppointmentDetailsContainer() {
   useEffect(() => {
     async function fetchAppointment() {
       try {
-        const res = await getOneAppointment(token, true);
-        setAppointment(res);
+        const res: GetOneAppointment = await getOneAppFromUser(token);
+        setAppointment(res.appointment);
+        setRatingData(res.rating)
       } catch (error) {
         console.error(error);
       }
     }
     fetchAppointment();
   }, [params.id, token]);
+  
+
+  const handleDraftChange = (patch: Partial<Appointment>) => {
+    setDraft((prev) => ({ ...prev, ...patch }))
+  }
 
   const handleEdit = (field: keyof Appointment) => {
-    // Solo abrimos el calendario si es fecha u hora
     if (field === "date" || field === "time") {
       setShowCalendar(true);
     }
-  };
+  }
 
   const handleCancel = async () => {
     try {
@@ -55,9 +62,8 @@ export default function AppointmentDetailsContainer() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
-  // Se llama desde AppointmentDetails (un solo llamado al guardar)
   const handleSaveChanges = async () => {
     try {
       if (!Object.keys(draft).length) {
@@ -72,9 +78,10 @@ export default function AppointmentDetailsContainer() {
       console.error(error);
       toast.error("No se pudieron guardar los cambios");
     }
-  };
+    
+    
+  }
 
-  // Cuando el usuario elige fecha/hora en el calendario (no llamamos API acá)
   const handleDateTimeSelect = (date: string, time: string) => {
     setDraft((prev) => ({ ...prev, date, time }));
     setShowCalendar(false);
@@ -91,27 +98,21 @@ export default function AppointmentDetailsContainer() {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {/* Columna principal: detalles */}
-      <div className="md:col-span-2">
-        <AppointmentDetails
-          appointment={appointment}
-          draft={draft}
-          onDraftChange={(patch) => setDraft((prev) => ({ ...prev, ...patch }))}
-          onEdit={handleEdit}
-          onCancel={handleCancel}
-          onSaveChanges={handleSaveChanges}   
-        />
-      </div>
+    <>
+     <AppointmentDetails
+      appointment={appointment!}
+      draft={draft}
+      onDraftChange={handleDraftChange}
+      onEdit={handleEdit}
+      onCancel={handleCancel}
+      onSaveChanges={handleSaveChanges}
+      rating={ratingData!}
+    />
 
-      {/* Columna lateral: profesional */}
-      <div>
-        <ProfessionalCard profile={appointment.professional.profile} />
-      </div>
-
-      {/* Modal con calendario de disponibilidad */}
+    {/* Modal con calendario de disponibilidad */}
       <Dialog open={showCalendar} onOpenChange={setShowCalendar}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+
           <AvailableCalendar
             onSelect={handleDateTimeSelect}
             professionalId={professionalId}
@@ -119,6 +120,7 @@ export default function AppointmentDetailsContainer() {
           />
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </>
+   
+  )
 }
