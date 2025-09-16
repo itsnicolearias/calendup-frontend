@@ -29,8 +29,7 @@ export default function Component() {
             router.push("/auth/login");
         };
 
-      const avatarUrl = user?.profile?.profilePicture 
-    || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${user?.profile?.name || ""} ${user?.profile?.lastName || ""}`)}&background=197387&color=fff`;
+      const avatarUrl = user?.profile?.profilePicture || "placeholder.svg"
 
     const name = `${user?.profile?.name} ${user?.profile?.lastName || ""}` || "Usuario"
 
@@ -86,7 +85,11 @@ export default function Component() {
                         <Avatar className="h-10 w-10">
                         <AvatarImage src={avatarUrl} alt="Perfil" />
                         <AvatarFallback className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white">
-                            U
+                            {name
+                            .split(" ")
+                            .filter(n => n.length > 0) // evitar strings vacíos
+                            .map(n => n[0].toUpperCase())
+                            .join("")}
                         </AvatarFallback>
                         </Avatar>
                     </Button>

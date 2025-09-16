@@ -72,7 +72,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     await registerUser(formData);
-    router.push("/check-email")
+    router.push("/auth/check-email")
   } catch (err) {
     console.error('Error al registrar:', err);
   }
