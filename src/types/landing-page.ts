@@ -74,3 +74,8 @@ export const categoryMap: Record<string, string[]> = {
     "Consultor",
   ],
 };
+
+export interface UserWithProfileWithAvailability extends UserWithProfile {
+  availabilityTag?: string | null
+}
+

@@ -4,17 +4,15 @@ import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Dialog, DialogTrigger } from "../../ui/dialog";
-import { UserWithProfile } from "@/types/settings";
 import { getAverageRating } from "@/utils/getAverageRating";
-import { obtainAvailability } from "@/utils/availabilityButton";
-import { useEffect, useState } from "react";
 import { State } from "country-state-city";
+import { UserWithProfileWithAvailability } from "@/types/landing-page";
 
 interface ProfessionalCardProps {
-  professional: UserWithProfile;
+  professional: UserWithProfileWithAvailability;
   isListView?: boolean;
-  onViewProfile: (professional: UserWithProfile) => void;
-  onBook: (professional: UserWithProfile) => void;
+  onViewProfile: (professional: UserWithProfileWithAvailability) => void;
+  onBook: (professional: UserWithProfileWithAvailability) => void;
 }
 
 export default function ProfessionalCard({
@@ -23,7 +21,6 @@ export default function ProfessionalCard({
   onViewProfile,
   onBook,
 }: ProfessionalCardProps) {
-  const [availability, setAvailability] = useState<string>("")
 
   const province = State.getStateByCodeAndCountry(professional.profile?.province || "", professional.profile?.country || "" )
   const location = `${professional.profile?.city}, ${province?.name}`
@@ -31,14 +28,6 @@ export default function ProfessionalCard({
   const rating = getAverageRating(professional?.Reviews)
 
 
-  useEffect(() => {
-    async function fetchData() {
-      const data =  await obtainAvailability(professional.userId)
-      setAvailability(data!)
-    }
-
-    fetchData()
-  }, [professional.userId])
    
 
     return (
@@ -78,15 +67,15 @@ export default function ProfessionalCard({
                   <span className="text-gray-500 text-sm ml-1">({professional.Reviews?.length} reseñas)</span>
                 </div>
 
-                {availability && (
+                {professional.availabilityTag && (
                   <Badge
                   className={`text-xs ${
-                    availability!.includes("hoy")
+                    professional.availabilityTag!.includes("hoy")
                       ? "bg-green-100 text-green-800 border-green-200"
                       : "bg-yellow-100 text-yellow-800 border-yellow-200"
                   }`}
                 >
-                  {availability}
+                  {professional.availabilityTag}
                 </Badge>
                 )}
                 

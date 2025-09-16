@@ -49,7 +49,9 @@ function isSameDate(a: Date, b: Date) {
 }
 
 export enum AvailabilityTag {
+  EVERY_MOMENT = "Cualquier momento",
   TODAY = "Disponible hoy",
   TOMORROW = "Disponible mañana",
-  THIS_WEEK = "Disponible esta semana"
+  THIS_WEEK = "Disponible esta semana",
+  THIS_MONTH = "Este mes"
 }
