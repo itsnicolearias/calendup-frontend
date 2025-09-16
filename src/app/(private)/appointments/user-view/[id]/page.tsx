@@ -123,6 +123,8 @@ export default function Component() {
             onSelect={handleDateTimeSelect}
             professionalId={professionalId}
             isModal={true}
+            selectedDate={draft.date ?? appointment.date}
+            selectedHour={draft.time ?? appointment.time}
           />
         </DialogContent>
       </Dialog>

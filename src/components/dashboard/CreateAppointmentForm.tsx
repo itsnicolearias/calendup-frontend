@@ -122,7 +122,7 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
       {/* Botón */}
       <div>
         <Button type="submit" className="w-full mt-6 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white">
-          Solicitar Turno
+          Crear Turno
         </Button>
       </div>
     </form>
