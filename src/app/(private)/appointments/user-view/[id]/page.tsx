@@ -41,7 +41,6 @@ export default function Component() {
   
 
   const handleDraftChange = (patch: Partial<Appointment>) => {
-    console.log(patch)
      setDraft((prev) => ({ ...prev, ...patch }));
   }
 
