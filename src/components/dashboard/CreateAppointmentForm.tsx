@@ -67,9 +67,15 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
 
       if (onCreated) onCreated(created)
       if (onClose) onClose()
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error("Error:", err)
-      toast.error("Error al crear turno")
+      if (err.message === "Appointment limit excedeed"){
+        toast.error("Has alcanzado el limite de turnos disponible")
+      } else {
+        toast.error("Error al crear turno")
+      }
+      
     }
   }
 

@@ -100,12 +100,19 @@ export default function Component() {
         formData.appointmentTypeId = selectedType;
       }
 
-      formData.appointmentTypeId = selectedType!;
 
-      await createAppointment(formData);
+      await createAppointment({
+        ...formData,
+        appointmentTypeId: formData.appointmentTypeId === "" ? null : formData.appointmentTypeId,
+      })
       setBookingConfirmed(true)
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error("Error:", err);
+
+      if (err.message === "Appointment limit excedeed"){
+        setError("El profesional ha alcanzado el limite de turnos disponible")
+      }
     }
   };
 
@@ -142,7 +149,7 @@ export default function Component() {
     { error && (
       
       <ErrorModal 
-        title="Profesional no encontrado" 
+        title="Ha ocurrido un error" 
         message={error}
         />
 
