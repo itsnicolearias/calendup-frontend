@@ -16,7 +16,7 @@ export default function Footer({ onNavClick }: FooterProps) {
   const navSupport = [
     { label: "Preguntas Frecuentes", section: "faq", icon: <HelpCircle className="w-4 h-4 mr-2" /> },
     { label: "Contacto", section: "contacto" },
-    { label: "Términos", href: "#" },
+    { label: "Términos y condiciones", href: "/auth/terms-and-conditions" },
   ];
 
   const handleClick = (item: typeof navProduct[number] | typeof navSupport[number]) => {
