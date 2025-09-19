@@ -37,6 +37,7 @@ export default function ChangePasswordForm({ onSubmit }: ChangePasswordFormProps
       });
       toast.success("Contraseña cambiada con éxito");
       form.reset();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       if (err.message === "Invalid password"){
