@@ -1,11 +1,12 @@
 'use client';
 import  AppointmentForm from "@/components/appointments/AppointmentForm";
+import { Suspense } from "react";
 
 
 export default function CreateAppointmentPage() {
   return (
-    <main className="p-4">
-      <AppointmentForm />
-    </main>
+      <Suspense fallback={<div>Cargando...</div>}>
+        <AppointmentForm />
+      </Suspense>
   );
 }

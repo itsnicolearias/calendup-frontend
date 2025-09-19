@@ -1,9 +1,10 @@
 import CreateReviewForm from "@/components/appointments/CreateReviewForm";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
-    <div>
-      <CreateReviewForm />
-    </div>
+      <Suspense fallback={<div>Cargando...</div>}>
+        <CreateReviewForm />
+      </Suspense>
   )
 }
