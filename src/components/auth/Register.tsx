@@ -188,24 +188,24 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <p className="text-xs text-gray-500 mt-1">La contraseña debe tener al menos 8 caracteres</p>
               </div>
 
-              <div className="flex items-start space-x-2">
-                <input
-                  id="terms"
-                  type="checkbox"
-                  className="w-4 h-4 text-[#0388bd] border-gray-300 rounded focus:ring-blue-500 mt-1"
-                  required
-                />
-                <Label htmlFor="terms" className="text-sm text-gray-600 leading-relaxed">
-                  Acepto los{" "}
-                  <a href="#" className="text-[#0388bd] hover:text-gray-900 font-medium">
-                    términos y condiciones
-                  </a>{" "}
-                  y la{" "}
-                  <a href="#" className="text-[#0388bd] hover:text-gray-900 font-medium">
-                    política de privacidad
-                  </a>
-                </Label>
-              </div>
+
+            <div className="flex items-start space-x-2">
+              <input
+                id="terms"
+                type="checkbox"
+                className="w-4 h-4 text-[#0388bd] border-gray-300 rounded focus:ring-blue-500 mt-1 flex-shrink-0"
+                required
+              />
+              <label
+                htmlFor="terms"
+                className="text-sm text-gray-600 flex-1 min-w-0 whitespace-normal leading-snug"
+              >
+                Acepto los{" "}
+                <a href="/auth/terms-and-conditions"className="text-[#0388bd] hover:text-gray-900 font-medium">términos y condiciones</a>{" "}
+                y la{" "}
+                <a href="/auth/privacy-policy"className="text-[#0388bd] hover:text-gray-900 font-medium">política de privacidad</a>
+              </label>
+            </div>
 
               <Button
                 type="submit"
