@@ -15,23 +15,34 @@ import ResultsHeader from "./ResultsHeader"
 import SearchAndFilters from "./SearchAndFilters"
 import { UserWithProfile } from "@/types/settings"
 import { getUsers } from "@/services/users"
-import { categoryMap, getCategories } from "@/types/landing-page"
+import { categoryMap, getCategories, UserWithProfileWithAvailability } from "@/types/landing-page"
+import { State } from "country-state-city"
+import { AvailabilityTag, obtainAvailability } from "@/utils/availabilityButton"
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("todos")
   const [selectedLocation, setSelectedLocation] = useState("")
+  const [selectedCity, setSelectedCity] = useState("")
+  const [selectedAvailability, setSelectedAvailability] = useState<AvailabilityTag[0]>("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [selectedProfessional, setSelectedProfessional] = useState<UserWithProfile | null>()
-  const [bookingProfessional, setBookingProfessional] = useState<UserWithProfile | null>(null)
-  const [professionals, setProfessionals] = useState<UserWithProfile[] | undefined>([])
+  const [selectedProfessional, setSelectedProfessional] = useState<UserWithProfileWithAvailability | null>()
+  const [bookingProfessional, setBookingProfessional] = useState<UserWithProfileWithAvailability | null>(null)
+  const [professionals, setProfessionals] = useState<UserWithProfileWithAvailability[] | undefined>([])
 
   // cargar profesionales
     useEffect(() => {
       const getProfessionals = async () => {
         try {
           const appData = await getUsers()
-          setProfessionals(appData?.rows)
+
+           const enriched: UserWithProfileWithAvailability[] = await Promise.all(
+            (appData?.rows ?? []).map(async (p: UserWithProfile) => {
+              const tag = await obtainAvailability(p.userId)
+              return { ...p, availabilityTag: tag }
+            })
+          )
+          setProfessionals(enriched)
         } catch (error) {
           console.error(error)
           return undefined
@@ -45,6 +56,7 @@ export default function Component() {
     const filteredProfessionals = professionals?.filter((professional) => {
       const jobTitle = professional.profile?.jobTitle ?? ""
       const name = professional.profile?.name ?? ""
+      const province = State.getStateByCodeAndCountry(professional.profile?.province ?? "", "AR") 
 
       const matchesSearch =
         name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -54,13 +66,23 @@ export default function Component() {
         selectedCategory === "todos" ||
         categoryMap[selectedCategory]?.includes(jobTitle)
 
-      const matchesLocation =
+      const matchesState =
         selectedLocation === "" ||
         selectedLocation === "todas" ||
-        professional.profile?.city?.toLowerCase().includes(selectedLocation.toLowerCase()) ||
-        professional.profile?.province?.toLowerCase().includes(selectedLocation.toLowerCase())
+        province?.name.toLowerCase().includes(selectedLocation.toLowerCase())
 
-      return matchesSearch && matchesCategory && matchesLocation
+      const matchesCity =
+        selectedCity === "" ||
+        selectedCity === "todas" ||
+        professional.profile?.city?.toLowerCase().includes(selectedCity.toLowerCase())
+
+      const matchesAvailability =
+        selectedAvailability === "" ||
+        selectedAvailability === AvailabilityTag.EVERY_MOMENT ||
+        professional.availabilityTag === selectedAvailability
+
+
+      return matchesSearch && matchesCategory && matchesState && matchesCity && matchesAvailability
     })
 
 
@@ -70,12 +92,12 @@ export default function Component() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-lg px-4 py-2 mb-4">
+          <Badge className="bg-blue-100 text-[#0388bd] border-blue-200 text-lg px-4 py-2 mb-4">
             🔍 Encuentra tu profesional ideal
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Buscar{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
               Profesionales
             </span>
           </h1>
@@ -95,10 +117,14 @@ export default function Component() {
           viewMode={viewMode}
           setViewMode={setViewMode}
           categories={getCategories(professionals || [])}
+          selectedCity={selectedCity}
+          setSelectedCity={setSelectedCity}
+          selectedAvailability={selectedAvailability}
+          setSelectedAvailability={setSelectedAvailability}
         />
 
         {/* Results */}
-        <ResultsHeader count={Number(professionals?.length)} />
+        <ResultsHeader count={Number(filteredProfessionals?.length)} />
 
         {/* Professional Cards */}
         <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>

@@ -90,7 +90,7 @@ export default function AppointmentTypesList() {
         {/* Modal para crear */}
         <Dialog open={isCreating} onOpenChange={setIsCreating}>
           <DialogTrigger asChild>
-            <Button>+ Nuevo servicio</Button>
+            <Button className="bg-[#0388bd]">+ Nuevo servicio</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>

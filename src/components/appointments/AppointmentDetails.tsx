@@ -123,7 +123,7 @@ export function AppointmentDetails({
 
           {/* Acciones */}
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Button onClick={onSaveChanges} className="sm:flex-1">
+            <Button onClick={onSaveChanges} className="sm:flex-1 bg-[#0388bd]">
               Guardar cambios
             </Button>
 

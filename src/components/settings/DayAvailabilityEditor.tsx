@@ -20,7 +20,7 @@ export function DayAvailabilityEditor({ day, label }: DayAvailabilityProps) {
     <div className="border p-4 rounded-lg space-y-2">
       <div className="flex justify-between items-center mb-2">
         <h3 className="capitalize font-semibold">{label}</h3>
-        <Button type="button" onClick={() => append({ start: "", end: "" })}>
+        <Button type="button" onClick={() => append({ start: "", end: "" })} className="bg-[#0388bd]">
           + Agregar horario
         </Button>
       </div>

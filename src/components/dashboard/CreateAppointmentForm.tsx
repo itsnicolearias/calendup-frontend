@@ -67,9 +67,15 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
 
       if (onCreated) onCreated(created)
       if (onClose) onClose()
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error("Error:", err)
-      toast.error("Error al crear turno")
+      if (err.message === "Appointment limit excedeed"){
+        toast.error("Has alcanzado el limite de turnos disponible")
+      } else {
+        toast.error("Error al crear turno")
+      }
+      
     }
   }
 
@@ -121,8 +127,8 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
 
       {/* Botón */}
       <div>
-        <Button type="submit" className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:bg-blue-700 text-white">
-          Solicitar Turno
+        <Button type="submit" className="w-full mt-6 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white">
+          Crear Turno
         </Button>
       </div>
     </form>

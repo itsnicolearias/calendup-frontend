@@ -40,7 +40,7 @@ function BenefitsSection() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
+              <div className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-3xl p-8 text-white">
                 <div className="text-center">
                   <Calendar className="w-20 h-20 mx-auto mb-6 opacity-90" />
                   <h3 className="text-2xl font-bold mb-4">Tu agenda, siempre organizada</h3>

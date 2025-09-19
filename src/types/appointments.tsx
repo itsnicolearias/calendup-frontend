@@ -41,6 +41,8 @@ export interface AvailableCalendarProps {
   onSelect: (date: string, time: string) => void;
   professionalId: string
   isModal: boolean
+  selectedDate?: string; // ahora viene del padre
+  selectedHour?: string; // ahora viene del padre
 }
 
 export interface AppointmentType {

@@ -29,8 +29,7 @@ export default function Component() {
             router.push("/auth/login");
         };
 
-      const avatarUrl = user?.profile?.profilePicture 
-    || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${user?.profile?.name || ""} ${user?.profile?.lastName || ""}`)}&background=197387&color=fff`;
+      const avatarUrl = user?.profile?.profilePicture || "placeholder.svg"
 
     const name = `${user?.profile?.name} ${user?.profile?.lastName || ""}` || "Usuario"
 
@@ -43,19 +42,19 @@ export default function Component() {
                 {/* Left side - Logo and Navigation */}
                 <div className="flex items-center space-x-8">
                 <div className="flex items-center">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-lg flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-white" />
                     </div>
-                    <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    <span className="ml-2 text-xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
                     CalendUp
                     </span>
                 </div>
-                <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={() => router.push("/dashboard/appointments")}>
+                <Button variant="ghost" className="text-gray-700 hover:text-[#0388bd]" onClick={() => router.push("/dashboard/appointments")}>
                     <Home className="w-4 h-4 mr-2" />
                     Inicio
                 </Button>
 
-                <Button variant="ghost" className="text-gray-700 hover:text-blue-600" onClick={() => handleAgenda()}>
+                <Button variant="ghost" className="text-gray-700 hover:text-[#0388bd]" onClick={() => handleAgenda()}>
                     <CalendarIcon className="mr-2 h-4 w-4" />
                         Agenda
                 </Button>
@@ -85,8 +84,12 @@ export default function Component() {
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                         <Avatar className="h-10 w-10">
                         <AvatarImage src={avatarUrl} alt="Perfil" />
-                        <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                            U
+                        <AvatarFallback className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white">
+                            {name
+                            .split(" ")
+                            .filter(n => n.length > 0) // evitar strings vacíos
+                            .map(n => n[0].toUpperCase())
+                            .join("")}
                         </AvatarFallback>
                         </Avatar>
                     </Button>

@@ -100,12 +100,19 @@ export default function Component() {
         formData.appointmentTypeId = selectedType;
       }
 
-      formData.appointmentTypeId = selectedType!;
 
-      await createAppointment(formData);
+      await createAppointment({
+        ...formData,
+        appointmentTypeId: formData.appointmentTypeId === "" ? null : formData.appointmentTypeId,
+      })
       setBookingConfirmed(true)
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
       console.error("Error:", err);
+
+      if (err.message === "Appointment limit excedeed"){
+        setError("El profesional ha alcanzado el limite de turnos disponible")
+      }
     }
   };
 
@@ -142,7 +149,7 @@ export default function Component() {
     { error && (
       
       <ErrorModal 
-        title="Profesional no encontrado" 
+        title="Ha ocurrido un error" 
         message={error}
         />
 
@@ -155,10 +162,10 @@ export default function Component() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-center">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-lg flex items-center justify-center">
                 <CalendarIcon className="w-5 h-5 text-white" />
               </div>
-              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
                 CalendUp - Solicitar Turno
               </span>
             </div>
@@ -196,7 +203,7 @@ export default function Component() {
               <Button
                 type="submit"
                 disabled={!isFormValid()}
-                className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold rounded-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full h-14 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white text-lg font-semibold rounded-xl transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isFormValid() ? (
                   <>

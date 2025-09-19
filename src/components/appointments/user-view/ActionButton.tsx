@@ -14,7 +14,7 @@ function ActionButton({ onSaveChanges, hasChanges, onCancel, disableButton }: { 
                     <Button
                       onClick={onSaveChanges}
                       disabled={!hasChanges || disableButton}
-                      className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold disabled:opacity-50"
+                      className="flex-1 h-12 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white font-semibold disabled:opacity-50"
                     >
                       <Save className="w-4 h-4 mr-2" />
                       Guardar Cambios

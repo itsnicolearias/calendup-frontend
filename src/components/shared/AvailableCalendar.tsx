@@ -10,20 +10,34 @@ import {
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { CalendarIcon } from "lucide-react";
+import { useControlledDateTime } from "@/utils/useControlledDateTime";
 
+/**
+ * Si pasás selectedDate y selectedHour → el componente se comporta como controlado (ideal para edición).
+ * Si no pasás nada → usa estado interno con useState (ideal para creación).
+ * 
+ */
 export default function AvailableCalendar({
   onSelect,
   professionalId,
   isModal,
+  selectedDate,
+  selectedHour,
 }: AvailableCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
   const [availability, setAvailability] = useState<AvailabilityResponse>({});
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-  const [selectedHour, setSelectedHour] = useState<string>("");
 
-  const cols = isModal ? "grid grid-cols-2 md:grid-cols-1 gap-8" : "grid grid-cols-2 md:grid-cols-2 gap-8"
+  // Hook que maneja estado interno o controlado por props
+  const {
+    currentDate,
+    currentHour,
+    handleDateChange,
+    handleHourChange,
+  } = useControlledDateTime(selectedDate, selectedHour, onSelect);
+
+  const cols = isModal
+    ? "grid grid-cols-2 md:grid-cols-1 gap-8"
+    : "grid grid-cols-2 md:grid-cols-2 gap-8";
 
   useEffect(() => {
     const month = currentMonth.getMonth() + 1;
@@ -37,32 +51,17 @@ export default function AvailableCalendar({
       setAvailability(data);
     };
     fetchSlots();
-  }, [currentMonth]);
-
-  useEffect(() => {
-  if (selectedDate && selectedHour) {
-    const dateStr = format(selectedDate, "yyyy-MM-dd");
-    onSelect(dateStr, selectedHour);
-  }
-}, [selectedDate]);
+  }, [currentMonth, professionalId]);
 
   const isDayAvailable = (date: Date) => {
     const formatted = format(date, "yyyy-MM-dd");
     return Object.keys(availability).includes(formatted);
   };
 
-  const handleTimeChange = (hour: string) => {
-    setSelectedHour(hour);
-    if (!selectedDate) return;
-    const dateStr = format(selectedDate, "yyyy-MM-dd");
-    onSelect(dateStr, hour);
-  };
-
   const availableHours =
-    availability[format(selectedDate ?? new Date(), "yyyy-MM-dd")] || [];
+    availability[format(currentDate ?? new Date(), "yyyy-MM-dd")] || [];
 
   return (
-    <div>
     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl flex items-center">
@@ -72,54 +71,52 @@ export default function AvailableCalendar({
       </CardHeader>
       <CardContent className="p-6">
         <div className={cols}>
-          {/* Calendar */}
+          {/* Calendario */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Fecha</h3>
             <div className="flex justify-center">
               <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              onMonthChange={setCurrentMonth}
-              locale={es}
-              disabled={(date) => !isDayAvailable(date)}
-              className="rounded-md border shadow w-100"
-            />
+                mode="single"
+                selected={currentDate}
+                onSelect={handleDateChange}
+                onMonthChange={setCurrentMonth}
+                locale={es}
+                disabled={(date) => !isDayAvailable(date)}
+                className="rounded-md border shadow w-100"
+              />
             </div>
           </div>
-          
-            
-            <div>
+
+          {/* Horarios */}
+          <div>
             <h4 className="text-lg font-semibold mb-4">Hora</h4>
-            {selectedDate && availableHours.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2"> 
-              {availableHours.map((hour) => (
+            {currentDate && availableHours.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2">
+                {availableHours.map((hour) => (
                   <Button
                     key={hour}
                     type="button"
-                    variant={selectedHour === hour ? "default" : "outline"}
+                    variant={currentHour === hour ? "default" : "outline"}
                     size="sm"
-                    onClick={() => handleTimeChange(hour)}
+                    onClick={() => handleHourChange(hour)}
                     className={
-                      selectedHour === hour
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                        : "hover:border-blue-500 hover:text-blue-600"
+                      currentHour === hour
+                        ? "bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white"
+                        : "hover:border-[#0388bd] hover:text-[#0388bd]"
                     }
                   >
                     {hour}
                   </Button>
                 ))}
               </div>
-              
             ) : (
-              <p className="text-gray-500 text-center py-8">Primero selecciona una fecha</p>
+              <p className="text-gray-500 text-center py-8">
+                Primero selecciona una fecha
+              </p>
             )}
-            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
-    
-      
-    </div>
   );
 }

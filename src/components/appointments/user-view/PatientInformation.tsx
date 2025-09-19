@@ -10,7 +10,7 @@ function PatientInformation({val, onDraftChange, disableInput}: {val: <K extends
         <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center">
-                    <User className="w-5 h-5 mr-2 text-blue-600" />
+                    <User className="w-5 h-5 mr-2 text-[#0388bd]" />
                     Información del Paciente
                   </CardTitle>
                 </CardHeader>

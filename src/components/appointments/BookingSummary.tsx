@@ -4,6 +4,7 @@ import { CheckCircle } from 'lucide-react'
 import { UserWithProfile } from '@/types/settings'
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { parseLocalDate } from '@/utils/date';
 
 interface BookingSummaryProps {
     professional: Partial<UserWithProfile>;
@@ -14,7 +15,7 @@ interface BookingSummaryProps {
 
 function BookingSummary({ professional, selectedType, selectedDate, selectedTime }: BookingSummaryProps) {
   const user = professional.profile;
-
+  
   const getSelectedTypeDetails = () => { 
     return professional?.AppointmentTypes?.find((type) => type.appointmentTypeId === selectedType) }
 
@@ -46,7 +47,7 @@ function BookingSummary({ professional, selectedType, selectedDate, selectedTime
                       </div>
                       <div className="space-y-2">
                         <p>
-                          <strong>Fecha:</strong> {format(selectedDate, "EEEE, dd 'de' MMMM 'de' yyyy", { locale: es })}
+                          <strong>Fecha:</strong> {format(parseLocalDate(selectedDate), "EEEE, dd 'de' MMMM 'de' yyyy", { locale: es })}
                         </p>
                         <p>
                           <strong>Hora:</strong> {selectedTime}

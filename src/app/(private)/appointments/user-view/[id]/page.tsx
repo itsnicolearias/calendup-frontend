@@ -41,8 +41,12 @@ export default function Component() {
   
 
   const handleDraftChange = (patch: Partial<Appointment>) => {
-    setDraft((prev) => ({ ...prev, ...patch }))
+     setDraft((prev) => ({ ...prev, ...patch }));
   }
+
+  const handleDiscardChanges = () => {
+  setDraft({});
+};
 
   const handleEdit = (field: keyof Appointment) => {
     if (field === "date" || field === "time") {
@@ -107,6 +111,7 @@ export default function Component() {
       onCancel={handleCancel}
       onSaveChanges={handleSaveChanges}
       rating={ratingData!}
+      handleDiscardChanges={handleDiscardChanges}
     />
 
     {/* Modal con calendario de disponibilidad */}
@@ -117,6 +122,8 @@ export default function Component() {
             onSelect={handleDateTimeSelect}
             professionalId={professionalId}
             isModal={true}
+            selectedDate={draft.date ?? appointment.date}
+            selectedHour={draft.time ?? appointment.time}
           />
         </DialogContent>
       </Dialog>

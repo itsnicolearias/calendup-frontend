@@ -30,7 +30,7 @@ export default function Footer({ onNavClick }: FooterProps) {
           {/* Logo + Descripción */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-xl flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
               <span className="ml-3 text-2xl font-bold">CalendUp</span>

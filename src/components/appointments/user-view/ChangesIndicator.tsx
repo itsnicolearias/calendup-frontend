@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Appointment } from '@/types/appointments'
 import { AlertCircle, Save } from 'lucide-react'
 import React from 'react'
 
-function ChangesIndicator({onDraftChange, onSaveChanges}: { onDraftChange: (patch: Partial<Appointment>) => void, onSaveChanges: () => void }) {
+function ChangesIndicator({onDraftChange, onSaveChanges}: { onDraftChange: () => void, onSaveChanges: () => void }) {
   return (
     <div>
         <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200 shadow-lg">
@@ -18,7 +17,7 @@ function ChangesIndicator({onDraftChange, onSaveChanges}: { onDraftChange: (patc
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => onDraftChange({})}
+                          onClick={onDraftChange}
                           className="bg-white/80 hover:bg-white"
                         >
                           Descartar
@@ -26,7 +25,7 @@ function ChangesIndicator({onDraftChange, onSaveChanges}: { onDraftChange: (patc
                         <Button
                           size="sm"
                           onClick={onSaveChanges}
-                          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                          className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                         >
                           <Save className="w-4 h-4 mr-1" />
                           Guardar

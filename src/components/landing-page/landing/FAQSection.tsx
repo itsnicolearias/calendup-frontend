@@ -14,12 +14,12 @@ function FAQSection() {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="bg-blue-100 text-blue-800 border-blue-200 text-lg px-4 py-2 mb-4">
+            <Badge className="bg-blue-100 text-[#0388bd] border-blue-200 text-lg px-4 py-2 mb-4">
               ❓ Preguntas Frecuentes
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               ¿Tienes dudas sobre{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
                 CalendUp?
               </span>
             </h1>
@@ -33,7 +33,7 @@ function FAQSection() {
               <Accordion type="single" collapsible className="w-full">
                 {faqs.map((faq, index) => (
                   <AccordionItem key={index} value={`item-${index}`} className="border-gray-200">
-                    <AccordionTrigger className="text-left hover:text-blue-600 transition-colors py-6">
+                    <AccordionTrigger className="text-left hover:text-[#0388bd] transition-colors py-6">
                       <span className="text-lg font-semibold">{faq.question}</span>
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-600 leading-relaxed pb-6">{faq.answer}</AccordionContent>
@@ -46,7 +46,7 @@ function FAQSection() {
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-6">¿No encontraste lo que buscabas?</p>
             <Button
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3"
+              className="hover:bg-gray-900 bg-[#0388bd] text-white px-8 py-3"
               onClick={() => router.push("/")}
             >
               Contactar Soporte

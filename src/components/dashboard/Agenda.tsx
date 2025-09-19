@@ -79,7 +79,7 @@ useEffect(() => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Contenedor flex para título y botón */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
             Mi Agenda
           </h1>
 
@@ -102,7 +102,7 @@ useEffect(() => {
           
           {/* Botón para abrir modal */}
           <Button 
-            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 " 
+            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] " 
             onClick={() => setOpenAppModal(true)} 
             disabled={!user || !user.profile?.profileCompleted}>
             Nuevo Turno

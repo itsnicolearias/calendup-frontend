@@ -141,7 +141,7 @@ export default function ProfileConfig() {
             )}
           </div>
 
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading} className="bg-[#0388bd]" >
             {loading ? "Guardando..." : "Guardar cambios"}
           </Button>
         </form>

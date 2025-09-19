@@ -5,6 +5,8 @@ import { Input } from '../../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select'
 import { Button } from '../../ui/button'
 import { CategoryType } from '@/types/landing-page'
+import { City, State } from 'country-state-city'
+import { AvailabilityTag } from '@/utils/availabilityButton'
 
 interface SearchAndFiltersProps {
     searchTerm: string
@@ -13,9 +15,13 @@ interface SearchAndFiltersProps {
     setSelectedCategory: (category: string) => void
     selectedLocation: string
     setSelectedLocation: (location: string) => void
+    selectedCity: string
+    setSelectedCity: (location: string) => void
     viewMode: "grid" | "list"
     setViewMode: (mode: "grid" | "list") => void
     categories: CategoryType[]
+    selectedAvailability: string
+    setSelectedAvailability: (availabilityTag: string) => void
 }
 
 
@@ -28,8 +34,18 @@ function SearchAndFilters({
     setSelectedLocation,
     viewMode,
     setViewMode,
-    categories
+    categories,
+    selectedCity,
+    setSelectedCity,
+    selectedAvailability,
+    setSelectedAvailability
 }: SearchAndFiltersProps) {
+  const states = State.getStatesOfCountry("AR");
+
+  const cities = selectedLocation ? City.getCitiesOfState("AR", selectedLocation) : [];
+
+  const tags = Object.values(AvailabilityTag)
+
   return (
     <Card className="mb-8 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-6">
@@ -48,20 +64,38 @@ function SearchAndFilters({
                     <SelectTrigger className="h-12">
                       <div className="flex items-center">
                         <MapPin className="w-5 h-5 mr-2 text-gray-400" />
-                        <SelectValue placeholder="Ubicación" />
+                        <SelectValue placeholder="Provincia" />
                       </div>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="todas">Todas las ubicaciones</SelectItem>
-                      <SelectItem value="Palermo">Palermo</SelectItem>
-                      <SelectItem value="Recoleta">Recoleta</SelectItem>
-                      <SelectItem value="Villa Crespo">Villa Crespo</SelectItem>
-                      <SelectItem value="Microcentro">Microcentro</SelectItem>
-                      <SelectItem value="Belgrano">Belgrano</SelectItem>
-                      <SelectItem value="San Telmo">San Telmo</SelectItem>
+                      {states.map((prov) => (
+                        <SelectItem key={prov.isoCode} value={prov.isoCode}>{prov.name}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
-                  <Select value="disponibilidad" onValueChange={() => {}}>
+
+                  
+                  { selectedLocation && (
+                      <Select value={selectedCity} onValueChange={setSelectedCity}>
+                      <SelectTrigger className="h-12">
+                        <div className="flex items-center">
+                          <MapPin className="w-5 h-5 mr-2 text-gray-400" />
+                          <SelectValue placeholder="Ciudad" />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="todas">Todas las ubicaciones</SelectItem>
+                        {cities.map((city) => (
+                          <SelectItem key={city.name} value={city.name}>{city.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                   
+
+
+                  <Select value={selectedAvailability} onValueChange={setSelectedAvailability}>
                     <SelectTrigger className="h-12">
                       <div className="flex items-center">
                         <Clock className="w-5 h-5 mr-2 text-gray-400" />
@@ -69,12 +103,12 @@ function SearchAndFilters({
                       </div>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cualquier">Cualquier momento</SelectItem>
-                      <SelectItem value="hoy">Disponible hoy</SelectItem>
-                      <SelectItem value="semana">Esta semana</SelectItem>
-                      <SelectItem value="mes">Este mes</SelectItem>
+                      { tags.map((tag) => (
+                         <SelectItem key={tag} value={tag}>{tag}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+
                   <div className="flex space-x-2">
                     <Button
                       variant={viewMode === "grid" ? "default" : "outline"}

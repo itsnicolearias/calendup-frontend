@@ -103,7 +103,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                         <div className="flex items-center space-x-4">
                           <Avatar className="w-16 h-16">
                             <AvatarImage src={professional.profile?.profilePicture || "placeholder.svg"} alt={professional.profile?.name} />
-                            <AvatarFallback className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg">
+                            <AvatarFallback className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white text-lg">
                                {name
                                 .split(" ")
                                 .filter(n => n.length > 0) // evitar strings vacíos
@@ -113,7 +113,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                           </Avatar>
                           <div className="flex-grow">
                             <h3 className="text-xl font-bold text-gray-900">{professional.profile?.name}</h3>
-                            <p className="text-blue-600 font-medium">{professional.profile?.jobTitle}</p>
+                            <p className="text-[#0388bd] font-medium">{professional.profile?.jobTitle}</p>
                             <div className="flex items-center mt-1">
                               <MapPin className="w-4 h-4 text-gray-500 mr-1" />
                               <span className="text-gray-600 text-sm">{location}</span>
@@ -155,7 +155,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                           <Card>
                             <CardContent className="p-6">
                               <h4 className="text-lg font-semibold mb-4 flex items-center">
-                                <User className="w-5 h-5 mr-2 text-blue-600" />
+                                <User className="w-5 h-5 mr-2 text-[#0388bd]" />
                                 Datos Personales
                               </h4>
                               <div className="space-y-4">
@@ -264,7 +264,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                             !bookingForm.lastName ||
                             !bookingForm.email
                           }
-                          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                          className="flex-1 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                         >
                           Confirmar turno
                         </Button>

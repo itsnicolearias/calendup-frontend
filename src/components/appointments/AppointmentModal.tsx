@@ -29,10 +29,10 @@ export function AppointmentModal({ appointment, handleClose }: { appointment: Ap
       <DialogContent className="max-w-md rounded-2xl shadow-lg">
         <DialogHeader>
           <div className="flex justify-between items-center">
-          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
             Detalles del Turno                 
           </DialogTitle>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
               #{appointment.appointmentCode}
           </h1>
                       

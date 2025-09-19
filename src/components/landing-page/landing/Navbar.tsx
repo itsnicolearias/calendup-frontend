@@ -25,10 +25,10 @@ export default function PublicNavbar() {
             className="flex items-center cursor-pointer"
             onClick={() => router.push("/")}
           >
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-xl flex items-center justify-center">
               <Calendar className="w-6 h-6 text-white" />
             </div>
-            <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
               CalendUp
             </span>
           </div>
@@ -39,13 +39,13 @@ export default function PublicNavbar() {
               <button
                 key={item.section}
                 onClick={() => router.push(`/${item.section}`)}
-                className="font-medium transition-color text-blue-600 hover:text-gray-600"
+                className="font-medium transition-color text-[#0388bd] hover:text-gray-600"
               >
                 {item.label}
               </button>
             ))}
             <Button
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
               onClick={() => router.push("/auth/login")}
             >
               Ingresar
@@ -73,13 +73,13 @@ export default function PublicNavbar() {
                 <button
                   key={item.section}
                   onClick={() => router.push(`/${item.section}`)}
-                  className="block w-full text-left px-3 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                  className="block w-full text-left px-3 py-2 text-[#0388bd] hover:text-gray-600 font-medium transition-colors"
                 >
                   {item.label}
                 </button>
               ))}
               <Button
-                className="w-full mt-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                className="w-full mt-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f] text-white"
                 onClick={() => router.push("/auth/login")}
               >
                 Ingresar

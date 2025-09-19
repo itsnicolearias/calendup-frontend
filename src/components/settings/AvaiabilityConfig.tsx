@@ -71,7 +71,7 @@ const onSubmit = async (data: ProfileFormValues) => {
 
         <AvailabilityEditor />
 
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="bg-[#0388bd]">
           {loading ? "Guardando..." : "Guardar cambios"}
         </Button>
       </form>
