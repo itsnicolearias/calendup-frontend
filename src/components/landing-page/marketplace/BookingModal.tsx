@@ -54,7 +54,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       }
     
   const handleBookingSubmit = async (e: React.FormEvent) => {
-         e.preventDefault();
+    e.preventDefault();
 
     try {
       bookingForm.date = selectedDate || "";
@@ -75,8 +75,9 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
 
       onOpenChange(false)
       handleCancel()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error("Error:", err);
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     }
       }
 

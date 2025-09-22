@@ -44,8 +44,9 @@ export default function AvailabilityConfig() {
         reset({
           availability: profile?.profile?.availability ?? {},
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        toast.error("Ha ocurrido un error cargando el perfil. Vuelve a intentarlo luego")
       }
     };
     loadProfile();
@@ -58,8 +59,9 @@ const onSubmit = async (data: ProfileFormValues) => {
   try {
     await updateProfile(token, data);
     toast.success("Perfil actualizado correctamente");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Error al actualizar", error);
+    toast.error("Ha ocurrido un error actualizando el perfil. Vuelve a intentarlo luego")
   } finally {
     setLoading(false);
   }

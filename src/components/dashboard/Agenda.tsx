@@ -18,6 +18,7 @@ import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 import { CopyCheck } from "lucide-react"
 import { useUser } from "@/contexts/UserContext"
+import { toast } from "sonner"
 
 export default function AgendaView() {
 
@@ -25,7 +26,7 @@ export default function AgendaView() {
 
   const { user } = useUser()
 
-  const getAppointmentsRows = async (): Promise<Appointment[]> => {
+  const getAppointmentsRows = async (): Promise<Appointment[] | undefined> => {
   try {
     const token = localStorage.getItem('token');
     if (!token || token === null){
@@ -33,9 +34,10 @@ export default function AgendaView() {
     }
 
     const appData = await getAppointments(token)
-    return appData.rows;
+    return appData?.rows;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error(error)
+    toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     return []
   }
 }
@@ -55,6 +57,7 @@ useEffect(() => {
   }
 
   fetchAppointments()
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [])
 
   const selectApp = (app: Appointment) => {

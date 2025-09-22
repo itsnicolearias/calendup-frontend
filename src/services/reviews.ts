@@ -1,5 +1,6 @@
 import { apiFetch } from "./api"
 import { GetAllApiResponse, ReviewBody } from "../types/appointments"
+import * as Sentry from "@sentry/nextjs";
 
 export const getAppointments = async (token: string | null ) => {
   try {
@@ -14,7 +15,7 @@ export const getAppointments = async (token: string | null ) => {
     }
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -30,7 +31,7 @@ export const getOneReview = async (token: string | null, reviewId?: string ) => 
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -55,7 +56,7 @@ export const updateReview = async (data: Partial<ReviewBody>, token: string | nu
     body: JSON.stringify(data),
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -70,7 +71,7 @@ export const deleteReview = async (reviewId: string, token: string | null) => {
 
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }

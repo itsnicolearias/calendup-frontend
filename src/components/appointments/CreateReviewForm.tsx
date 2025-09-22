@@ -18,11 +18,13 @@ export default function CreateReviewForm() {
   const MAX_LENGTH = 300;
 
   const searchParams = useSearchParams();
-  if (searchParams === null) {
-    throw new Error();
-  }
+  
   const professionalId = searchParams.get("professionalId") || "";
   const token = searchParams.get("authorization") || "";
+
+  if (!professionalId || !token ) {
+    throw new Error();
+  }
 
 
     useEffect(() => {
@@ -55,9 +57,9 @@ export default function CreateReviewForm() {
       toast("¡Gracias por tu calificación!");
       setRating(0);
       setComment("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast("Error al enviar la calificación" );
-      console.error(error)
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     } finally {
       setLoading(false);
     }

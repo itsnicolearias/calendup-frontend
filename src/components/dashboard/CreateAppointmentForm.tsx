@@ -13,7 +13,7 @@ import { useUser } from "@/contexts/UserContext"
 import AppointmentTypesSelect from "../appointments/AppointmentTypesSelect"
 
 interface Props {
-  onCreated?: (appointment: Appointment) => void
+  onCreated?: (appointment: Appointment | undefined) => void
   onClose?: () => void
 }
 
@@ -69,11 +69,10 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
       if (onClose) onClose()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error("Error:", err)
       if (err.message === "Appointment limit excedeed"){
         toast.error("Has alcanzado el limite de turnos disponible")
       } else {
-        toast.error("Error al crear turno")
+        toast.error("Error al crear turno. Vuelve a intentarlo luego")
       }
       
     }

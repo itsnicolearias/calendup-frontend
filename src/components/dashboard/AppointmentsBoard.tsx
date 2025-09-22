@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 import { OnboardingChecklist } from "./OnboardingChecklist"
 import WelcomeWizard from "./WelcomeWizard"
 import { updateProfile } from "@/services/settings"
+import { toast } from "sonner"
 
 interface Props {
   appointments: Appointment[]
@@ -37,8 +38,9 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
     try {
       const token = localStorage.getItem("token")
       await updateAppointment({ appointmentId, status }, token, false)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     }
   }
 
@@ -56,8 +58,9 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
     try {
       const token = localStorage.getItem("token")
       await updateProfile(token, { isNewUser: false })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     }
 
   }

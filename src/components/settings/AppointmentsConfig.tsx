@@ -53,8 +53,9 @@ export default function ProfileConfig() {
           defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
           markAppAsCompleted: profile?.profile?.markAppAsCompleted ?? true,
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     };
     loadProfile();
@@ -65,9 +66,9 @@ export default function ProfileConfig() {
     try {
       await updateProfile(token, data);
       toast.success("Perfil actualizado correctamente");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Error al actualizar", error);
-      toast.error("Error al actualizar perfil");
+      toast.error("Error al actualizar perfil. Vuelve a internarlo luego");
     } finally {
       setLoading(false);
     }

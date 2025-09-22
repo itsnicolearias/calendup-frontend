@@ -19,10 +19,12 @@ import ErrorModal from "../shared/ErrorModal";
 
 export default function Component() {
   const searchParams = useSearchParams();
-  if (searchParams === null) {
+
+  const professionalId = searchParams.get("professionalId") || "";
+  if (!professionalId) {
     throw new Error();
   }
-  const professionalId = searchParams.get("professionalId") || "";
+
 
   const [dateF, setDateF] = useState<string>();
   const [time, setTime] = useState<string>("");
@@ -108,10 +110,10 @@ export default function Component() {
       setBookingConfirmed(true)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error("Error:", err);
-
       if (err.message === "Appointment limit excedeed"){
         setError("El profesional ha alcanzado el limite de turnos disponible")
+      } else {
+        setError("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     }
   };

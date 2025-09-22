@@ -32,9 +32,13 @@ export default function AppointmentTypesList() {
     const fetchAppointmentTypes = async () => {
       try {
         const appTypes = await getAppointmentsTypes(token)
-        setAppointmentTypes(appTypes.rows)
+
+        if (appTypes){
+          setAppointmentTypes(appTypes.rows)
+        }      
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error(error)
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     }
     fetchAppointmentTypes()
@@ -44,12 +48,15 @@ export default function AppointmentTypesList() {
     try {
       data.price = Number(data.price) || 0.0
       const created = await createAppointmentType(data, token)
-      setAppointmentTypes([...appointmentTypes, created])
-      setIsCreating(false)
-      toast.success("Tipo de turno creado")
+      if (created) {
+        setAppointmentTypes([...appointmentTypes, created ])
+        setIsCreating(false)
+        toast.success("Servicio creado correctamente")
+      }
+      
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
-      toast.error("Error al crear tipo de turno")
+      toast.error("Error al crear servicio. Vuelve a intentarlo luego")
     }
   }
 
@@ -57,16 +64,20 @@ export default function AppointmentTypesList() {
     data.price = Number(data.price) || 0.0
     try {
       const updated = await updateAppointmentType(data, appointmentTypeId, token)
-      setAppointmentTypes((prev) =>
-        prev.map((type) =>
-          type.appointmentTypeId === appointmentTypeId ? updated : type
+
+      if (updated){
+        setAppointmentTypes((prev) =>
+          prev.map((type) =>
+            type.appointmentTypeId === appointmentTypeId ? updated : type
+          )
         )
-      )
-      setEditingId(null)
-      toast.success("Tipo de turno actualizado")
+        setEditingId(null)
+        toast.success("Servicio actualizado correctamente")
+      }
+      
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
-      toast.error("Error al actualizar")
+      toast.error("Error al actualizar servicio. Vuelve a intentarlo luego")
     }
   }
 
@@ -76,10 +87,10 @@ export default function AppointmentTypesList() {
       setAppointmentTypes((prev) =>
         prev.filter((type) => type.appointmentTypeId !== appointmentTypeId)
       )
-      toast.success("Tipo de turno eliminado")
+      toast.success("Servicio eliminado correctamente")
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
-      toast.error("Error al eliminar")
+      toast.error("Error al eliminar servicio. Vuelve a intentarlo luego")
     }
   }
 

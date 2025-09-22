@@ -1,4 +1,5 @@
 import { apiFetch } from "./api"
+import * as Sentry from "@sentry/nextjs";
 import { Appointment, AvailabilityResponse, GetAllApiResponse, GetOneAppointment } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
@@ -14,7 +15,7 @@ export const getAppointments = async (token: string | null ) => {
     }
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -52,12 +53,12 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
   })
     }  
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
 
-export const getAvailableSlots = async (professionaId: string, year: number, month: number): Promise<AvailabilityResponse> => {
+export const getAvailableSlots = async (professionaId: string, year: number, month: number): Promise<AvailabilityResponse | undefined> => {
   try {
     if (!year || !month || !professionaId){
       throw new Error('Missing parameters');
@@ -67,7 +68,7 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
     method: "GET"
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -85,7 +86,7 @@ export const getOneAppointment = async (token: string | null, appointmentId?: st
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -101,7 +102,7 @@ export const getOneAppFromUser = async (token: string | null) => {
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }

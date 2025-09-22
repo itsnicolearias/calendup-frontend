@@ -1,5 +1,6 @@
 import { AppointmentType, GetAllApiResponse } from "@/types/appointments";
 import { apiFetch } from "./api";
+import * as Sentry from "@sentry/nextjs";
 
 export const getAppointmentsTypes = async (token: string | null ) => {
   try {
@@ -14,7 +15,7 @@ export const getAppointmentsTypes = async (token: string | null ) => {
     }
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -32,7 +33,7 @@ export const getOneAppType = async (id: string, token: string | null) => {
     }
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -51,7 +52,7 @@ export const createAppointmentType = async (data: Partial<AppointmentType>, toke
   }) 
         
     } catch (error) {
-        throw error;
+        Sentry.captureException(error);
     }
   
 }
@@ -73,7 +74,7 @@ export const updateAppointmentType = async (data: Partial<AppointmentType>, id: 
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -92,7 +93,7 @@ export const deleteAppointmentType = async (id: string, token: string | null) =>
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }

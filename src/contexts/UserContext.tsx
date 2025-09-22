@@ -2,6 +2,7 @@
 import { getProfile } from '@/services/settings';
 import { UserWithProfile } from '@/types/settings';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import * as Sentry from "@sentry/nextjs";
 
 interface UserContextType {
   user: UserWithProfile | null;
@@ -33,7 +34,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       const fetchedUser = await getProfile(token);
       setUser(fetchedUser ?? null);
     } catch (error) {
-      console.error('Error cargando usuario', error);
+      Sentry.captureException(error);
       setUser(null);
     } finally {
       setLoading(false);

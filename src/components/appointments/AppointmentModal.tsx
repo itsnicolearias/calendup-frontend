@@ -8,6 +8,7 @@ import { Appointment, AppointmentStatus } from "@/types/appointments"
 import { updateAppointment } from "@/services/appointments"
 import { StatusDropdown } from "./StatusDropdown"
 import { useState } from "react"
+import { toast } from "sonner"
 
 export function AppointmentModal({ appointment, handleClose }: { appointment: Appointment, handleClose: () => void }) {
 
@@ -18,8 +19,9 @@ export function AppointmentModal({ appointment, handleClose }: { appointment: Ap
       const token = localStorage.getItem("token")
       await updateAppointment({ appointmentId: appointment.appointmentId, status: newStatus }, token, false)
       setCurrentStatus(newStatus)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error(err)
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     }
   }
 

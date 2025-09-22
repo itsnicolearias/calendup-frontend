@@ -77,8 +77,9 @@ export default function ProfileForm() {
           education: profile?.profile?.education ?? [],
           languages: profile?.profile?.languages ?? [],
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     };
     loadProfile();
@@ -98,8 +99,9 @@ const onSubmit = async (data: ProfileFormValues) => {
 
     await updateProfile(token, { ...data, profilePicture: profilePictureUrl });
     toast.success("Perfil actualizado correctamente");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Error al actualizar", error);
+    toast.error("Ha ocurrido un error actualizando el perfil. Vuelve a intentarlo luego")
   } finally {
     setLoading(false);
   }

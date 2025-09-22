@@ -17,7 +17,7 @@ import { UserWithProfile } from "@/types/settings"
 import { getUsers } from "@/services/users"
 import { categoryMap, getCategories, UserWithProfileWithAvailability } from "@/types/landing-page"
 import { State } from "country-state-city"
-import { AvailabilityTag, obtainAvailability } from "@/utils/availabilityButton"
+import { AvailabilityTag, obtainAvailabilityTags } from "@/utils/availabilityButton"
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -38,13 +38,13 @@ export default function Component() {
 
            const enriched: UserWithProfileWithAvailability[] = await Promise.all(
             (appData?.rows ?? []).map(async (p: UserWithProfile) => {
-              const tag = await obtainAvailability(p.userId)
+              const tag = await obtainAvailabilityTags(p.userId)
               return { ...p, availabilityTag: tag }
             })
           )
           setProfessionals(enriched)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-          console.error(error)
           return undefined
         }
       }

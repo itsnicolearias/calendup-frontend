@@ -1,16 +1,20 @@
 import { getAvailableSlots } from "@/services/appointments"
 
-export const obtainAvailability = async (professionalId: string) => {
+export const obtainAvailabilityTags = async (professionalId: string) => {
 try {
     const date = new Date()
     const currentYear = date.getFullYear()
     const currentMonth = date.getMonth() + 1
     const avaiableSlots = await getAvailableSlots(professionalId, currentYear, currentMonth)
 
-    return getAvailabilityTag(avaiableSlots);
+    if (avaiableSlots) {
+      const tags = getAvailabilityTag(avaiableSlots);
+      return tags;
+    }
+    return null
 
 } catch (error) {
-    console.log(error)
+   throw error;
 }
 }
 

@@ -6,6 +6,7 @@ import { AppointmentsBoard } from "@/components/dashboard/AppointmentsBoard"
 import { Appointment } from "@/types/appointments"
 import { getAppointments } from "@/services/appointments"
 import { useUser } from "@/contexts/UserContext"
+import { toast } from "sonner"
 
 export default function AppointmentsPage() {
   const router = useRouter()
@@ -25,15 +26,20 @@ export default function AppointmentsPage() {
         }
     
         const appData = await getAppointments(token)
-        setAppointments(appData.rows)
+
+        if (appData){
+          setAppointments(appData.rows)
+        }
         //return appData.rows;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error(error)
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
         return undefined
       }
     }
 
     getAppointmentsRows()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const openAppointment = (appointment: Appointment) => {

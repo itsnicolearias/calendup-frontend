@@ -39,11 +39,10 @@ export default function ChangePasswordForm({ onSubmit }: ChangePasswordFormProps
       form.reset();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(err);
       if (err.message === "Invalid password"){
             toast.error("La contraseña ingresada es incorrecta")
           } else {
-            toast.error("Error al cambiar la contraseña");
+            toast.error("Error al cambiar la contraseña. Vuelve a intentarlo luego");
           }
       
     }

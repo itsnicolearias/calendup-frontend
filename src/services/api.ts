@@ -1,7 +1,9 @@
+import * as Sentry from "@sentry/nextjs";
+
 export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {}
-): Promise<T> {
+): Promise<T | undefined> {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
         headers: {
@@ -20,7 +22,6 @@ export async function apiFetch<T>(
 
         return data;
     } catch (error) {
-        console.error("Error en la solicitud:", error)
-        throw error
+        Sentry.captureException(error);
     }
 }
