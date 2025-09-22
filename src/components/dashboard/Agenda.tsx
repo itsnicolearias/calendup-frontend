@@ -140,52 +140,57 @@ useEffect(() => {
         </p>
     </div>
 
-    <div className="h-screen p-6">
-      <Card className="h-full">
-    <CardContent className="h-full">
-      <div className="grid grid-cols-2 gap-6 h-full">
-        {/* Calendario */}
-        <div className="flex justify-center items-start">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => date && setSelectedDate(date)}
-            locale={es}
-            className="w-100 h-100 rounded-md border shadow-md"
-          />
-        </div>
+    <div className="min-h-[70vh] p-4 sm:p-6 w-full overflow-x-hidden">
+      <Card className="h-full shadow-lg w-full">
+        <CardContent className="h-full w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 h-full w-full">
+            {/* Calendario */}
+            <div className="lg:col-span-2 flex justify-center items-center w-full">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => date && setSelectedDate(date)}
+                locale={es}
+                className="rounded-md border shadow-md w-full max-w-full sm:max-w-md"
+              />
+            </div>
+            
+            {/* Lista de turnos (1/3 en desktop) */}
+            <div className="lg:col-span-1 overflow-y-auto p-2">
+              <h3 className="text-lg font-semibold mb-4">
+                Turnos para {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: es })}
+              </h3>
+              <div className="space-y-3">
+                {appointments
+                  .filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd"))
+                  .map((appointment) => (
+                    <Card
+                      key={appointment.appointmentId}
+                      className="p-4 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                      onClick={() => selectApp(appointment)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold">
+                            {appointment.name} {appointment.lastName}
+                          </h4>
+                          <p className="text-sm text-gray-600">{appointment.time}</p>
+                        </div>
+                        <Badge className={getStatusColor(appointment.status)}>
+                          {getStatusText(appointment.status)}
+                        </Badge>
+                      </div>
+                    </Card>
+                  ))}
+              </div>
 
-        {/* Lista de turnos */}
-        <div className="overflow-y-auto">
-          <h3 className="text-lg font-semibold mb-4">
-            Turnos para {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: es })}
-          </h3>
-          <div className="space-y-3">
-            {appointments
-              .filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd"))
-              .map((appointment) => (
-                <Card
-                  key={appointment.appointmentId}
-                  className="p-4 cursor-pointer hover:shadow-md transition-shadow duration-200"
-                  onClick={() => selectApp(appointment)}
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h4 className="font-semibold">
-                        {appointment.name} {appointment.lastName}
-                      </h4>
-                      <p className="text-sm text-gray-600">{appointment.time}</p>
-                    </div>
-                    <Badge className={getStatusColor(appointment.status)}>
-                      {getStatusText(appointment.status)}
-                    </Badge>
-                  </div>
-                </Card>
-              ))}
+              {/* Estado vacío elegante */}
+              {appointments.filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd")).length === 0 && (
+                <p className="text-gray-500 text-sm mt-4">No hay turnos para esta fecha.</p>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-    </CardContent>
+        </CardContent>
       </Card>
     </div>
   
