@@ -69,7 +69,7 @@ const onSubmit = async (data: ProfileFormValues) => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
         <AvailabilityEditor />
 

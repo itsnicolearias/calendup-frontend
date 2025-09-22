@@ -96,59 +96,72 @@ export default function AppointmentTypesList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-
-        {/* Modal para crear */}
+      {/* Botón para crear nuevo servicio */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
         <Dialog open={isCreating} onOpenChange={setIsCreating}>
           <DialogTrigger asChild>
-            <Button className="bg-[#0388bd]">+ Nuevo servicio</Button>
+            <Button className="bg-[#0388bd] w-full sm:w-auto">+ Nuevo servicio</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-lg">
+          <DialogContent className="w-full sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>Crear nuevo servicio</DialogTitle>
             </DialogHeader>
-            <AppointmentTypeForm onSubmit={handleCreate} onCancel={() => setIsCreating(false)} />
+            <AppointmentTypeForm
+              onSubmit={handleCreate}
+              onCancel={() => setIsCreating(false)}
+            />
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
+      {/* Lista de servicios */}
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {appointmentTypes.map((type) => (
-            // Dentro del map de appointmentTypes
-            <Card key={type.appointmentTypeId} className="shadow-sm border rounded-lg">
+          <Card key={type.appointmentTypeId} className="shadow-sm border rounded-lg">
             <CardHeader>
-                <CardTitle>{type.name}</CardTitle>
+              <CardTitle>{type.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-                <p>{type.description || "Sin descripción"}</p>
-                <p>Precio: {type.price ? `$${type.price}` : "No especificado"}</p>
-                <p>Modalidad: {type.sessionType === "in person" ? "Presencial" : "Online"}</p>
+              <p>{type.description || "Sin descripción"}</p>
+              <p>Precio: {type.price ? `$${type.price}` : "No especificado"}</p>
+              <p>Modalidad: {type.sessionType === "in person" ? "Presencial" : "Online"}</p>
 
-                <div className="flex gap-2 mt-2">
-                {/* Modal editar */}
-                <Dialog open={editingId === type.appointmentTypeId} onOpenChange={(open) => setEditingId(open ? type.appointmentTypeId : null)}>
-                    <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">Editar</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                {/* Modal para editar */}
+                <Dialog
+                  open={editingId === type.appointmentTypeId}
+                  onOpenChange={(open) =>
+                    setEditingId(open ? type.appointmentTypeId : null)
+                  }
+                >
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                      Editar
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-full sm:max-w-lg">
                     <DialogHeader>
-                        <DialogTitle>Editar servicio</DialogTitle>
+                      <DialogTitle>Editar servicio</DialogTitle>
                     </DialogHeader>
                     <AppointmentTypeForm
-                        initialData={type}
-                        onSubmit={(data) => handleUpdate(data, type.appointmentTypeId)}
-                        onCancel={() => setEditingId(null)}
+                      initialData={type}
+                      onSubmit={(data) => handleUpdate(data, type.appointmentTypeId)}
+                      onCancel={() => setEditingId(null)}
                     />
-                    </DialogContent>
+                  </DialogContent>
                 </Dialog>
 
-                <Button variant="destructive" size="sm" onClick={() => handleDelete(type.appointmentTypeId)}>
-                    Eliminar
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="w-full sm:w-auto"
+                  onClick={() => handleDelete(type.appointmentTypeId)}
+                >
+                  Eliminar
                 </Button>
-                </div>
+              </div>
             </CardContent>
-            </Card>
-
+          </Card>
         ))}
       </div>
     </div>
