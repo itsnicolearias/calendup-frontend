@@ -16,9 +16,12 @@ export default function AppointmentDetailPage() {
       const token = localStorage.getItem("token")
       const data = await getAppointments(token!)
 
-      const found = data.rows.find((a: Appointment) => a.appointmentId === String(id?.id))
+      if (data) {
+        const found = data.rows.find((a: Appointment) => a.appointmentId === String(id?.id))
 
-      if (found) setAppointment(found)
+        if (found) setAppointment(found)
+      }
+   
     }
     fetchData()
   }, [id])

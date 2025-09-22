@@ -15,8 +15,7 @@ import { getAppointments } from "@/services/appointments"
 import { AppointmentModal } from "../appointments/AppointmentModal"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
 import { Button } from "../ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
-import { CopyCheck } from "lucide-react"
+import { Copy, Plus } from "lucide-react"
 import { useUser } from "@/contexts/UserContext"
 import { toast } from "sonner"
 
@@ -86,31 +85,27 @@ useEffect(() => {
             Mi Agenda
           </h1>
 
-          <div className="flex items-center gap-2">
-                <Tooltip>
-                <TooltipTrigger asChild>
-                  <button 
-                    className="p-2 rounded-full  hover:bg-gray-100" 
-                    onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
-                    disabled={!user || !user.profile?.profileCompleted} 
-                    >
-                    <CopyCheck className="w-5 h-5 text-black"  />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Comparte tu link de agendamiento</p>
-                </TooltipContent>
-              </Tooltip>
+          <div className="hidden sm:flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white/80 hover:bg-white border-gray-300"
+              onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Compartir Link
+            </Button>
 
-          
-          {/* Botón para abrir modal */}
-          <Button 
-            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] " 
-            onClick={() => setOpenAppModal(true)} 
-            disabled={!user || !user.profile?.profileCompleted}>
-            Nuevo Turno
-          </Button>
-          </div>
+            
+            {/* Botón para abrir modal */}
+            <Button 
+              className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white" 
+              onClick={() => setOpenAppModal(true)} 
+              disabled={!user || !user.profile?.profileCompleted}>
+                <Plus className="w-4 h-4 mr-2" />
+              Nuevo Turno
+            </Button>
+                    </div>
           
         </div>
 
