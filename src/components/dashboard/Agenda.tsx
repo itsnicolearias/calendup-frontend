@@ -85,6 +85,7 @@ useEffect(() => {
             Mi Agenda
           </h1>
 
+        <div className="flex items-center space-x-2">
           <div className="hidden sm:flex items-center space-x-2">
             <Button
               variant="outline"
@@ -105,7 +106,30 @@ useEffect(() => {
                 <Plus className="w-4 h-4 mr-2" />
               Nuevo Turno
             </Button>
-                    </div>
+          </div>
+
+          {/* Mobile buttons - only icons */}
+          <div className="flex sm:hidden items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white/80 hover:bg-white border-gray-300 h-9 w-9 p-0"
+              onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+            >
+              <Copy className="w-4 h-4" />
+            </Button>
+
+            <Button
+              onClick={() => setOpenAppModal(true)}
+              size="sm"
+              disabled={!user || !user.profile?.profileCompleted}
+              className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#8a0336] hover:to-[#0370a3] text-white h-9 w-9 p-0"
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div> 
+        </div>
+          
           
         </div>
 

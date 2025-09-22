@@ -11,6 +11,10 @@ export default function AppointmentDetailPage() {
   const router = useRouter()
   const [appointment, setAppointment] = useState<Appointment | null>(null)
 
+  if (!id){
+    throw new Error;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token")

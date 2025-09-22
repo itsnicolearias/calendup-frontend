@@ -13,7 +13,7 @@ import { useUser } from "@/contexts/UserContext"
 import AppointmentTypesSelect from "../appointments/AppointmentTypesSelect"
 
 interface Props {
-  onCreated?: (appointment: Appointment | undefined) => void
+  onCreated?: (appointment: Appointment) => void
   onClose?: () => void
 }
 
@@ -64,9 +64,12 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
         description: "Te enviaremos un email con los detalles.",
         duration: 5000,
       })
+      if (created){
+        if (onCreated) onCreated(created)
+        if (onClose) onClose()
+      }
 
-      if (onCreated) onCreated(created)
-      if (onClose) onClose()
+      
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.message === "Appointment limit excedeed"){
@@ -83,7 +86,7 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
       {/* Datos del cliente */}
       <Card className="w-full">
         <CardContent className="space-y-4 pt-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
               <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
@@ -120,7 +123,10 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
       {/* Calendario abajo */}
       <Card className="w-full">
         <CardContent>
-          <AvailableCalendar onSelect={handleSelect} professionalId={user?.userId ?? ""} isModal={true} />
+          <AvailableCalendar 
+            onSelect={handleSelect} 
+            professionalId={user?.userId ?? ""} 
+            isModal={true} />
         </CardContent>
       </Card>
 
