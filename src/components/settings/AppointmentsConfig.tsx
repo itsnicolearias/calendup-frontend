@@ -25,7 +25,8 @@ export default function ProfileConfig() {
       jobTitle: "",
       appointmentDuration: 30,
       defaultAppConfirmation: true,
-      markAppAsCompleted: true
+      markAppAsCompleted: true,
+      address: "",
     },
     mode: "onChange",
   });
@@ -52,6 +53,7 @@ export default function ProfileConfig() {
           appointmentDuration: profile?.profile?.appointmentDuration ?? 30,
           defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
           markAppAsCompleted: profile?.profile?.markAppAsCompleted ?? true,
+          address: profile?.profile?.address ?? "",
         });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -101,6 +103,15 @@ export default function ProfileConfig() {
           <div>
             <Label>Descripción de profesión</Label>
             <Textarea {...register("bio")} />
+            {errors.bio && (
+              <p className="text-sm text-red-500">{errors.bio.message}</p>
+            )}
+          </div>
+
+          {/* Direccion profesional */}
+          <div>
+            <Label>Direccion de local profesional</Label>
+            <Input {...register("address")} />
             {errors.bio && (
               <p className="text-sm text-red-500">{errors.bio.message}</p>
             )}

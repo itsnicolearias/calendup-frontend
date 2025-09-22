@@ -30,7 +30,6 @@ export default function ProfileForm() {
     defaultValues: {
       name: "",
       lastName: "",
-      address: "",
       phone: "",
       profilePicture: "",
       country:  "",
@@ -68,7 +67,6 @@ export default function ProfileForm() {
         reset({
           name: profile?.profile?.name ?? "",
           lastName: profile?.profile?.lastName ?? "",
-          address: profile?.profile?.address ?? "",
           phone: profile?.profile?.phone ?? "",
           profilePicture: profile?.profile?.profilePicture ?? "",
           country: profile?.profile?.country ?? "",
@@ -138,10 +136,6 @@ const onSubmit = async (data: ProfileFormValues) => {
 
         <LocationSelect />
         
-        <div>
-          <Label>Dirección</Label>
-          <Input {...register("address")} />
-        </div>
 
         <div>
           <Label>Idiomas</Label>
