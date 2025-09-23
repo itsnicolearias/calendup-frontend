@@ -77,60 +77,59 @@ useEffect(() => {
   const appointmentLink = user ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${user.userId}` : '';
 
   return (
-  <div>
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Contenedor flex para título y botón */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
+  <div className="w-full overflow-x-hidden">
+    {/* Header */}
+    <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full overflow-x-hidden">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0 overflow-x-hidden">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent overflow-x-hidden">
             Mi Agenda
           </h1>
 
-        <div className="flex items-center space-x-2">
-          <div className="hidden sm:flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-white/80 hover:bg-white border-gray-300"
-              onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
-            >
-              <Copy className="w-4 h-4 mr-2" />
-              Compartir Link
-            </Button>
+          <div className="flex items-center space-x-2 overflow-x-hidden">
+            {/* Botones desktop */}
+            <div className="hidden sm:flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/80 hover:bg-white border-gray-300"
+                onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Compartir Link
+              </Button>
 
-            
-            {/* Botón para abrir modal */}
-            <Button 
-              className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white" 
-              onClick={() => setOpenAppModal(true)} 
-              disabled={!user || !user.profile?.profileCompleted}>
+              <Button
+                className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white"
+                onClick={() => setOpenAppModal(true)}
+                disabled={!user || !user.profile?.profileCompleted}
+              >
                 <Plus className="w-4 h-4 mr-2" />
-              Nuevo Turno
-            </Button>
+                Nuevo Turno
+              </Button>
+            </div>
+
+            {/* Botones mobile */}
+            <div className="flex sm:hidden items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/80 hover:bg-white border-gray-300 h-9 w-9 p-0"
+                onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+              >
+                <Copy className="w-4 h-4" />
+              </Button>
+
+              <Button
+                onClick={() => setOpenAppModal(true)}
+                size="sm"
+                disabled={!user || !user.profile?.profileCompleted}
+                className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#8a0336] hover:to-[#0370a3] text-white h-9 w-9 p-0"
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-
-          {/* Mobile buttons - only icons */}
-          <div className="flex sm:hidden items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-white/80 hover:bg-white border-gray-300 h-9 w-9 p-0"
-              onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
-            >
-              <Copy className="w-4 h-4" />
-            </Button>
-
-            <Button
-              onClick={() => setOpenAppModal(true)}
-              size="sm"
-              disabled={!user || !user.profile?.profileCompleted}
-              className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#8a0336] hover:to-[#0370a3] text-white h-9 w-9 p-0"
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
-          </div> 
-        </div>
-          
-          
         </div>
 
         <CreateAppointmentModal open={openAppModal} onClose={() => setOpenAppModal(false)} />
@@ -138,12 +137,14 @@ useEffect(() => {
         <p className="text-gray-600 mt-2">
           Puedes visualizar y abrir el detalle de cada turno haciendo click sobre él.
         </p>
+      </div>
     </div>
 
-    <div className="min-h-[70vh] p-4 sm:p-6 w-full overflow-x-hidden">
-      <Card className="h-full shadow-lg w-full">
-        <CardContent className="h-full w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 h-full w-full">
+    {/* Contenido principal */}
+    <div className="min-h-[70vh] px-4 sm:px-6 py-6 w-full overflow-x-hidden">
+      <Card className="h-full shadow-lg w-full overflow-hidden">
+        <CardContent className="h-full w-full overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 h-full w-full">
             {/* Calendario */}
             <div className="lg:col-span-2 flex justify-center items-center w-full">
               <Calendar
@@ -154,8 +155,8 @@ useEffect(() => {
                 className="rounded-md border shadow-md w-full max-w-full sm:max-w-md"
               />
             </div>
-            
-            {/* Lista de turnos (1/3 en desktop) */}
+
+            {/* Lista de turnos */}
             <div className="lg:col-span-1 overflow-y-auto p-2">
               <h3 className="text-lg font-semibold mb-4">
                 Turnos para {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: es })}
@@ -184,7 +185,6 @@ useEffect(() => {
                   ))}
               </div>
 
-              {/* Estado vacío elegante */}
               {appointments.filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd")).length === 0 && (
                 <p className="text-gray-500 text-sm mt-4">No hay turnos para esta fecha.</p>
               )}
@@ -193,8 +193,6 @@ useEffect(() => {
         </CardContent>
       </Card>
     </div>
-  
-</div>
-
-  )
+  </div>
+)
 }
