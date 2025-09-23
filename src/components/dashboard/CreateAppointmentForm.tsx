@@ -60,13 +60,16 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
         ...formData,
         appointmentTypeId: formData.appointmentTypeId === "" ? null : formData.appointmentTypeId,
       })
-      toast.success("Turno solicitado con éxito", {
+
+      if (created){
+        toast.success("Turno solicitado con éxito", {
         description: "Te enviaremos un email con los detalles.",
         duration: 5000,
       })
-      if (created){
         if (onCreated) onCreated(created)
         if (onClose) onClose()
+      } else if (created === undefined) {
+         toast.error("Error al crear turno. Vuelve a intentarlo luego")
       }
 
       

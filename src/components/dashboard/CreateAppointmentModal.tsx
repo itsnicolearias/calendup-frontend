@@ -17,8 +17,7 @@ export function CreateAppointmentModal({ open, onClose, onCreated }: Props) {
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Crear nuevo turno</DialogTitle>
         </DialogHeader>
-
-        {/* El formulario que ya tenías, lo separamos como AppointmentForm */}
+                                  
         <AppointmentForm onCreated={onCreated} onClose={onClose} />
       </DialogContent>
     </Dialog>

@@ -7,6 +7,8 @@ import { Appointment } from "@/types/appointments"
 import { getAppointments } from "@/services/appointments"
 import { useUser } from "@/contexts/UserContext"
 import { toast } from "sonner"
+import { useIsMobile } from "@/utils/isDeviceMobile"
+import { MobileAppointmentsBoard } from "@/components/dashboard/mobile-dashboard/AppointmentsBoard"
 
 export default function AppointmentsPage() {
   const router = useRouter()
@@ -49,12 +51,22 @@ export default function AppointmentsPage() {
 
   return (
     <>
-      <AppointmentsBoard 
+    {useIsMobile() ?
+    <MobileAppointmentsBoard 
+      appointments={appointments}
+      onOpen={openAppointment}
+      setAppointments={setAppointments}
+      professional={user}
+
+    />
+    :
+    <AppointmentsBoard 
         appointments={appointments} 
         onOpen={openAppointment} 
         setAppointments={setAppointments} // para drag & drop
         professional={user}
       />
+    }     
     </>
   )
 }

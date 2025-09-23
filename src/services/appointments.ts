@@ -21,10 +21,16 @@ export const getAppointments = async (token: string | null ) => {
 }
 
 export const createAppointment = async (data: Partial<Appointment>) => {
-  return apiFetch<Appointment>("/appointments", {
+  try {
+    const app =  apiFetch<Appointment>("/appointments", {
     method: "POST",
     body: JSON.stringify(data),
   })
+    return app
+  } catch (error) {
+    Sentry.captureException(error);
+  }
+  
 }
 
 export const updateAppointment = async (data: Partial<Appointment>, token: string | null, isFromUser: boolean ) => {
