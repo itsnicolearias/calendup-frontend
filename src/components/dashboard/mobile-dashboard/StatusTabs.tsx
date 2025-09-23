@@ -23,32 +23,40 @@ function StatusTabs({ appointments, activeTab, setActiveTab, filteredAppointment
 
         {/* Tabs for Status */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-white/80 backdrop-blur-sm border-0 shadow-lg h-auto p-1 overflow-x-auto">
-            <div className="flex min-w-max space-x-1">
-              <TabsTrigger
+          <TabsList className="w-full flex overflow-x-auto flex-nowrap no-scrollbar bg-white/80 backdrop-blur-sm border-0 shadow-lg h-auto p-1">
+            <TabsTrigger
                 value="all"
-                className="flex flex-col items-center py-2 px-3 min-w-[70px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ac043f] data-[state=active]:to-[#0388bd] data-[state=active]:text-white"
-              >
+                className="flex-shrink-0 flex flex-col items-center py-2 px-3 min-w-[70px] 
+                        data-[state=active]:bg-gradient-to-r 
+                        data-[state=active]:from-[#ac043f] 
+                        data-[state=active]:to-[#0388bd] 
+                        data-[state=active]:text-white"
+            >
                 <span className="text-xs font-medium">Todos</span>
                 <span className="text-sm font-bold">{appointments.length}</span>
-              </TabsTrigger>
-              {Object.entries(statusConfig).map(([status, config]) => {
+            </TabsTrigger>
+
+            {Object.entries(statusConfig).map(([status, config]) => {
                 const count = statusCounts[status] || 0
                 const StatusIcon = config.icon
                 return (
-                  <TabsTrigger
+                <TabsTrigger
                     key={status}
                     value={status}
-                    className="flex flex-col items-center py-2 px-2 min-w-[70px] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#ac043f] data-[state=active]:to-[#0388bd] data-[state=active]:text-white"
-                  >
+                    className="flex-shrink-0 flex flex-col items-center py-2 px-2 min-w-[70px] 
+                            data-[state=active]:bg-gradient-to-r 
+                            data-[state=active]:from-[#ac043f] 
+                            data-[state=active]:to-[#0388bd] 
+                            data-[state=active]:text-white"
+                >
                     <StatusIcon className={`w-3 h-3 mb-1 ${config.iconColor}`} />
                     <span className="text-xs font-medium truncate">{config.label}</span>
                     <span className="text-sm font-bold">{count}</span>
-                  </TabsTrigger>
+                </TabsTrigger>
                 )
-              })}
-            </div>
-          </TabsList>
+            })}
+            </TabsList>
+
 
           <div className="mt-6">
             <TabsContent value="all" className="mt-0">

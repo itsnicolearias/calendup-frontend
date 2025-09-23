@@ -14,6 +14,9 @@ import { Appointment } from "@/types/appointments"
 import { updateAppointment } from "@/services/appointments"
 import { toast } from "sonner"
 import { CreateAppointmentModal } from "../CreateAppointmentModal"
+import { OnboardingChecklist } from "../OnboardingChecklist"
+import WelcomeWizard from "../WelcomeWizard"
+import { updateProfile } from "@/services/settings"
 
 
 interface Props {
@@ -56,10 +59,32 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         }
     }
 
+    const handleFinishWizard = async () => {
+        setOpenWizard(false);
+         
+        try {
+          const token = localStorage.getItem("token")
+          await updateProfile(token, { isNewUser: false })
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+          toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
+        }
+    
+      }
+
     const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional.userId}` : '';
 
   return (
-    <div className="min-h-screen">
+    <>
+    { professional && !professional.profile?.profileCompleted && (
+            <OnboardingChecklist profile={professional?.profile || {}} />
+          )}
+    
+          { professional && professional.profile?.isNewUser && (
+            <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={professional?.profile?.isNewUser} handleFinish={handleFinishWizard} />
+          )}
+
+          <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -82,6 +107,7 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
                   size="sm"
                   className="bg-white/80 hover:bg-white border-gray-300 h-9 w-9 p-0"
                   onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+                  aria-label="Copiar link de agendamiento"
                 >
                   <Copy className="w-4 h-4" />
                 </Button>
@@ -89,6 +115,7 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
                   onClick={() => setOpen(true)}
                   size="sm"
                   disabled={!professional || !professional.profile?.profileCompleted}
+                  aria-label="crear nuevo turno"
                   className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#8a0336] hover:to-[#0370a3] text-white h-9 w-9 p-0"
                 >
                   <Plus className="w-4 h-4" />
@@ -111,5 +138,6 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         statusCounts={statusCounts}
          />
     </div>
+    </>
   )
 }
