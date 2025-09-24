@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import RegisterPage from "../../../../components/auth/Register";
 import FreePlanFeatures from "@/components/auth/FreePlanFeatures";
+import { Suspense } from "react";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export default function Page() {
 
   return (
     <>
+      <Suspense fallback={<div>Cargando...</div>}>
       {planName && planName === "free" ? (
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
           <RegisterPage />
@@ -21,6 +23,8 @@ export default function Page() {
       ) : (
         <RegisterPage />
       )}
+      </Suspense>
+      
     </>
   )
 }
