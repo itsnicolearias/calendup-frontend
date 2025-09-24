@@ -19,6 +19,8 @@ export function useS3Upload(): UseS3UploadResult {
       // 1️⃣ Pedimos una URL firmada al backend
       const res = await apiFetch<{signedUrl: string, fileUrl: string}>(`/get-signed-url?fileName=${encodeURIComponent(file.name)}&fileType=${file.type}`)
 
+      if (!res) throw new Error("No se pudo obtener la URL firmada");
+
       const { signedUrl, fileUrl } = res
 
       // 2️⃣ Subimos el archivo a S3 usando la URL firmada

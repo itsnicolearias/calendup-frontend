@@ -20,7 +20,7 @@ import ErrorModal from "../shared/ErrorModal";
 export default function Component() {
   const searchParams = useSearchParams();
 
-  const professionalId = searchParams.get("professionalId") || "";
+  const professionalId = searchParams.get("professionalId");
   if (!professionalId) {
     throw new Error();
   }
@@ -49,7 +49,7 @@ export default function Component() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getOneUser(professionalId)
+        const data = await getOneUser(professionalId || "")
 
         setProfessional(data?.professional)
         setRatingData(data?.rating)

@@ -189,7 +189,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
 
 
-            <div className="flex items-start space-x-2">
+            <div className="lex-col items-start space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <input
                 id="terms"
                 type="checkbox"
