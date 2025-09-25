@@ -28,3 +28,8 @@ export interface UserData {
 }
 
 export type Providers = "google" | "facebook" | "microsoft"
+
+export interface ResetPasswordProps {
+  token: string
+  newPassword: string
+}

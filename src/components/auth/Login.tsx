@@ -153,7 +153,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     Recordarme
                   </Label>
                 </div>
-                <a href="#" className="text-sm text-[#0388bd] hover:text-gray-900 font-medium">
+                <a href="/auth/forgot-password" className="text-sm text-[#0388bd] hover:text-gray-900 font-medium">
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>
