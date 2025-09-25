@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   CalendarIcon,
@@ -17,20 +17,25 @@ import { CreateAppointmentModal } from "../CreateAppointmentModal"
 import { OnboardingChecklist } from "../OnboardingChecklist"
 import WelcomeWizard from "../WelcomeWizard"
 import { updateProfile } from "@/services/settings"
+import ProfileCompletedModal from "../ProfileCompletedModal"
 
 
 interface Props {
   appointments: Appointment[]
   onOpen: (appointment: Appointment) => void
   setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>
-  professional: UserWithProfile | null
+  professional: UserWithProfile | null;
+  refreshProfessional: () => Promise<void>
 }
 
 
-export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments, professional }: Props) {
+export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional }: Props) {
   const [activeTab, setActiveTab] = useState("all")
   const [open, setOpen] = useState(false)
+  const [openPCModal, setopenPCModal] = useState(false);
   const [openWizard, setOpenWizard] = useState(false);
+
+  const profile = professional?.profile;
 
   // Calculate counts for each status
   const statusCounts = appointments.reduce(
@@ -53,7 +58,7 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
     try {
           const token = localStorage.getItem("token")
           await updateAppointment({ appointmentId, status: newStatus }, token, false)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
           toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
         }
@@ -65,24 +70,54 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         try {
           const token = localStorage.getItem("token")
           await updateProfile(token, { isNewUser: false })
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
           toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
         }
     
       }
+      
+    const handleClosePCModal = async () => {
+    setopenPCModal(false);
+     
+    try {
+      const token = localStorage.getItem("token")
+      await updateProfile(token, { pcModalShowed : true })
+      await refreshProfessional()    
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
+    }
+
+  }
+
+
+    useEffect(() => {
+        const openPcModal = () => {
+        if (profile && profile?.profileCompleted && !profile?.pcModalShowed) {
+          setopenPCModal(true)
+    
+        } 
+      }
+      openPcModal()
+      
+        }, [profile]);
 
     const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional.userId}` : '';
 
   return (
     <>
-    { professional && !professional.profile?.profileCompleted && (
+    { profile && !profile?.profileCompleted && (
             <OnboardingChecklist profile={professional?.profile || {}} />
-          )}
+    )}
     
-          { professional && professional.profile?.isNewUser && (
-            <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={professional?.profile?.isNewUser} handleFinish={handleFinishWizard} />
-          )}
+    { profile && profile?.isNewUser && (
+      <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={profile?.isNewUser} handleFinish={handleFinishWizard} />
+    )}
+
+    { profile && profile?.profileCompleted && !profile?.pcModalShowed && (
+            <ProfileCompletedModal open={openPCModal} onClose={handleClosePCModal} schedulingLink={appointmentLink} />
+    )}
 
           <div className="min-h-screen">
       {/* Header */}

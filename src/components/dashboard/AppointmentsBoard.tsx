@@ -3,7 +3,7 @@ import { AppointmentCard } from "./AppointmentCard"
 import { updateAppointment } from "@/services/appointments"
 import { getStatusText } from "../../types/status"
 import { Button } from "../ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
 import { Copy, Plus } from "lucide-react"
 import { UserWithProfile } from "@/types/settings"
@@ -11,23 +11,28 @@ import { OnboardingChecklist } from "./OnboardingChecklist"
 import WelcomeWizard from "./WelcomeWizard"
 import { updateProfile } from "@/services/settings"
 import { toast } from "sonner"
+import ProfileCompletedModal from "./ProfileCompletedModal"
 
 interface Props {
   appointments: Appointment[]
   onOpen: (appointment: Appointment) => void
   setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>
   professional: UserWithProfile | null;
+  refreshProfessional: () => Promise<void>
 }
 
-export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional }: Props) {
+export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional }: Props) {
    const [open, setOpen] = useState(false)
    const [openWizard, setOpenWizard] = useState(false);
+   const [openPCModal, setopenPCModal] = useState(false);
+
+   const profile = professional?.profile;
 
   const handleDragStart = (e: React.DragEvent, appointment: Appointment) => {
     e.dataTransfer.setData("appointmentId", appointment.appointmentId.toString())
   }
 
-  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional.userId}` : '';
+  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional?.userId}` : '';
 
   const handleDrop = async (e: React.DragEvent, status: AppointmentStatus) => {
     const appointmentId = e.dataTransfer.getData("appointmentId")
@@ -64,14 +69,47 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
 
   }
 
+  const handleClosePCModal = async () => {
+    setopenPCModal(false);
+     
+    try {
+      const token = localStorage.getItem("token")
+      await updateProfile(token, { pcModalShowed : true })
+
+      await refreshProfessional()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
+    }
+
+  }
+
+   useEffect(() => {
+      const openPcModal = () => {
+    if (profile && profile?.profileCompleted && !profile?.pcModalShowed) {
+      setopenPCModal(true)
+
+    } 
+  }
+  openPcModal()
+  
+    }, [profile]);
+
+  
+
+ 
   return (
     <div>
-      { professional && !professional.profile?.profileCompleted && (
-        <OnboardingChecklist profile={professional?.profile || {}} />
+      { profile && !profile?.profileCompleted && (
+        <OnboardingChecklist profile={profile || {}} />
       )}
 
-      { professional && professional.profile?.isNewUser && (
-        <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={professional?.profile?.isNewUser} handleFinish={handleFinishWizard} />
+      { profile && profile?.isNewUser && (
+        <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={profile?.isNewUser} handleFinish={handleFinishWizard} />
+      )}
+
+      { profile && profile?.profileCompleted && !profile?.pcModalShowed && (
+        <ProfileCompletedModal open={openPCModal} onClose={handleClosePCModal} schedulingLink={appointmentLink} />
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -98,7 +136,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
                 <Button 
                   className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white" 
                   onClick={() => setOpen(true)} 
-                  disabled={!professional || !professional.profile?.profileCompleted}>
+                  disabled={!profile || !profile?.profileCompleted}>
                    <Plus className="w-4 h-4 mr-2" />
                   Nuevo Turno
                 </Button>

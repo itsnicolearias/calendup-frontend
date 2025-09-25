@@ -41,7 +41,7 @@ interface WelcomeWizardProps {
     isFromHelp?: boolean
 } 
 
-export default function WelcomeWizard({ open, setOpen,isNewUser, handleFinish, isFromHelp }: WelcomeWizardProps) {
+export default function WelcomeWizard({ open, setOpen, isNewUser, handleFinish, isFromHelp }: WelcomeWizardProps) {
   const [step, setStep] = useState(0);
 
   // Mostrar wizard solo la primera vez
