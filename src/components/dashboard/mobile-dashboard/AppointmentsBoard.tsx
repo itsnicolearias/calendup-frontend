@@ -70,6 +70,7 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         try {
           const token = localStorage.getItem("token")
           await updateProfile(token, { isNewUser: false })
+          await refreshProfessional()
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
           toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
