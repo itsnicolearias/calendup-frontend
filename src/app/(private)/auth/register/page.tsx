@@ -12,18 +12,26 @@ export default function Page() {
 
   return (
     <>
-      <Suspense fallback={<div>Cargando...</div>}>
       {planName && planName === "free" ? (
+        <>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
-          <RegisterPage />
+          <Suspense fallback={<div>Cargando...</div>}>
+            <RegisterPage />
+           </Suspense>
           <div className="w-full max-w-md lg:sticky lg:top-8">
             <FreePlanFeatures />
           </div>
         </div>
+        </>        
       ) : (
-        <RegisterPage />
+        <>
+         <Suspense fallback={<div>Cargando...</div>}>
+            <RegisterPage />
+           </Suspense>
+        </>
+       
       )}
-      </Suspense>
+
       
     </>
   )
