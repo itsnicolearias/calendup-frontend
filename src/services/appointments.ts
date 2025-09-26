@@ -8,7 +8,7 @@ export const getAppointments = async (token: string | null ) => {
         throw new Error;
     }
 
-    return apiFetch<GetAllApiResponse<Appointment>>("/appointments?all=true", {
+    return await apiFetch<GetAllApiResponse<Appointment>>("/appointments?all=true", {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
@@ -22,7 +22,7 @@ export const getAppointments = async (token: string | null ) => {
 
 export const createAppointment = async (data: Partial<Appointment>) => {
   try {
-    const app =  apiFetch<Appointment>("/appointments", {
+    const app =  await apiFetch<Appointment>("/appointments", {
     method: "POST",
     body: JSON.stringify(data),
   })
@@ -39,7 +39,7 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
         throw new Error;
     }
     if (isFromUser) {
-      return apiFetch<Appointment>(`/appointments/from-user?token=${token}`, {
+      return await apiFetch<Appointment>(`/appointments/from-user?token=${token}`, {
     method: "PUT",
     headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
     body: JSON.stringify(data),
   })
     } else {
-      return apiFetch<Appointment>(`/appointments/${data.appointmentId}`, {
+      return await apiFetch<Appointment>(`/appointments/${data.appointmentId}`, {
     method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -84,7 +84,7 @@ export const getOneAppointment = async (token: string | null, appointmentId?: st
     if (!token) {
         throw new Error;
     }
-      return apiFetch<Appointment>("/appointments/" + appointmentId, {
+      return await apiFetch<Appointment>("/appointments/" + appointmentId, {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
@@ -103,7 +103,7 @@ export const getOneAppFromUser = async (token: string | null) => {
         throw new Error;
     }
 
-      return apiFetch<GetOneAppointment>(`/appointments/from-user?token=${token}`, {
+      return await apiFetch<GetOneAppointment>(`/appointments/from-user?token=${token}`, {
     method: "GET"
   })
 
