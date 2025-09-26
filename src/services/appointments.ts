@@ -1,4 +1,5 @@
 import { apiFetch } from "./api"
+import * as Sentry from "@sentry/nextjs";
 import { Appointment, AvailabilityResponse, GetAllApiResponse, GetOneAppointment } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
@@ -7,23 +8,29 @@ export const getAppointments = async (token: string | null ) => {
         throw new Error;
     }
 
-    return apiFetch<GetAllApiResponse<Appointment>>("/appointments?all=true", {
+    return await apiFetch<GetAllApiResponse<Appointment>>("/appointments?all=true", {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
     }
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
 
 export const createAppointment = async (data: Partial<Appointment>) => {
-  return apiFetch<Appointment>("/appointments", {
+  try {
+    const app =  await apiFetch<Appointment>("/appointments", {
     method: "POST",
     body: JSON.stringify(data),
   })
+    return app
+  } catch (error) {
+    Sentry.captureException(error);
+  }
+  
 }
 
 export const updateAppointment = async (data: Partial<Appointment>, token: string | null, isFromUser: boolean ) => {
@@ -32,7 +39,7 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
         throw new Error;
     }
     if (isFromUser) {
-      return apiFetch<Appointment>(`/appointments/from-user?token=${token}`, {
+      return await apiFetch<Appointment>(`/appointments/from-user?token=${token}`, {
     method: "PUT",
     headers: {
         "Content-Type": "application/json",
@@ -41,7 +48,7 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
     body: JSON.stringify(data),
   })
     } else {
-      return apiFetch<Appointment>(`/appointments/${data.appointmentId}`, {
+      return await apiFetch<Appointment>(`/appointments/${data.appointmentId}`, {
     method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -52,12 +59,12 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
   })
     }  
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
 
-export const getAvailableSlots = async (professionaId: string, year: number, month: number): Promise<AvailabilityResponse> => {
+export const getAvailableSlots = async (professionaId: string, year: number, month: number): Promise<AvailabilityResponse | undefined> => {
   try {
     if (!year || !month || !professionaId){
       throw new Error('Missing parameters');
@@ -67,7 +74,7 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
     method: "GET"
   })
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -77,7 +84,7 @@ export const getOneAppointment = async (token: string | null, appointmentId?: st
     if (!token) {
         throw new Error;
     }
-      return apiFetch<Appointment>("/appointments/" + appointmentId, {
+      return await apiFetch<Appointment>("/appointments/" + appointmentId, {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
@@ -85,7 +92,7 @@ export const getOneAppointment = async (token: string | null, appointmentId?: st
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }
@@ -96,12 +103,12 @@ export const getOneAppFromUser = async (token: string | null) => {
         throw new Error;
     }
 
-      return apiFetch<GetOneAppointment>(`/appointments/from-user?token=${token}`, {
+      return await apiFetch<GetOneAppointment>(`/appointments/from-user?token=${token}`, {
     method: "GET"
   })
 
   } catch (error) {
-    throw error;
+    Sentry.captureException(error);
   }
   
 }

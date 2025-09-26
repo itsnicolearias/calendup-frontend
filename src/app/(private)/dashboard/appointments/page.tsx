@@ -6,13 +6,18 @@ import { AppointmentsBoard } from "@/components/dashboard/AppointmentsBoard"
 import { Appointment } from "@/types/appointments"
 import { getAppointments } from "@/services/appointments"
 import { useUser } from "@/contexts/UserContext"
+import { toast } from "sonner"
+import { useIsMobile } from "@/utils/isDeviceMobile"
+import { MobileAppointmentsBoard } from "@/components/dashboard/mobile-dashboard/AppointmentsBoard"
 
 export default function AppointmentsPage() {
   const router = useRouter()
 
-  const { user } = useUser()
+  const { user, refreshUser } = useUser()
 
   const [appointments, setAppointments] = useState<Appointment[]>([])
+
+  const isMobile = useIsMobile();
 
   // cargar turnos
   useEffect(() => {
@@ -25,15 +30,20 @@ export default function AppointmentsPage() {
         }
     
         const appData = await getAppointments(token)
-        setAppointments(appData.rows)
+
+        if (appData){
+          setAppointments(appData.rows)
+        }
         //return appData.rows;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error(error)
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
         return undefined
       }
     }
 
     getAppointmentsRows()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const openAppointment = (appointment: Appointment) => {
@@ -43,12 +53,24 @@ export default function AppointmentsPage() {
 
   return (
     <>
-      <AppointmentsBoard 
+    {isMobile ?
+    <MobileAppointmentsBoard 
+      appointments={appointments}
+      onOpen={openAppointment}
+      setAppointments={setAppointments}
+      professional={user}
+      refreshProfessional={refreshUser}
+
+    />
+    :
+    <AppointmentsBoard 
         appointments={appointments} 
         onOpen={openAppointment} 
         setAppointments={setAppointments} // para drag & drop
         professional={user}
+        refreshProfessional={refreshUser}
       />
+    }     
     </>
   )
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -27,28 +29,21 @@ export default function AvailableCalendar({
   const [availability, setAvailability] = useState<AvailabilityResponse>({});
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
-  // Hook que maneja estado interno o controlado por props
-  const {
-    currentDate,
-    currentHour,
-    handleDateChange,
-    handleHourChange,
-  } = useControlledDateTime(selectedDate, selectedHour, onSelect);
-
-  const cols = isModal
-    ? "grid grid-cols-2 md:grid-cols-1 gap-8"
-    : "grid grid-cols-2 md:grid-cols-2 gap-8";
+  const { currentDate, currentHour, handleDateChange, handleHourChange } =
+    useControlledDateTime(selectedDate, selectedHour, onSelect);
 
   useEffect(() => {
     const month = currentMonth.getMonth() + 1;
     const year = currentMonth.getFullYear();
     const fetchSlots = async () => {
-      const data: AvailabilityResponse = await getAvailableSlots(
+      const data: AvailabilityResponse | undefined = await getAvailableSlots(
         professionalId,
         year,
         month
       );
-      setAvailability(data);
+      if (data) {
+        setAvailability(data);
+      }
     };
     fetchSlots();
   }, [currentMonth, professionalId]);
@@ -62,7 +57,7 @@ export default function AvailableCalendar({
     availability[format(currentDate ?? new Date(), "yyyy-MM-dd")] || [];
 
   return (
-    <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl flex items-center">
           <CalendarIcon className="w-5 h-5 mr-2 text-blue-600" />
@@ -70,11 +65,17 @@ export default function AvailableCalendar({
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        <div className={cols}>
+        <div
+          className={
+            isModal
+              ? "flex flex-col gap-8 lg:grid lg:grid-cols-1 lg:gap-12"
+              : "grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12"
+          }
+        >
           {/* Calendario */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Fecha</h3>
-            <div className="flex justify-center">
+          <div className="flex flex-col items-center lg:items-start">
+            <h3 className="text-base sm:text-lg font-semibold mb-4">Fecha</h3>
+            <div className="w-full overflow-x-auto sm:overflow-visible">
               <Calendar
                 mode="single"
                 selected={currentDate}
@@ -82,16 +83,16 @@ export default function AvailableCalendar({
                 onMonthChange={setCurrentMonth}
                 locale={es}
                 disabled={(date) => !isDayAvailable(date)}
-                className="rounded-md border shadow w-100"
+                className="rounded-md border shadow w-full max-w-md mx-auto"
               />
             </div>
           </div>
 
           {/* Horarios */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Hora</h4>
+          <div className="flex flex-col">
+            <h4 className="text-base sm:text-lg font-semibold mb-4">Hora</h4>
             {currentDate && availableHours.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {availableHours.map((hour) => (
                   <Button
                     key={hour}
@@ -101,8 +102,8 @@ export default function AvailableCalendar({
                     onClick={() => handleHourChange(hour)}
                     className={
                       currentHour === hour
-                        ? "bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white"
-                        : "hover:border-[#0388bd] hover:text-[#0388bd]"
+                        ? "bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white w-full"
+                        : "hover:border-[#0388bd] hover:text-[#0388bd] w-full"
                     }
                   >
                     {hour}
@@ -110,13 +111,13 @@ export default function AvailableCalendar({
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-8">
+              <p className="text-gray-500 text-center py-6 sm:py-8">
                 Primero selecciona una fecha
               </p>
             )}
           </div>
         </div>
       </CardContent>
-    </Card>
+      </Card> 
   );
 }

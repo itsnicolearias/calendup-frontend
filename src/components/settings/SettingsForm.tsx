@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { languageOptions, ProfileFormValues, profileSchema } from "@/types/settings";
-import { getProfile, updateProfile } from "@/services/settings";
+import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import UploadImage from "../shared/UploadFiles";
@@ -15,6 +15,7 @@ import { MultiValue } from "react-select";
 import { useFieldArray } from "react-hook-form";
 import dynamic from "next/dynamic";
 import LocationSelect from "../shared/LocationSelect";
+import { useUser } from "@/contexts/UserContext";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
 
@@ -23,14 +24,16 @@ export default function ProfileForm() {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const { uploadFile, isUploading } = useS3Upload();
+  const { uploadFile } = useS3Upload();
+
+   const { user, refreshUser } = useUser()
+  
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: "",
       lastName: "",
-      address: "",
       phone: "",
       profilePicture: "",
       country:  "",
@@ -62,13 +65,11 @@ export default function ProfileForm() {
   // Cargar datos del perfil
   useEffect(() => {
     const loadProfile = async () => {
-      if (!token) return;
       try {
-        const profile = await getProfile(token);
+        const profile = user;
         reset({
           name: profile?.profile?.name ?? "",
           lastName: profile?.profile?.lastName ?? "",
-          address: profile?.profile?.address ?? "",
           phone: profile?.profile?.phone ?? "",
           profilePicture: profile?.profile?.profilePicture ?? "",
           country: profile?.profile?.country ?? "",
@@ -77,12 +78,13 @@ export default function ProfileForm() {
           education: profile?.profile?.education ?? [],
           languages: profile?.profile?.languages ?? [],
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     };
     loadProfile();
-  }, [token, reset]);
+  }, [user, reset]);
 
   
 
@@ -97,9 +99,11 @@ const onSubmit = async (data: ProfileFormValues) => {
     }
 
     await updateProfile(token, { ...data, profilePicture: profilePictureUrl });
+    await refreshUser()
     toast.success("Perfil actualizado correctamente");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Error al actualizar", error);
+    toast.error("Ha ocurrido un error actualizando el perfil. Vuelve a intentarlo luego")
   } finally {
     setLoading(false);
   }
@@ -107,81 +111,75 @@ const onSubmit = async (data: ProfileFormValues) => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto">
-        <div>
-          <Label>Nombre</Label>
-          <Input {...register("name")} />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-        </div>
+  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <div>
+      <Label>Nombre</Label>
+      <Input {...register("name")} />
+      {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+    </div>
 
-        <div>
-          <Label>Apellido</Label>
-          <Input {...register("lastName")} />
-          {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
-        </div>
+    <div>
+      <Label>Apellido</Label>
+      <Input {...register("lastName")} />
+      {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
+    </div>
 
-        <div>
-          <Label>Teléfono</Label>
-          <Input {...register("phone")} />
-        </div>
+    <div>
+      <Label>Teléfono</Label>
+      <Input {...register("phone")} />
+    </div>
 
-        <div>
-          <Label>Foto de perfil</Label>
-          <UploadImage
-            label="Foto de perfil"
-            currentImageUrl={watch("profilePicture")}
-            onChange={(file) => setSelectedFile(file)}
+    <div>
+      <Label>Foto de perfil</Label>
+      <UploadImage
+        label="Foto de perfil"
+        currentImageUrl={watch("profilePicture")}
+        onChange={(file) => setSelectedFile(file)}
+      />
+    </div>
+
+    <LocationSelect />
+
+    <div className="w-full">
+      <Label>Idiomas</Label>
+      <Select
+        isMulti
+        options={languageOptions}
+        value={languageOptions.filter(opt => watch("languages")?.includes(opt.value))}
+        onChange={(newValue) => {
+          const selected = newValue as MultiValue<{ value: string; label: string }>;
+          form.setValue("languages", selected.map((opt) => opt.value), { shouldValidate: true });
+        }}
+      />
+    </div>
+
+    <div className="overflow-x-auto">
+      <Label>Educación</Label>
+      {fields.map((field, index) => (
+        <div key={field.id} className="flex flex-col sm:flex-row gap-2 mb-2 items-start sm:items-center">
+          <Input
+            placeholder="Título"
+            {...register(`education.${index}.title` as const)}
           />
-        </div>
-
-        <LocationSelect />
-        
-        <div>
-          <Label>Dirección</Label>
-          <Input {...register("address")} />
-        </div>
-
-        <div>
-          <Label>Idiomas</Label>
-          <Select
-            isMulti
-            options={languageOptions}
-            value={languageOptions.filter(opt => watch("languages")?.includes(opt.value))}
-            onChange={(newValue) => {
-              const selected = newValue as MultiValue<{ value: string; label: string }>;
-              form.setValue("languages", selected.map((opt) => opt.value), { shouldValidate: true });
-            }}
+          <Input
+            placeholder="Institución"
+            {...register(`education.${index}.institution` as const)}
           />
-        </div>
-
-        <div>
-          <Label>Educación</Label>
-          {fields.map((field, index) => (
-            <div key={field.id} className="flex gap-2 mb-2">
-              <Input
-                placeholder="Título"
-                {...register(`education.${index}.title` as const)}
-              />
-              <Input
-                placeholder="Institución"
-                {...register(`education.${index}.institution` as const)}
-              />
-              <Button type="button" variant="destructive" onClick={() => remove(index)}>
-                Eliminar
-              </Button>
-            </div>
-          ))}
-
-          <Button type="button" onClick={() => append({ title: "", institution: "" })}>
-            + Agregar educación
+          <Button type="button" variant="destructive" onClick={() => remove(index)}>
+            Eliminar
           </Button>
         </div>
+      ))}
+      <Button type="button" onClick={() => append({ title: "", institution: "" })}>
+        + Agregar educación
+      </Button>
+    </div>
 
+    <Button type="submit" disabled={loading} className="bg-[#0388bd]">
+      {loading ? "Guardando..." : "Guardar cambios"}
+    </Button>
+  </form>
+</FormProvider>
 
-        <Button type="submit" disabled={loading} className="bg-[#0388bd]">
-          {loading ? "Guardando..." : "Guardar cambios"}
-        </Button>
-      </form>
-    </FormProvider>
   );
 }

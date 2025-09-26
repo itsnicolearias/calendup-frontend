@@ -4,16 +4,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ProfileFormValues, profileSchema } from "@/types/settings";
-import { getProfile, updateProfile } from "@/services/settings";
+import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AvailabilityEditor from "./AvailabilityEditor";
+import { useUser } from "@/contexts/UserContext";
 
 
 export default function AvailabilityConfig() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+
+   const { user, refreshUser } = useUser()
+  
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -23,7 +27,7 @@ export default function AvailabilityConfig() {
     mode: "onChange",
   });
 
-  const { register, handleSubmit, reset, } = form;
+  const { handleSubmit, reset, } = form;
 
   // Cargar token y redirigir si no existe
   useEffect(() => {
@@ -38,18 +42,18 @@ export default function AvailabilityConfig() {
   // Cargar datos del perfil
   useEffect(() => {
     const loadProfile = async () => {
-      if (!token) return;
       try {
-        const profile = await getProfile(token);
+        const profile = user;
         reset({
           availability: profile?.profile?.availability ?? {},
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        toast.error("Ha ocurrido un error cargando el perfil. Vuelve a intentarlo luego")
       }
     };
     loadProfile();
-  }, [token, reset]);
+  }, [user, reset]);
 
   
 
@@ -57,9 +61,11 @@ const onSubmit = async (data: ProfileFormValues) => {
   setLoading(true);
   try {
     await updateProfile(token, data);
+    await refreshUser()
     toast.success("Perfil actualizado correctamente");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error("Error al actualizar", error);
+    toast.error("Ha ocurrido un error actualizando el perfil. Vuelve a intentarlo luego")
   } finally {
     setLoading(false);
   }
@@ -67,9 +73,9 @@ const onSubmit = async (data: ProfileFormValues) => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-        <AvailabilityEditor />
+        <AvailabilityEditor saveChanges={onSubmit} />
 
         <Button type="submit" disabled={loading} className="bg-[#0388bd]">
           {loading ? "Guardando..." : "Guardar cambios"}

@@ -62,22 +62,21 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const data = await loginUser({email, password})
     // Podés redirigir o mostrar un mensaje de éxito
+
+    if (data)
     localStorage.setItem('token', data.token);
     await refreshUser()
     router.push('/dashboard/appointments')
   } catch (err: any) {
     if (err.message === "User does not exist"){
       toast.error("El usuario ingresado no existe")
-    }
-
-    if (err.message === "Invalid email or password"){
+    } else if (err.message === "Invalid email or password"){
       toast.error("Credenciales invalidas")
-    }
-
-    if (err.message === "You must verify your email before logging in"){
+    } else if (err.message === "You must verify your email before logging in"){
       toast.error("Debes verificar tu cuenta antes de iniciar sesion")
-    }
-    
+    } else {
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
+    } 
   }
 };
 
@@ -154,7 +153,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     Recordarme
                   </Label>
                 </div>
-                <a href="#" className="text-sm text-[#0388bd] hover:text-gray-900 font-medium">
+                <a href="/auth/forgot-password" className="text-sm text-[#0388bd] hover:text-gray-900 font-medium">
                   ¿Olvidaste tu contraseña?
                 </a>
               </div>

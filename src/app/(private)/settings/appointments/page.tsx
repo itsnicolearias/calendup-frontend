@@ -5,10 +5,9 @@ import AppointmentTypesList from "@/components/settings/AppointmentTypesList"
 
 export default function AppointmentSettingsPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-12">
-      {/* Encabezado principal */}
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-12">
       <div>
-        <h1 className="text-2xl font-bold mb-2">Configuración de turnos</h1>
+        <h1 className="text-2xl font-bold mb-2 break-words">Configuración de turnos</h1>
         <p className="text-muted-foreground mb-4">
           Ajusta la duración de tus turnos, confirmación automática y tipos de servicio.
         </p>
@@ -17,7 +16,9 @@ export default function AppointmentSettingsPage() {
       {/* Sección Perfil Profesional */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold mb-2">Perfil profesional</h2>
-        <ProfileConfig />
+         <div className="border rounded-lg shadow-sm">
+            <ProfileConfig />
+          </div>
       </section>
 
       {/* Sección Tipos de Turnos */}

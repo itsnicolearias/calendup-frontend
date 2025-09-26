@@ -1,5 +1,6 @@
 import { apiFetch } from "@/services/api"
 import { ProfileFormValues, UserWithProfile } from "@/types/settings"
+import * as Sentry from "@sentry/nextjs";
 
 export const getProfile = async (token: string) => {
     try {
@@ -16,7 +17,7 @@ export const getProfile = async (token: string) => {
 
   return user;  
     } catch (error) {
-        console.log(error)
+        Sentry.captureException(error);
     }
   
 }
@@ -26,7 +27,7 @@ export const updateProfile = async (token: string | null, body: ProfileFormValue
     if (!token) {
         throw new Error;
     }
-    return apiFetch("/settings/profile", {
+    return await apiFetch("/settings/profile", {
     method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -35,8 +36,7 @@ export const updateProfile = async (token: string | null, body: ProfileFormValue
     body: JSON.stringify(body)
   })      
     } catch (error) {
-        console.log(error)
-        throw error;
+       Sentry.captureException(error);
     }
   
 }
@@ -47,7 +47,7 @@ export const changePassword = async (token: string, body: { password: string; ne
             return null;
         } 
 
-        return apiFetch("/settings/change-password", {
+        return await apiFetch("/settings/change-password", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -56,6 +56,6 @@ export const changePassword = async (token: string, body: { password: string; ne
             body: JSON.stringify(body)
         })
     } catch (error) {
-        console.log(error)
+        Sentry.captureException(error);
     }
 }

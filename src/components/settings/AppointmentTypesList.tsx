@@ -32,9 +32,13 @@ export default function AppointmentTypesList() {
     const fetchAppointmentTypes = async () => {
       try {
         const appTypes = await getAppointmentsTypes(token)
-        setAppointmentTypes(appTypes.rows)
+
+        if (appTypes){
+          setAppointmentTypes(appTypes.rows)
+        }      
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error(error)
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     }
     fetchAppointmentTypes()
@@ -44,12 +48,15 @@ export default function AppointmentTypesList() {
     try {
       data.price = Number(data.price) || 0.0
       const created = await createAppointmentType(data, token)
-      setAppointmentTypes([...appointmentTypes, created])
-      setIsCreating(false)
-      toast.success("Tipo de turno creado")
+      if (created) {
+        setAppointmentTypes([...appointmentTypes, created ])
+        setIsCreating(false)
+        toast.success("Servicio creado correctamente")
+      }
+      
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
-      toast.error("Error al crear tipo de turno")
+      toast.error("Error al crear servicio. Vuelve a intentarlo luego")
     }
   }
 
@@ -57,16 +64,20 @@ export default function AppointmentTypesList() {
     data.price = Number(data.price) || 0.0
     try {
       const updated = await updateAppointmentType(data, appointmentTypeId, token)
-      setAppointmentTypes((prev) =>
-        prev.map((type) =>
-          type.appointmentTypeId === appointmentTypeId ? updated : type
+
+      if (updated){
+        setAppointmentTypes((prev) =>
+          prev.map((type) =>
+            type.appointmentTypeId === appointmentTypeId ? updated : type
+          )
         )
-      )
-      setEditingId(null)
-      toast.success("Tipo de turno actualizado")
+        setEditingId(null)
+        toast.success("Servicio actualizado correctamente")
+      }
+      
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
-      toast.error("Error al actualizar")
+      toast.error("Error al actualizar servicio. Vuelve a intentarlo luego")
     }
   }
 
@@ -76,68 +87,81 @@ export default function AppointmentTypesList() {
       setAppointmentTypes((prev) =>
         prev.filter((type) => type.appointmentTypeId !== appointmentTypeId)
       )
-      toast.success("Tipo de turno eliminado")
+      toast.success("Servicio eliminado correctamente")
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
-      toast.error("Error al eliminar")
+      toast.error("Error al eliminar servicio. Vuelve a intentarlo luego")
     }
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-
-        {/* Modal para crear */}
+      {/* Botón para crear nuevo servicio */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
         <Dialog open={isCreating} onOpenChange={setIsCreating}>
           <DialogTrigger asChild>
-            <Button className="bg-[#0388bd]">+ Nuevo servicio</Button>
+            <Button className="bg-[#0388bd] w-full sm:w-auto">+ Nuevo servicio</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-lg">
+          <DialogContent className="w-full sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>Crear nuevo servicio</DialogTitle>
             </DialogHeader>
-            <AppointmentTypeForm onSubmit={handleCreate} onCancel={() => setIsCreating(false)} />
+            <AppointmentTypeForm
+              onSubmit={handleCreate}
+              onCancel={() => setIsCreating(false)}
+            />
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
+      {/* Lista de servicios */}
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {appointmentTypes.map((type) => (
-            // Dentro del map de appointmentTypes
-            <Card key={type.appointmentTypeId} className="shadow-sm border rounded-lg">
+          <Card key={type.appointmentTypeId} className="shadow-sm border rounded-lg">
             <CardHeader>
-                <CardTitle>{type.name}</CardTitle>
+              <CardTitle>{type.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-                <p>{type.description || "Sin descripción"}</p>
-                <p>Precio: {type.price ? `$${type.price}` : "No especificado"}</p>
-                <p>Modalidad: {type.sessionType === "in person" ? "Presencial" : "Online"}</p>
+              <p>{type.description || "Sin descripción"}</p>
+              <p>Precio: {type.price ? `$${type.price}` : "No especificado"}</p>
+              <p>Modalidad: {type.sessionType === "in person" ? "Presencial" : "Online"}</p>
 
-                <div className="flex gap-2 mt-2">
-                {/* Modal editar */}
-                <Dialog open={editingId === type.appointmentTypeId} onOpenChange={(open) => setEditingId(open ? type.appointmentTypeId : null)}>
-                    <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">Editar</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                {/* Modal para editar */}
+                <Dialog
+                  open={editingId === type.appointmentTypeId}
+                  onOpenChange={(open) =>
+                    setEditingId(open ? type.appointmentTypeId : null)
+                  }
+                >
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto">
+                      Editar
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-full sm:max-w-lg">
                     <DialogHeader>
-                        <DialogTitle>Editar servicio</DialogTitle>
+                      <DialogTitle>Editar servicio</DialogTitle>
                     </DialogHeader>
                     <AppointmentTypeForm
-                        initialData={type}
-                        onSubmit={(data) => handleUpdate(data, type.appointmentTypeId)}
-                        onCancel={() => setEditingId(null)}
+                      initialData={type}
+                      onSubmit={(data) => handleUpdate(data, type.appointmentTypeId)}
+                      onCancel={() => setEditingId(null)}
                     />
-                    </DialogContent>
+                  </DialogContent>
                 </Dialog>
 
-                <Button variant="destructive" size="sm" onClick={() => handleDelete(type.appointmentTypeId)}>
-                    Eliminar
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="w-full sm:w-auto"
+                  onClick={() => handleDelete(type.appointmentTypeId)}
+                >
+                  Eliminar
                 </Button>
-                </div>
+              </div>
             </CardContent>
-            </Card>
-
+          </Card>
         ))}
       </div>
     </div>

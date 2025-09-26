@@ -60,20 +60,25 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
         ...formData,
         appointmentTypeId: formData.appointmentTypeId === "" ? null : formData.appointmentTypeId,
       })
-      toast.success("Turno solicitado con éxito", {
+
+      if (created){
+        toast.success("Turno solicitado con éxito", {
         description: "Te enviaremos un email con los detalles.",
         duration: 5000,
       })
+        if (onCreated) onCreated(created)
+        if (onClose) onClose()
+      } else if (created === undefined) {
+         toast.error("Error al crear turno. Vuelve a intentarlo luego")
+      }
 
-      if (onCreated) onCreated(created)
-      if (onClose) onClose()
+      
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error("Error:", err)
       if (err.message === "Appointment limit excedeed"){
         toast.error("Has alcanzado el limite de turnos disponible")
       } else {
-        toast.error("Error al crear turno")
+        toast.error("Error al crear turno. Vuelve a intentarlo luego")
       }
       
     }
@@ -84,7 +89,7 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
       {/* Datos del cliente */}
       <Card className="w-full">
         <CardContent className="space-y-4 pt-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
               <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
@@ -121,7 +126,10 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
       {/* Calendario abajo */}
       <Card className="w-full">
         <CardContent>
-          <AvailableCalendar onSelect={handleSelect} professionalId={user?.userId ?? ""} isModal={true} />
+          <AvailableCalendar 
+            onSelect={handleSelect} 
+            professionalId={user?.userId ?? ""} 
+            isModal={true} />
         </CardContent>
       </Card>
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import AppointmentDetails from "@/components/appointments/user-view/AppointmentDetails"
-import { Appointment, GetOneAppointment } from "@/types/appointments"
+import { Appointment } from "@/types/appointments"
 import { useParams, useSearchParams } from "next/navigation";
 import { getOneAppFromUser, updateAppointment } from "@/services/appointments";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -29,11 +29,16 @@ export default function Component() {
   useEffect(() => {
     async function fetchAppointment() {
       try {
-        const res: GetOneAppointment = await getOneAppFromUser(token);
+        const res = await getOneAppFromUser(token);
+
+        if (res) {
         setAppointment(res.appointment);
         setRatingData(res.rating)
+        }
+        
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error(error);
+        toast.error("No se pudo obtener el turno");
       }
     }
     fetchAppointment();
@@ -63,8 +68,9 @@ export default function Component() {
       });
       // Opcional: podés actualizar el estado local
       setAppointment((prev) => (prev ? { ...prev, status: "cancelled" } : prev));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error);
+      toast.error("No se ha podido cancelar el turno");
     }
   }
 
@@ -78,8 +84,8 @@ export default function Component() {
       setAppointment((prev) => (prev ? { ...prev, ...draft } : prev));
       setDraft({});
       toast.success("Cambios guardados", { duration: 3000 });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error);
       toast.error("No se pudieron guardar los cambios");
     }
     

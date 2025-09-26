@@ -19,7 +19,7 @@ function CTASection() {
             <Button
               size="lg"
               className="bg-white text-[#0388bd] hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-xl transform hover:scale-105 transition-all duration-200"
-              onClick={() => router.push("/auth/register")}
+              onClick={() => router.push("/auth/register?plan-name=free")}
             >
               Crear mi cuenta gratis
               <ArrowRight className="ml-2 w-5 h-5" />

@@ -15,9 +15,9 @@ import { getAppointments } from "@/services/appointments"
 import { AppointmentModal } from "../appointments/AppointmentModal"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
 import { Button } from "../ui/button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
-import { CopyCheck } from "lucide-react"
+import { Copy, Plus } from "lucide-react"
 import { useUser } from "@/contexts/UserContext"
+import { toast } from "sonner"
 
 export default function AgendaView() {
 
@@ -25,7 +25,7 @@ export default function AgendaView() {
 
   const { user } = useUser()
 
-  const getAppointmentsRows = async (): Promise<Appointment[]> => {
+  const getAppointmentsRows = async (): Promise<Appointment[] | undefined> => {
   try {
     const token = localStorage.getItem('token');
     if (!token || token === null){
@@ -33,9 +33,10 @@ export default function AgendaView() {
     }
 
     const appData = await getAppointments(token)
-    return appData.rows;
+    return appData?.rows;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error(error)
+    toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     return []
   }
 }
@@ -55,6 +56,7 @@ useEffect(() => {
   }
 
   fetchAppointments()
+// eslint-disable-next-line react-hooks/exhaustive-deps
 }, [])
 
   const selectApp = (app: Appointment) => {
@@ -75,40 +77,59 @@ useEffect(() => {
   const appointmentLink = user ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${user.userId}` : '';
 
   return (
-  <div>
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Contenedor flex para título y botón */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
+  <div className="w-full overflow-x-hidden">
+    {/* Header */}
+    <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full overflow-x-hidden">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0 overflow-x-hidden">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent overflow-x-hidden">
             Mi Agenda
           </h1>
 
-          <div className="flex items-center gap-2">
-                <Tooltip>
-                <TooltipTrigger asChild>
-                  <button 
-                    className="p-2 rounded-full  hover:bg-gray-100" 
-                    onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
-                    disabled={!user || !user.profile?.profileCompleted} 
-                    >
-                    <CopyCheck className="w-5 h-5 text-black"  />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Comparte tu link de agendamiento</p>
-                </TooltipContent>
-              </Tooltip>
+          <div className="flex items-center space-x-2 overflow-x-hidden">
+            {/* Botones desktop */}
+            <div className="hidden sm:flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/80 hover:bg-white border-gray-300"
+                onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Compartir Link
+              </Button>
 
-          
-          {/* Botón para abrir modal */}
-          <Button 
-            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] " 
-            onClick={() => setOpenAppModal(true)} 
-            disabled={!user || !user.profile?.profileCompleted}>
-            Nuevo Turno
-          </Button>
+              <Button
+                className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white"
+                onClick={() => setOpenAppModal(true)}
+                disabled={!user || !user.profile?.profileCompleted}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Nuevo Turno
+              </Button>
+            </div>
+
+            {/* Botones mobile */}
+            <div className="flex sm:hidden items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/80 hover:bg-white border-gray-300 h-9 w-9 p-0"
+                onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+              >
+                <Copy className="w-4 h-4" />
+              </Button>
+
+              <Button
+                onClick={() => setOpenAppModal(true)}
+                size="sm"
+                disabled={!user || !user.profile?.profileCompleted}
+                className="bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#8a0336] hover:to-[#0370a3] text-white h-9 w-9 p-0"
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-          
         </div>
 
         <CreateAppointmentModal open={openAppModal} onClose={() => setOpenAppModal(false)} />
@@ -116,58 +137,62 @@ useEffect(() => {
         <p className="text-gray-600 mt-2">
           Puedes visualizar y abrir el detalle de cada turno haciendo click sobre él.
         </p>
+      </div>
     </div>
 
-    <div className="h-screen p-6">
-      <Card className="h-full">
-    <CardContent className="h-full">
-      <div className="grid grid-cols-2 gap-6 h-full">
-        {/* Calendario */}
-        <div className="flex justify-center items-start">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => date && setSelectedDate(date)}
-            locale={es}
-            className="w-100 h-100 rounded-md border shadow-md"
-          />
-        </div>
+    {/* Contenido principal */}
+    <div className="min-h-[70vh] px-4 sm:px-6 py-6 w-full overflow-x-hidden">
+      <Card className="h-full shadow-lg w-full overflow-hidden">
+        <CardContent className="h-full w-full overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 h-full w-full">
+            {/* Calendario */}
+            <div className="lg:col-span-2 flex justify-center items-center w-full">
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => date && setSelectedDate(date)}
+                locale={es}
+                className="rounded-md border shadow-md w-full max-w-full sm:max-w-md"
+              />
+            </div>
 
-        {/* Lista de turnos */}
-        <div className="overflow-y-auto">
-          <h3 className="text-lg font-semibold mb-4">
-            Turnos para {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: es })}
-          </h3>
-          <div className="space-y-3">
-            {appointments
-              .filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd"))
-              .map((appointment) => (
-                <Card
-                  key={appointment.appointmentId}
-                  className="p-4 cursor-pointer hover:shadow-md transition-shadow duration-200"
-                  onClick={() => selectApp(appointment)}
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h4 className="font-semibold">
-                        {appointment.name} {appointment.lastName}
-                      </h4>
-                      <p className="text-sm text-gray-600">{appointment.time}</p>
-                    </div>
-                    <Badge className={getStatusColor(appointment.status)}>
-                      {getStatusText(appointment.status)}
-                    </Badge>
-                  </div>
-                </Card>
-              ))}
+            {/* Lista de turnos */}
+            <div className="lg:col-span-1 overflow-y-auto p-2">
+              <h3 className="text-lg font-semibold mb-4">
+                Turnos para {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: es })}
+              </h3>
+              <div className="space-y-3">
+                {appointments
+                  .filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd"))
+                  .map((appointment) => (
+                    <Card
+                      key={appointment.appointmentId}
+                      className="p-4 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                      onClick={() => selectApp(appointment)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold">
+                            {appointment.name} {appointment.lastName}
+                          </h4>
+                          <p className="text-sm text-gray-600">{appointment.time}</p>
+                        </div>
+                        <Badge className={getStatusColor(appointment.status)}>
+                          {getStatusText(appointment.status)}
+                        </Badge>
+                      </div>
+                    </Card>
+                  ))}
+              </div>
+
+              {appointments.filter((appointment) => appointment.date === format(selectedDate, "yyyy-MM-dd")).length === 0 && (
+                <p className="text-gray-500 text-sm mt-4">No hay turnos para esta fecha.</p>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-    </CardContent>
+        </CardContent>
       </Card>
     </div>
-  
-</div>
-
-  )
+  </div>
+)
 }

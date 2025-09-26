@@ -9,14 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { JobTitles, ProfileFormValues, profileSchema } from "@/types/settings";
-import { getProfile, updateProfile } from "@/services/settings";
+import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useUser } from "@/contexts/UserContext";
 
 export default function ProfileConfig() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+
+   const { user, refreshUser } = useUser()
+  
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -25,7 +29,8 @@ export default function ProfileConfig() {
       jobTitle: "",
       appointmentDuration: 30,
       defaultAppConfirmation: true,
-      markAppAsCompleted: true
+      markAppAsCompleted: true,
+      address: "",
     },
     mode: "onChange",
   });
@@ -43,31 +48,33 @@ export default function ProfileConfig() {
 
   useEffect(() => {
     const loadProfile = async () => {
-      if (!token) return;
       try {
-        const profile = await getProfile(token);
+        const profile = user;
         reset({
           bio: profile?.profile?.bio ?? "",
           jobTitle: profile?.profile?.jobTitle ?? "",
           appointmentDuration: profile?.profile?.appointmentDuration ?? 30,
           defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
           markAppAsCompleted: profile?.profile?.markAppAsCompleted ?? true,
+          address: profile?.profile?.address ?? "",
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
       }
     };
     loadProfile();
-  }, [token, reset]);
+  }, [user, reset]);
 
   const onSubmit = async (data: ProfileFormValues) => {
     setLoading(true);
     try {
       await updateProfile(token, data);
       toast.success("Perfil actualizado correctamente");
+      await refreshUser()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Error al actualizar", error);
-      toast.error("Error al actualizar perfil");
+      toast.error("Error al actualizar perfil. Vuelve a internarlo luego");
     } finally {
       setLoading(false);
     }
@@ -100,6 +107,15 @@ export default function ProfileConfig() {
           <div>
             <Label>Descripción de profesión</Label>
             <Textarea {...register("bio")} />
+            {errors.bio && (
+              <p className="text-sm text-red-500">{errors.bio.message}</p>
+            )}
+          </div>
+
+          {/* Direccion profesional */}
+          <div>
+            <Label>Direccion profesional</Label>
+            <Input {...register("address")} />
             {errors.bio && (
               <p className="text-sm text-red-500">{errors.bio.message}</p>
             )}

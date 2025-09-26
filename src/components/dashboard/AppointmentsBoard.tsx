@@ -3,31 +3,36 @@ import { AppointmentCard } from "./AppointmentCard"
 import { updateAppointment } from "@/services/appointments"
 import { getStatusText } from "../../types/status"
 import { Button } from "../ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CreateAppointmentModal } from "./CreateAppointmentModal"
-import { CopyCheck } from "lucide-react"
+import { Copy, Plus } from "lucide-react"
 import { UserWithProfile } from "@/types/settings"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 import { OnboardingChecklist } from "./OnboardingChecklist"
 import WelcomeWizard from "./WelcomeWizard"
 import { updateProfile } from "@/services/settings"
+import { toast } from "sonner"
+import ProfileCompletedModal from "./ProfileCompletedModal"
 
 interface Props {
   appointments: Appointment[]
   onOpen: (appointment: Appointment) => void
   setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>
   professional: UserWithProfile | null;
+  refreshProfessional: () => Promise<void>
 }
 
-export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional }: Props) {
+export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional }: Props) {
    const [open, setOpen] = useState(false)
    const [openWizard, setOpenWizard] = useState(false);
+   const [openPCModal, setopenPCModal] = useState(false);
+
+   const profile = professional?.profile;
 
   const handleDragStart = (e: React.DragEvent, appointment: Appointment) => {
     e.dataTransfer.setData("appointmentId", appointment.appointmentId.toString())
   }
 
-  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional.userId}` : '';
+  const appointmentLink = professional ? `${process.env.NEXT_PUBLIC_FRONT_URL}/appointments/create?professionalId=${professional?.userId}` : '';
 
   const handleDrop = async (e: React.DragEvent, status: AppointmentStatus) => {
     const appointmentId = e.dataTransfer.getData("appointmentId")
@@ -37,8 +42,9 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
     try {
       const token = localStorage.getItem("token")
       await updateAppointment({ appointmentId, status }, token, false)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     }
   }
 
@@ -56,20 +62,55 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
     try {
       const token = localStorage.getItem("token")
       await updateProfile(token, { isNewUser: false })
+      await refreshProfessional()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error)
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
     }
 
   }
 
+  const handleClosePCModal = async () => {
+    setopenPCModal(false);
+     
+    try {
+      const token = localStorage.getItem("token")
+      await updateProfile(token, { pcModalShowed : true })
+
+      await refreshProfessional()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
+    }
+
+  }
+
+   useEffect(() => {
+      const openPcModal = () => {
+    if (profile && profile?.profileCompleted && !profile?.pcModalShowed) {
+      setopenPCModal(true)
+
+    } 
+  }
+    openPcModal()
+  
+    }, [profile]);
+
+  
+
+ 
   return (
     <div>
-      { professional && !professional.profile?.profileCompleted && (
-        <OnboardingChecklist profile={professional?.profile || {}} />
+      { profile && !profile?.profileCompleted && (
+        <OnboardingChecklist profile={profile || {}} />
       )}
 
-      { professional && professional.profile?.isNewUser && (
-        <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={professional?.profile?.isNewUser} handleFinish={handleFinishWizard} />
+      { profile && profile?.isNewUser && (
+        <WelcomeWizard open={openWizard} setOpen={setOpenWizard} isNewUser={profile?.isNewUser} handleFinish={handleFinishWizard} />
+      )}
+
+      { profile && profile?.profileCompleted && !profile?.pcModalShowed && (
+        <ProfileCompletedModal open={openPCModal} onClose={handleClosePCModal} schedulingLink={appointmentLink} />
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -79,31 +120,31 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
             Mis Turnos
           </h1>
 
-          <div className="flex items-center gap-2">
-                <Tooltip>
-                <TooltipTrigger asChild>
-                  <button 
-                    className="p-2 rounded-full  hover:bg-gray-100" 
-                    onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)} 
-                    disabled={!professional || !professional.profile?.profileCompleted} 
-                    >
-                    <CopyCheck className="w-5 h-5 text-black"  />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Comparte tu link de agendamiento</p>
-                </TooltipContent>
-              </Tooltip>
+          <div className="flex items-center space-x-2">
+           <div className="hidden sm:flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/80 hover:bg-white border-gray-300"
+                  onClick={() => navigator.clipboard.writeText(`${appointmentLink}`)}
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Compartir Link
+                </Button>
 
-          
-          {/* Botón para abrir modal */}
-          <Button 
-            className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] " 
-            onClick={() => setOpen(true)} 
-            disabled={!professional || !professional.profile?.profileCompleted}>
-            Nuevo Turno
-          </Button>
+                
+                {/* Botón para abrir modal */}
+                <Button 
+                  className="sm:ml-4 px-4 py-2 bg-gradient-to-r from-[#ac043f] to-[#0388bd] text-white" 
+                  onClick={() => setOpen(true)} 
+                  disabled={!profile || !profile?.profileCompleted}>
+                   <Plus className="w-4 h-4 mr-2" />
+                  Nuevo Turno
+                </Button>
+            </div>
+
           </div>
+          
           
         </div>
 
@@ -115,7 +156,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
       </div>
 
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
           {statuses.map(({ key, color, dot }) => (
             <div
               key={key}

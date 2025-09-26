@@ -11,7 +11,7 @@ export default function PublicNavbar() {
 
   const navItems = [
     { label: "Inicio", section: "" },
-    { label: "Buscar Profesionales", section: "professionals-marketplace" },
+    { label: "Portal de Profesionales", section: "professionals-marketplace" },
     { label: "Precios", section: "pricing" },
     { label: "Contacto", section: "contact" },
   ];

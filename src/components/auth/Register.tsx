@@ -76,11 +76,11 @@ const handleSubmit = async (e: React.FormEvent) => {
     router.push("/auth/check-email")
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    console.error('Error al registrar:', err);
     if (err.message === "Email is already registered"){
         toast.error("El usuario ya existe en nuestra plataforma")
-      }
-    
+      } else {
+        toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
+      } 
   }
 };
 
@@ -189,7 +189,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
 
 
-            <div className="flex items-start space-x-2">
+            <div className="lex-col items-start space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <input
                 id="terms"
                 type="checkbox"

@@ -1,27 +1,55 @@
-import { Login, LoginResponse, Register } from "@/types/auth";
+import { Login, LoginResponse, Register, ResetPasswordProps } from "@/types/auth";
 import { apiFetch } from "./api"
+import * as Sentry from "@sentry/nextjs";
 
 export const loginUser = async (body: Login) => {
     try {
-        return apiFetch<LoginResponse>("/auth/login", {
+        return await apiFetch<LoginResponse>("/auth/login", {
             method: "POST",
             body: JSON.stringify(body),
         })
 
     } catch (error) {
-        throw error;
+        Sentry.captureException(error);
     }
   
 }
 
 export const registerUser = async (body: Register) => {
     try {
-    return apiFetch("/auth/register", {
+    return await apiFetch("/auth/register", {
     method: "POST",
     body: JSON.stringify(body),
   })
     } catch (error) {
-        throw error;
+        Sentry.captureException(error);
+    }
+  
+}
+
+export const forgotPassword = async (email: string) => {
+    try {
+    const res = await  apiFetch("/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify({email: email}),
+  })
+
+    return res
+    } catch (error) {
+        Sentry.captureException(error);
+    }
+  
+}
+
+export const resetPassword = async (body: ResetPasswordProps) => {
+    try {
+        const res = await apiFetch(`/auth/reset-password?token=${body.token}`, {
+        method: "POST",
+        body: JSON.stringify({newPassword: body.newPassword})
+        })
+        return res;
+    } catch (error) {
+        Sentry.captureException(error);
     }
   
 }
