@@ -27,7 +27,7 @@ export const updateProfile = async (token: string | null, body: ProfileFormValue
     if (!token) {
         throw new Error;
     }
-    return apiFetch("/settings/profile", {
+    return await apiFetch("/settings/profile", {
     method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -47,7 +47,7 @@ export const changePassword = async (token: string, body: { password: string; ne
             return null;
         } 
 
-        return apiFetch("/settings/change-password", {
+        return await apiFetch("/settings/change-password", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,

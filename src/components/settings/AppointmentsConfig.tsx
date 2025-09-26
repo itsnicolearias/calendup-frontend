@@ -114,7 +114,7 @@ export default function ProfileConfig() {
 
           {/* Direccion profesional */}
           <div>
-            <Label>Direccion de local profesional</Label>
+            <Label>Direccion profesional</Label>
             <Input {...register("address")} />
             {errors.bio && (
               <p className="text-sm text-red-500">{errors.bio.message}</p>
