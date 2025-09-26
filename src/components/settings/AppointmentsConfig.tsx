@@ -9,14 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { JobTitles, ProfileFormValues, profileSchema } from "@/types/settings";
-import { getProfile, updateProfile } from "@/services/settings";
+import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useUser } from "@/contexts/UserContext";
 
 export default function ProfileConfig() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+
+   const { user, refreshUser } = useUser()
+  
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -44,9 +48,8 @@ export default function ProfileConfig() {
 
   useEffect(() => {
     const loadProfile = async () => {
-      if (!token) return;
       try {
-        const profile = await getProfile(token);
+        const profile = user;
         reset({
           bio: profile?.profile?.bio ?? "",
           jobTitle: profile?.profile?.jobTitle ?? "",
@@ -61,13 +64,14 @@ export default function ProfileConfig() {
       }
     };
     loadProfile();
-  }, [token, reset]);
+  }, [user, reset]);
 
   const onSubmit = async (data: ProfileFormValues) => {
     setLoading(true);
     try {
       await updateProfile(token, data);
       toast.success("Perfil actualizado correctamente");
+      await refreshUser()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Error al actualizar perfil. Vuelve a internarlo luego");

@@ -58,6 +58,7 @@ export const profileSchema = z.object({
   province: z.string().optional(),
   city: z.string().optional(),
   isNewUser: z.boolean().optional(),
+  pcModalShowed: z.boolean().optional(),
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
@@ -102,6 +103,7 @@ export interface Profile {
     languages: string[]
     profileCompleted: boolean
     isNewUser: boolean
+    pcModalShowed: boolean
 }
 
 export type Education = {

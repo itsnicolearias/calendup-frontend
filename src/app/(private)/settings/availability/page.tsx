@@ -1,4 +1,4 @@
-import AvailabilityConfig from "@/components/settings/AvaiabilityConfig";
+import AvailabilityConfig from "@/components/settings/AvailabilityConfig";
 
 export default function AvailabilitySettingsPage() {
   return (

@@ -13,9 +13,11 @@ import { MobileAppointmentsBoard } from "@/components/dashboard/mobile-dashboard
 export default function AppointmentsPage() {
   const router = useRouter()
 
-  const { user } = useUser()
+  const { user, refreshUser } = useUser()
 
   const [appointments, setAppointments] = useState<Appointment[]>([])
+
+  const isMobile = useIsMobile();
 
   // cargar turnos
   useEffect(() => {
@@ -51,12 +53,13 @@ export default function AppointmentsPage() {
 
   return (
     <>
-    {useIsMobile() ?
+    {isMobile ?
     <MobileAppointmentsBoard 
       appointments={appointments}
       onOpen={openAppointment}
       setAppointments={setAppointments}
       professional={user}
+      refreshProfessional={refreshUser}
 
     />
     :
@@ -65,6 +68,7 @@ export default function AppointmentsPage() {
         onOpen={openAppointment} 
         setAppointments={setAppointments} // para drag & drop
         professional={user}
+        refreshProfessional={refreshUser}
       />
     }     
     </>

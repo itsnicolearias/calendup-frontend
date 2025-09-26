@@ -41,9 +41,9 @@ export default function ChangePasswordForm({ onSubmit }: ChangePasswordFormProps
     } catch (err: any) {
       if (err.message === "Invalid password"){
             toast.error("La contraseña ingresada es incorrecta")
-          } else {
-            toast.error("Error al cambiar la contraseña. Vuelve a intentarlo luego");
-          }
+      } else {
+        toast.error("Error al cambiar la contraseña. Vuelve a intentarlo luego");
+      }
       
     }
   };

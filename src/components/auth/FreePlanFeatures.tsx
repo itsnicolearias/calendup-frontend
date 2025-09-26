@@ -12,7 +12,7 @@ const features = [
   },
   {
     icon: Calendar,
-    text: "Agenda hasta 30 turnos por mes",
+    text: "Agenda hasta 50 turnos por mes",
     emoji: "📅",
   },
   {

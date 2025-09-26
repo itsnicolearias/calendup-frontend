@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { languageOptions, ProfileFormValues, profileSchema } from "@/types/settings";
-import { getProfile, updateProfile } from "@/services/settings";
+import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import UploadImage from "../shared/UploadFiles";
@@ -15,6 +15,7 @@ import { MultiValue } from "react-select";
 import { useFieldArray } from "react-hook-form";
 import dynamic from "next/dynamic";
 import LocationSelect from "../shared/LocationSelect";
+import { useUser } from "@/contexts/UserContext";
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
 
@@ -23,7 +24,10 @@ export default function ProfileForm() {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const { uploadFile, isUploading } = useS3Upload();
+  const { uploadFile } = useS3Upload();
+
+   const { user, refreshUser } = useUser()
+  
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -61,9 +65,8 @@ export default function ProfileForm() {
   // Cargar datos del perfil
   useEffect(() => {
     const loadProfile = async () => {
-      if (!token) return;
       try {
-        const profile = await getProfile(token);
+        const profile = user;
         reset({
           name: profile?.profile?.name ?? "",
           lastName: profile?.profile?.lastName ?? "",
@@ -81,7 +84,7 @@ export default function ProfileForm() {
       }
     };
     loadProfile();
-  }, [token, reset]);
+  }, [user, reset]);
 
   
 
@@ -96,6 +99,7 @@ const onSubmit = async (data: ProfileFormValues) => {
     }
 
     await updateProfile(token, { ...data, profilePicture: profilePictureUrl });
+    await refreshUser()
     toast.success("Perfil actualizado correctamente");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {

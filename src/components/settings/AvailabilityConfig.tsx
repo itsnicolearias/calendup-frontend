@@ -4,16 +4,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ProfileFormValues, profileSchema } from "@/types/settings";
-import { getProfile, updateProfile } from "@/services/settings";
+import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AvailabilityEditor from "./AvailabilityEditor";
+import { useUser } from "@/contexts/UserContext";
 
 
 export default function AvailabilityConfig() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+
+   const { user, refreshUser } = useUser()
+  
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -23,7 +27,7 @@ export default function AvailabilityConfig() {
     mode: "onChange",
   });
 
-  const { register, handleSubmit, reset, } = form;
+  const { handleSubmit, reset, } = form;
 
   // Cargar token y redirigir si no existe
   useEffect(() => {
@@ -38,9 +42,8 @@ export default function AvailabilityConfig() {
   // Cargar datos del perfil
   useEffect(() => {
     const loadProfile = async () => {
-      if (!token) return;
       try {
-        const profile = await getProfile(token);
+        const profile = user;
         reset({
           availability: profile?.profile?.availability ?? {},
         });
@@ -50,7 +53,7 @@ export default function AvailabilityConfig() {
       }
     };
     loadProfile();
-  }, [token, reset]);
+  }, [user, reset]);
 
   
 
@@ -58,6 +61,7 @@ const onSubmit = async (data: ProfileFormValues) => {
   setLoading(true);
   try {
     await updateProfile(token, data);
+    await refreshUser()
     toast.success("Perfil actualizado correctamente");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
