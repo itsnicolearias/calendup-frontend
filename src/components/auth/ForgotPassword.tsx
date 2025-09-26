@@ -45,9 +45,16 @@ export default function ForgotPassword({ onBack }: ForgotPasswordEmailProps) {
     setIsLoading(true)
 
     try {
-      await forgotPassword(email)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await forgotPassword(email)
 
-      setShowModal(true)
+      if (res === undefined){
+      toast.error("Error al enviar el email. Intenta nuevamente.")
+      } else if (res.message === "Please check your email.") {
+        setShowModal(true)
+      }
+
+      
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Error al enviar el email. Intenta nuevamente.")

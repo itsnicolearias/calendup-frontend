@@ -4,7 +4,7 @@ import * as Sentry from "@sentry/nextjs";
 
 export const loginUser = async (body: Login) => {
     try {
-        return apiFetch<LoginResponse>("/auth/login", {
+        return await apiFetch<LoginResponse>("/auth/login", {
             method: "POST",
             body: JSON.stringify(body),
         })
@@ -17,7 +17,7 @@ export const loginUser = async (body: Login) => {
 
 export const registerUser = async (body: Register) => {
     try {
-    return apiFetch("/auth/register", {
+    return await apiFetch("/auth/register", {
     method: "POST",
     body: JSON.stringify(body),
   })
@@ -29,10 +29,12 @@ export const registerUser = async (body: Register) => {
 
 export const forgotPassword = async (email: string) => {
     try {
-    return apiFetch("/auth/forgot-password", {
+    const res = await  apiFetch("/auth/forgot-password", {
     method: "POST",
     body: JSON.stringify({email: email}),
   })
+
+    return res
     } catch (error) {
         Sentry.captureException(error);
     }
@@ -41,10 +43,11 @@ export const forgotPassword = async (email: string) => {
 
 export const resetPassword = async (body: ResetPasswordProps) => {
     try {
-    return apiFetch(`/auth/reset-password?token=${body.token}`, {
-    method: "POST",
-    body: JSON.stringify({newPassword: body.newPassword})
-  })
+        const res = await apiFetch(`/auth/reset-password?token=${body.token}`, {
+        method: "POST",
+        body: JSON.stringify({newPassword: body.newPassword})
+        })
+        return res;
     } catch (error) {
         Sentry.captureException(error);
     }
