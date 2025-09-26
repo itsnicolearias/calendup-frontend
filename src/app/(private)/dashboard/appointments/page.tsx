@@ -17,6 +17,8 @@ export default function AppointmentsPage() {
 
   const [appointments, setAppointments] = useState<Appointment[]>([])
 
+  const isMobile = useIsMobile();
+
   // cargar turnos
   useEffect(() => {
     const getAppointmentsRows = async (): Promise<Appointment[] | undefined> => {
@@ -51,7 +53,7 @@ export default function AppointmentsPage() {
 
   return (
     <>
-    {useIsMobile() ?
+    {isMobile ?
     <MobileAppointmentsBoard 
       appointments={appointments}
       onOpen={openAppointment}
