@@ -15,7 +15,7 @@ export default function Footer({ onNavClick }: FooterProps) {
 
   const navSupport = [
     { label: "Preguntas Frecuentes", section: "faq", icon: <HelpCircle className="w-4 h-4 mr-2" /> },
-    { label: "Contacto", section: "contacto" },
+    { label: "Politica de privacidad", href: "/auth/privacy-policy" },
     { label: "Términos y condiciones", href: "/auth/terms-and-conditions" },
   ];
 

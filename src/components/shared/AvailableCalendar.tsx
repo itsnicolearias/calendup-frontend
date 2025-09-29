@@ -60,7 +60,7 @@ export default function AvailableCalendar({
      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
       <CardHeader>
         <CardTitle className="text-xl flex items-center">
-          <CalendarIcon className="w-5 h-5 mr-2 text-blue-600" />
+          <CalendarIcon className="w-5 h-5 mr-2 text-[#0388bd]" />
           Selecciona fecha y hora
         </CardTitle>
       </CardHeader>
