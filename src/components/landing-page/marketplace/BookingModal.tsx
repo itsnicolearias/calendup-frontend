@@ -142,12 +142,10 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                         
                         {/* Calendar and Time Selection */}
                         <div className="space-y-6">
-                          <Card>
-                            <CardContent className="">
-                                <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId} isModal={true} />
+                           {/* ver si esta card es necesaria */}
 
-                            </CardContent>
-                          </Card>                         
+                                <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId} isModal={true} />
+                    
         
                         </div>
         
