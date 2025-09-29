@@ -6,6 +6,9 @@ import PublicNavbar from "@/components/landing-page/landing/Navbar";
 export const metadata: Metadata = {
   title: "CalendUp",
   description: "Plataforma de gestion de turnos",
+   other: {
+    "google-site-verification": "pwHIA3WjArT19ea0r1d2cHnWiqyU5vAAb9vLED1TZ9I",
+  },
 };
 
 export default function RootLayout({
