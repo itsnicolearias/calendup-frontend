@@ -54,7 +54,7 @@ export default function ProfessionalCard({
         <div className={`${isListView ? "flex-grow" : ""}`}>
           <div className={`${isListView ? "flex justify-between items-start" : ""}`}>
             <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">{professional?.profile?.name}</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{name}</h3>
               <p className="text-[#0388bd] font-medium mb-2">{professional.profile?.jobTitle}</p>
               <div className="flex items-center text-gray-600 text-sm mb-2">
                 <MapPin className="w-4 h-4 mr-1" />

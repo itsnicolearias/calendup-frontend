@@ -40,7 +40,7 @@ export default function ProfileCompletedModal ({ open, schedulingLink, onClose }
             <br /><br />
             A partir de ahora tu perfil aparece en nuestro{" "}
             <a
-              href="/portal"
+              href="/professionals-marketplace"
               className="text-[#0388bd] font-medium hover:underline"
               target="_blank"
               rel="noopener noreferrer"
