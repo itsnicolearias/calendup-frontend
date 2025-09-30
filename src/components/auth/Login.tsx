@@ -68,9 +68,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     await refreshUser()
     router.push('/dashboard/appointments')
   } catch (err: any) {
-    if (err.message === "User does not exist"){
-      toast.error("El usuario ingresado no existe")
-    } else if (err.message === "Invalid email or password"){
+  if (err.message === "Invalid email or password" || err.message === "User does not exist"){
       toast.error("Credenciales invalidas")
     } else if (err.message === "You must verify your email before logging in"){
       toast.error("Debes verificar tu cuenta antes de iniciar sesion")
@@ -207,6 +205,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 type="button"
                 variant="outline"
                 onClick={() => handleSocialLogin("microsoft")}
+                disabled={true}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -222,6 +221,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 type="button"
                 variant="outline"
                 onClick={() => handleSocialLogin("facebook")}
+                disabled={true}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">

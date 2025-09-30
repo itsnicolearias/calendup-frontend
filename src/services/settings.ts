@@ -1,6 +1,5 @@
 import { apiFetch } from "@/services/api"
 import { ProfileFormValues, UserWithProfile } from "@/types/settings"
-import * as Sentry from "@sentry/nextjs";
 
 export const getProfile = async (token: string) => {
     try {
@@ -17,7 +16,7 @@ export const getProfile = async (token: string) => {
 
   return user;  
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
   
 }
@@ -36,7 +35,7 @@ export const updateProfile = async (token: string | null, body: ProfileFormValue
     body: JSON.stringify(body)
   })      
     } catch (error) {
-       Sentry.captureException(error);
+       throw error;
     }
   
 }
@@ -56,6 +55,6 @@ export const changePassword = async (token: string, body: { password: string; ne
             body: JSON.stringify(body)
         })
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
 }

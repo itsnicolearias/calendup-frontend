@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/nextjs";
 
 export async function apiFetch<T>(
   endpoint: string,
@@ -22,6 +21,7 @@ export async function apiFetch<T>(
 
         return data;
     } catch (error) {
-        Sentry.captureException(error);
+        throw error
+       // Sentry.captureException(error);
     }
 }
