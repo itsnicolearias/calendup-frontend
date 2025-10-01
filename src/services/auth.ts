@@ -1,6 +1,5 @@
 import { Login, LoginResponse, Register, ResetPasswordProps } from "@/types/auth";
 import { apiFetch } from "./api"
-import * as Sentry from "@sentry/nextjs";
 
 export const loginUser = async (body: Login) => {
     try {
@@ -10,7 +9,7 @@ export const loginUser = async (body: Login) => {
         })
 
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
   
 }
@@ -22,7 +21,7 @@ export const registerUser = async (body: Register) => {
     body: JSON.stringify(body),
   })
     } catch (error) {
-        Sentry.captureException(error);
+        throw error; 
     }
   
 }
@@ -36,7 +35,7 @@ export const forgotPassword = async (email: string) => {
 
     return res
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
   
 }
@@ -49,7 +48,7 @@ export const resetPassword = async (body: ResetPasswordProps) => {
         })
         return res;
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
   
 }

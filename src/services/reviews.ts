@@ -1,6 +1,5 @@
 import { apiFetch } from "./api"
 import { GetAllApiResponse, ReviewBody } from "../types/appointments"
-import * as Sentry from "@sentry/nextjs";
 
 export const getAppointments = async (token: string | null ) => {
   try {
@@ -15,7 +14,7 @@ export const getAppointments = async (token: string | null ) => {
     }
   })
   } catch (error) {
-    Sentry.captureException(error);
+      throw error;
   }
   
 }
@@ -31,22 +30,26 @@ export const getOneReview = async (token: string | null, reviewId?: string ) => 
   })
 
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
 
 export const createReview = async (data: Partial<ReviewBody>, token: string) => {
-  return await apiFetch<ReviewBody>(`/appointments/reviews?token=${token}`, {
+  try {
+    return await apiFetch<ReviewBody>(`/appointments/reviews?token=${token}`, {
     method: "POST",
     body: JSON.stringify(data),
   })
+  } catch (error) {
+    throw error;
+  }
+  
 }
 
 export const updateReview = async (data: Partial<ReviewBody>, token: string | null) => {
   try {
-
-      return await apiFetch<ReviewBody>(`/appointments/reviews/${data.reviewId}`, {
+    return await apiFetch<ReviewBody>(`/appointments/reviews/${data.reviewId}`, {
     method: "PUT",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -56,14 +59,14 @@ export const updateReview = async (data: Partial<ReviewBody>, token: string | nu
     body: JSON.stringify(data),
   })
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
 
 export const deleteReview = async (reviewId: string, token: string | null) => {
   try {
-      return await apiFetch<ReviewBody>(`/appointments/reviews/${reviewId}`, {
+    return await apiFetch<ReviewBody>(`/appointments/reviews/${reviewId}`, {
     method: "DELETE",
     headers: {
         "Authorization": `Bearer ${token}`,
@@ -71,7 +74,7 @@ export const deleteReview = async (reviewId: string, token: string | null) => {
 
   })
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }

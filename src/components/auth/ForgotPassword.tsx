@@ -10,7 +10,6 @@ import { Mail, Loader2 } from "lucide-react"
 import { forgotPassword } from "@/services/auth"
 import ConfirmationModal from "./ConfirmationModal"
 import AuthLayout from "./AuthLayout"
-import { toast } from "sonner"
 
 interface ForgotPasswordEmailProps {
   onBack?: () => void
@@ -45,20 +44,17 @@ export default function ForgotPassword({ onBack }: ForgotPasswordEmailProps) {
     setIsLoading(true)
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await forgotPassword(email)
+       await forgotPassword(email)
 
-      if (res === undefined){
-      toast.error("Error al enviar el email. Intenta nuevamente.")
-      } else if (res.message === "Please check your email.") {
-        setShowModal(true)
-      }
-
+       setShowModal(true)
       
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      toast.error("Error al enviar el email. Intenta nuevamente.")
-      setErrors({ email: "Error al enviar el email. Intenta nuevamente." })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.message === "User not found" ){
+        setShowModal(true)
+      } else {
+        setErrors({ email: "Error al enviar el email. Intenta nuevamente." })
+      }      
     } finally {
       setIsLoading(false)
     }
