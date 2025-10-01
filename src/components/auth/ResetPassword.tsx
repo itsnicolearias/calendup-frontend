@@ -10,7 +10,6 @@ import { Lock, Eye, EyeOff, Loader2, CheckCircle, XCircle } from "lucide-react"
 import AuthLayout from "./AuthLayout"
 import ConfirmationModal from "./ConfirmationModal"
 import { resetPassword } from "@/services/auth"
-import { toast } from "sonner"
 
 interface ResetPasswordProps {
   token: string
@@ -76,18 +75,12 @@ export default function ResetPassword({ token, onSuccess }: ResetPasswordProps) 
     try {
         const password = formData.password;
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const res: any = await resetPassword({token, newPassword: password})
+        await resetPassword({token, newPassword: password})
+        setShowModal(true)
 
-        if (res === undefined){
-          toast.error("Error al cambiar contraseña. Intenta nuevamente.")
-          } else if (res.message === "Please log in.") {
-            setShowModal(true)
-          }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast.error("Error al cambiar contraseña. Intenta nuevamente.")
       setErrors({ password: "Error al restablecer la contraseña. Intenta nuevamente." })
     } finally {
       setIsLoading(false)

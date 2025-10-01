@@ -2,7 +2,6 @@ import { UserWithProfile } from "@/types/settings"
 import { apiFetch } from "./api"
 import { GetAllApiResponse } from "@/types/appointments"
 import { GetProfessionalResponse } from "@/types/review"
-import * as Sentry from "@sentry/nextjs";
 
 export const getUsers = async () => {
     try {
@@ -10,7 +9,7 @@ export const getUsers = async () => {
     method: "GET",
   })  
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
 }
 
@@ -22,6 +21,6 @@ export const getOneUser = async (professionalId: string): Promise<GetProfessiona
   
   return data;
     } catch (error) {
-        Sentry.captureException(error);
+        throw error;
     }
 }

@@ -1,5 +1,4 @@
 import { apiFetch } from "./api"
-import * as Sentry from "@sentry/nextjs";
 import { Appointment, AvailabilityResponse, GetAllApiResponse, GetOneAppointment } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
@@ -15,7 +14,7 @@ export const getAppointments = async (token: string | null ) => {
     }
   })
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
@@ -28,7 +27,7 @@ export const createAppointment = async (data: Partial<Appointment>) => {
   })
     return app
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
@@ -59,7 +58,7 @@ export const updateAppointment = async (data: Partial<Appointment>, token: strin
   })
     }  
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
@@ -74,7 +73,7 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
     method: "GET"
   })
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
@@ -92,7 +91,7 @@ export const getOneAppointment = async (token: string | null, appointmentId?: st
   })
 
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }
@@ -108,7 +107,7 @@ export const getOneAppFromUser = async (token: string | null) => {
   })
 
   } catch (error) {
-    Sentry.captureException(error);
+    throw error;
   }
   
 }

@@ -253,6 +253,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                           <Button
                             type="button"
                             variant="outline"
+                            disabled={true}
                             onClick={() => handleSocialRegister("microsoft")}
                             className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
                           >
@@ -268,6 +269,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                           <Button
                             type="button"
                             variant="outline"
+                            disabled={true}
                             onClick={() => handleSocialRegister("facebook")}
                             className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
                           >
