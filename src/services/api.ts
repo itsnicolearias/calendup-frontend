@@ -13,8 +13,8 @@ export async function apiFetch<T>(
     })
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}))
-            throw new Error(errorData.message || "Error en la solicitud")
+            const data = await response.json().catch(() => ({}));
+            throw { status: response.status, ...data };
         }
 
         const data = await response.json()
