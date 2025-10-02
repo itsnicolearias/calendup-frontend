@@ -11,7 +11,7 @@ import { getOneUser } from "@/services/users";
 import { RatingResponse } from "@/types/review";
 import ProfessionalProfileCard from "../shared/ProfessionalProfileCard";
 import ServiceSelection from "../shared/ServiceSelection";
-import { ArrowRight, CalendarIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import PersonalInformation from "./PersonalInformation";
 import BookingSummary from "./BookingSummary";
 import BookingConfirmed from "./BookingConfirmed";
@@ -164,11 +164,8 @@ export default function Component() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-center">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-lg flex items-center justify-center">
-                <CalendarIcon className="w-5 h-5 text-white" />
-              </div>
-              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
-                CalendUp - Solicitar Turno
+              <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
+               Solicitar Turno
               </span>
             </div>
           </div>
