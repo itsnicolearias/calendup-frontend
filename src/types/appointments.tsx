@@ -64,3 +64,13 @@ export interface ReviewBody {
   createdAt?: string; // ISO date
   updatedAt?: string; // ISO date
 }
+
+export interface GetAllAppResponse<T> {
+    appointments: {
+      count: number;
+      pagesQuantity: number;
+      rows: T[]
+    },
+    createdThisMonth: number;
+    
+}

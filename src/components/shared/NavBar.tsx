@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, CalendarIcon, Home, Info, LogOut, Palette, Search, Settings, Menu, X } from "lucide-react"
+import { Calendar, Home, Info, LogOut, Palette, Search, Settings, Menu, X, CalendarIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
@@ -55,9 +55,6 @@ export default function Navbar() {
             <div className="hidden sm:flex items-center space-x-4">
               <Button variant="ghost" className="text-gray-700 hover:text-[#0388bd]" onClick={handleAppointments}>
                 <Home className="w-4 h-4 mr-2" /> Inicio
-              </Button>
-              <Button variant="ghost" className="text-gray-700 hover:text-[#0388bd]" onClick={handleAgenda}>
-                <CalendarIcon className="w-4 h-4 mr-2" /> Agenda
               </Button>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />

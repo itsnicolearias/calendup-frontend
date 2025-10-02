@@ -33,7 +33,7 @@ export default function AgendaView() {
     }
 
     const appData = await getAppointments(token)
-    return appData?.rows;
+    return appData?.appointments.rows;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     toast.error("Ha ocurrido un error. Vuelve a intentarlo luego")
