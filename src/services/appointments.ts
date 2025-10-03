@@ -69,9 +69,11 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
       throw new Error('Missing parameters');
     }
     
-    return await apiFetch(`/professionals/${professionaId}/available-dates?year=${year}&month=${month}`, {
+    const response: AvailabilityResponse | undefined = await apiFetch(`/professionals/${professionaId}/available-dates?year=${year}&month=${month}`, {
     method: "GET"
   })
+
+    return response
   } catch (error) {
     throw error;
   }

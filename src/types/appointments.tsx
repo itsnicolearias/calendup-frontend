@@ -33,9 +33,12 @@ export interface GetAllApiResponse<T> {
     rows: T[]
 }
 
-export type AvailabilityResponse = {
-  [date: string]: string[];
-};
+export type AvailabilityResponse  = {
+  availableSlots: Record<string, string[]>,
+  holidays: Holidays
+}
+
+export type Holidays = { date: string; type: string; name: string }[]
 
 export interface AvailableCalendarProps {
   onSelect: (date: string, time: string) => void;
