@@ -91,22 +91,22 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
         <CardContent className="space-y-4 pt-6">
           <div className="grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nombre</Label>
+              <Label htmlFor="name">Nombre *</Label>
               <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Apellido</Label>
+              <Label htmlFor="lastName">Apellido *</Label>
               <Input id="lastName" name="lastName" value={formData.lastName} onChange={handleInputChange} required />
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="phone">Celular</Label>
-            <Input id="phone" name="phone" value={formData.phone} onChange={handleInputChange} />
+            <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleInputChange} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email *</Label>
             <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
           </div>
 

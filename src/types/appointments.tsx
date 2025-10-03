@@ -33,9 +33,12 @@ export interface GetAllApiResponse<T> {
     rows: T[]
 }
 
-export type AvailabilityResponse = {
-  [date: string]: string[];
-};
+export type AvailabilityResponse  = {
+  availableSlots: Record<string, string[]>,
+  holidays: Holidays
+}
+
+export type Holidays = { date: string; type: string; name: string }[]
 
 export interface AvailableCalendarProps {
   onSelect: (date: string, time: string) => void;
@@ -63,4 +66,14 @@ export interface ReviewBody {
   deleted?: boolean;
   createdAt?: string; // ISO date
   updatedAt?: string; // ISO date
+}
+
+export interface GetAllAppResponse<T> {
+    appointments: {
+      count: number;
+      pagesQuantity: number;
+      rows: T[]
+    },
+    createdThisMonth: number;
+    
 }
