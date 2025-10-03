@@ -8,7 +8,7 @@ try {
     const avaiableSlots = await getAvailableSlots(professionalId, currentYear, currentMonth)
 
     if (avaiableSlots) {
-      const tags = getAvailabilityTag(avaiableSlots);
+      const tags = getAvailabilityTag(avaiableSlots.availableSlots);
       return tags;
     }
     return null
