@@ -7,21 +7,22 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
 import SidebarContent from "./SidebarContent"
 import { useRouter } from "next/navigation"
+import { SubscriptionAttributes } from "@/types/subscriptions"
 
 interface DashboardSidebarMainProps {
   currentView: "turnos" | "agenda"
-  onViewChange: (view: "turnos" | "agenda") => void
+  onViewChange: (view: string) => void
   usedAppointments?: number
-  totalAppointments?: number
-  onUpgrade?: () => void
+  //onUpgrade?: () => void
+  subscriptionData: SubscriptionAttributes
 }
 
 export default function DashboardSidebarMain({
   currentView,
   onViewChange,
   usedAppointments = 0,
-  totalAppointments = 50,
-  onUpgrade,
+  //onUpgrade,
+  subscriptionData
 }: DashboardSidebarMainProps) {
   const router = useRouter()
 
@@ -40,10 +41,10 @@ export default function DashboardSidebarMain({
       icon: Calendar,
       label: "Agenda",
       path: "/dashboard/agenda"
-    },
+    }
   ]
 
-  const handleMenuClick = (id: "turnos" | "agenda") => {
+  const handleMenuClick = (id: string) => {
     onViewChange(id)
     setMobileOpen(false)
     router.push(menuItems.find(item => item.id === id)?.path || "/dashboard/appointments")
@@ -67,8 +68,8 @@ export default function DashboardSidebarMain({
               menuItems={menuItems}
               currentView={currentView}
               usedAppointments={usedAppointments}
-              totalAppointments={totalAppointments}
-              onUpgrade={onUpgrade}
+              subscriptionData={subscriptionData}
+              //onUpgrade={onUpgrade}
               isCollapsed={isCollapsed}
               setIsCollapsed={setIsCollapsed}
             />
@@ -88,8 +89,8 @@ export default function DashboardSidebarMain({
               menuItems={menuItems}
               currentView={currentView}
               usedAppointments={usedAppointments}
-              totalAppointments={totalAppointments}
-              onUpgrade={onUpgrade}
+              subscriptionData={subscriptionData}
+              //onUpgrade={onUpgrade}
               isCollapsed={isCollapsed}
               setIsCollapsed={setIsCollapsed}
             />

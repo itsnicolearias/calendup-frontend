@@ -5,16 +5,19 @@ import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
 import { Card } from "@/components/ui/card"
 import { CalendarDays } from "lucide-react"
+import { PlanAttributes } from "@/types/subscriptions"
 
 interface UsageStatsProps {
   used: number
-  total: number
-  planName?: string
+  plan: PlanAttributes
 }
 
-export default function UsageStats({ used, total, planName = "Plan Gratuito" }: UsageStatsProps) {
+export default function UsageStats({ used, plan }: UsageStatsProps) {
+  const total = plan.features?.maxAppointmentsPerMonth || 50;
   const percentage = (used / total) * 100
   const isNearLimit = percentage >= 80
+
+  const freePlanId = process.env.NEXT_PUBLIC_PLAN_ID
 
   return (
     <Card className="border-0 bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm">
@@ -24,35 +27,40 @@ export default function UsageStats({ used, total, planName = "Plan Gratuito" }: 
             <div className="w-8 h-8 bg-gradient-to-r from-[#ac043f]/10 to-[#0388bd]/10 rounded-lg flex items-center justify-center">
               <CalendarDays className="w-4 h-4 text-[#0388bd]" />
             </div>
-            <span className="text-sm font-medium text-gray-700">{planName}</span>
+            <span className="text-sm font-medium text-gray-700">{ plan.planId === freePlanId ? "Plan Gratuito" : plan.name}</span>
           </div>
         </div>
-
-        <div className="space-y-2">
-          <div className="flex items-baseline justify-between">
-            <span className="text-xs text-gray-600">Turnos utilizados</span>
-            <span className={cn("text-sm font-bold", isNearLimit ? "text-orange-600" : "text-gray-900")}>
-              {used} / {total}
-            </span>
+      
+      {plan && plan.planId === freePlanId && (
+        <>
+          <div className="space-y-2">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs text-gray-600">Turnos utilizados</span>
+              <span className={cn("text-sm font-bold", isNearLimit ? "text-orange-600" : "text-gray-900")}>
+                {used} / {total}
+              </span>
+            </div>
+            <Progress
+              value={percentage}
+              className={cn(
+                "h-2 transition-all duration-500",
+                isNearLimit
+                  ? "bg-gradient-to-r from-orange-500 to-red-500"
+                  : "bg-gradient-to-r from-[#ac043f] to-[#0388bd]",
+              )}
+            />
           </div>
-          <Progress
-            value={percentage}
-            className={cn(
-              "h-2 transition-all duration-500",
-              isNearLimit
-                ? "bg-gradient-to-r from-orange-500 to-red-500"
-                : "bg-gradient-to-r from-[#ac043f] to-[#0388bd]",
-            )}
-          />
-        </div>
 
-        {isNearLimit && (
-          <div className="p-2 bg-orange-50 border border-orange-200 rounded-lg">
-            <p className="text-xs text-orange-800">⚠️ Estás cerca del límite de tu plan</p>
-          </div>
-        )}
+          {isNearLimit && (
+            <div className="p-2 bg-orange-50 border border-orange-200 rounded-lg">
+              <p className="text-xs text-orange-800">⚠️ Estás cerca del límite de tu plan</p>
+            </div>
+          )}
 
-        <div className="text-xs text-gray-500 text-center pt-1">Se reinicia el 1 de cada mes</div>
+          <div className="text-xs text-gray-500 text-center pt-1">Se reinicia el 1 de cada mes</div>
+        </>
+      )}
+        
       </div>
     </Card>
   )

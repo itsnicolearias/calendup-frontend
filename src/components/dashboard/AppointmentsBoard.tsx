@@ -103,13 +103,15 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
  
   return (
      <div className="flex min-h-screen">
-      <DashboardSidebarMain
+      {professional?.Subscription && (
+        <DashboardSidebarMain
           currentView="turnos"
           onViewChange={(view) => (view === "turnos" ? null : null)}
           usedAppointments={usedAppThisMonth}
-          totalAppointments={50}
-          onUpgrade={() => console.log("Upgrade clicked")}
+          subscriptionData={professional?.Subscription}
+          //onUpgrade={() => console.log("Upgrade clicked")}
         />
+      )}
 
       <div className="flex-1">
       

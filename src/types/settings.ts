@@ -1,6 +1,7 @@
 import z from "zod"
 import { AppointmentType } from "./appointments"
 import { Review } from "./review"
+import { SubscriptionAttributes } from "./subscriptions"
 
 const timeRangeSchema = z.object({
   start: z
@@ -76,6 +77,7 @@ export interface UserWithProfile {
   profile?: Profile
   AppointmentTypes?: AppointmentType[],
   Reviews?: Review[]
+  Subscription: SubscriptionAttributes
 }
 
 export interface Profile {
