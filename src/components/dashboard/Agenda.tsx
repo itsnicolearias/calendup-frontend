@@ -148,7 +148,11 @@ useEffect(() => {
               </div>
             </div>
 
-            <CreateAppointmentModal open={openAppModal} onClose={() => setOpenAppModal(false)} />
+            <CreateAppointmentModal 
+              open={openAppModal} 
+              onClose={() => setOpenAppModal(false)} 
+              onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+              />
 
             <p className="text-gray-600 mt-2">
               Puedes visualizar y abrir el detalle de cada turno haciendo click sobre él.

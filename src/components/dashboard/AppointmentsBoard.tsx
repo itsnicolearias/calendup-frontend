@@ -162,7 +162,11 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
           
         </div>
 
-        <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />
+        <CreateAppointmentModal 
+        open={open} 
+        onClose={() => setOpen(false)}
+        onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+        />
 
         <p className="text-gray-600 mt-2">
           Arrastra los turnos entre columnas para cambiar su estado

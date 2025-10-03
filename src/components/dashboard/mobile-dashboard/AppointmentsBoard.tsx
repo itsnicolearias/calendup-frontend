@@ -162,7 +162,11 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         </div>
       </div>
 
-      <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />
+      <CreateAppointmentModal 
+        open={open} 
+        onClose={() => setOpen(false)} 
+        onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+        />
 
       <StatusTabs 
         appointments={appointments}  
