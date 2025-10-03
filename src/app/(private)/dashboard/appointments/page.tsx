@@ -16,6 +16,7 @@ export default function AppointmentsPage() {
   const { user, refreshUser } = useUser()
 
   const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [usedAppThisMonth, setUsedAppThisMonth] = useState<number>(0)
 
   const isMobile = useIsMobile();
 
@@ -32,7 +33,8 @@ export default function AppointmentsPage() {
         const appData = await getAppointments(token)
 
         if (appData){
-          setAppointments(appData.rows)
+          setAppointments(appData.appointments.rows)
+          setUsedAppThisMonth(appData.createdThisMonth)
         }
         //return appData.rows;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -69,6 +71,7 @@ export default function AppointmentsPage() {
         setAppointments={setAppointments} // para drag & drop
         professional={user}
         refreshProfessional={refreshUser}
+        usedAppThisMonth={usedAppThisMonth}
       />
     }     
     </>

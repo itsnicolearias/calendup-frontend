@@ -12,6 +12,7 @@ import WelcomeWizard from "./WelcomeWizard"
 import { updateProfile } from "@/services/settings"
 import { toast } from "sonner"
 import ProfileCompletedModal from "./ProfileCompletedModal"
+import DashboardSidebarMain from "./sidebar/SidebarMain"
 
 interface Props {
   appointments: Appointment[]
@@ -19,9 +20,10 @@ interface Props {
   setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>
   professional: UserWithProfile | null;
   refreshProfessional: () => Promise<void>
+  usedAppThisMonth: number;
 }
 
-export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional }: Props) {
+export function AppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional, usedAppThisMonth }: Props) {
    const [open, setOpen] = useState(false)
    const [openWizard, setOpenWizard] = useState(false);
    const [openPCModal, setopenPCModal] = useState(false);
@@ -52,7 +54,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
   const statuses: { key: AppointmentStatus; color: string; dot: string }[] = [
     { key: "pending", color: "text-yellow-700", dot: "bg-yellow-500" },
     { key: "confirmed", color: "text-green-700", dot: "bg-green-500" },
-    { key: "completed", color: "text-blue-700", dot: "bg-blue-500" },
+    //{ key: "completed", color: "text-blue-700", dot: "bg-blue-500" },
     { key: "cancelled", color: "text-red-700", dot: "bg-red-500" },
   ]
 
@@ -100,7 +102,19 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
 
  
   return (
-    <div>
+     <div className="flex min-h-screen">
+      {professional?.Subscription && (
+        <DashboardSidebarMain
+          currentView="turnos"
+          onViewChange={(view) => (view === "turnos" ? null : null)}
+          usedAppointments={usedAppThisMonth}
+          subscriptionData={professional?.Subscription}
+          //onUpgrade={() => console.log("Upgrade clicked")}
+        />
+      )}
+
+      <div className="flex-1">
+      
       { profile && !profile?.profileCompleted && (
         <OnboardingChecklist profile={profile || {}} />
       )}
@@ -148,7 +162,11 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
           
         </div>
 
-        <CreateAppointmentModal open={open} onClose={() => setOpen(false)} />
+        <CreateAppointmentModal 
+        open={open} 
+        onClose={() => setOpen(false)}
+        onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+        />
 
         <p className="text-gray-600 mt-2">
           Arrastra los turnos entre columnas para cambiar su estado
@@ -156,7 +174,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
       </div>
 
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
           {statuses.map(({ key, color, dot }) => (
             <div
               key={key}
@@ -184,7 +202,8 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
               </div>
             </div>
           ))}
-        </div>        
+        </div> 
+        </div>       
     </div>    
   )
 }

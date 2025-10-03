@@ -8,6 +8,7 @@ import { getAvailableSlots } from "@/services/appointments";
 import {
   AvailabilityResponse,
   AvailableCalendarProps,
+  Holidays,
 } from "@/types/appointments";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -26,8 +27,9 @@ export default function AvailableCalendar({
   selectedDate,
   selectedHour,
 }: AvailableCalendarProps) {
-  const [availability, setAvailability] = useState<AvailabilityResponse>({});
+  const [availability, setAvailability] = useState<Record<string, string[]>>({});
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [holidays, setHolidays] = useState<Holidays>([]);
 
   const { currentDate, currentHour, handleDateChange, handleHourChange } =
     useControlledDateTime(selectedDate, selectedHour, onSelect);
@@ -42,7 +44,8 @@ export default function AvailableCalendar({
         month
       );
       if (data) {
-        setAvailability(data);
+        setAvailability(data.availableSlots);
+        setHolidays(data.holidays)
       }
     };
     fetchSlots();
@@ -87,6 +90,16 @@ export default function AvailableCalendar({
               />
             </div>
           </div>
+          {holidays.length > 0 && (
+                <div className=" text-sm text-black">
+                  <p>Feriados del mes:</p>
+                  <ul>
+                    {holidays.map(h => (
+                      <li key={h.date}>{format(new Date(h.date), 'dd/MM/yyyy')} - {h.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}  
 
           {/* Horarios */}
           <div className="flex flex-col">
@@ -108,8 +121,9 @@ export default function AvailableCalendar({
                   >
                     {hour}
                   </Button>
-                ))}
+                ))}           
               </div>
+              
             ) : (
               <p className="text-gray-500 text-center py-6 sm:py-8">
                 Primero selecciona una fecha

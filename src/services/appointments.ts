@@ -1,5 +1,5 @@
 import { apiFetch } from "./api"
-import { Appointment, AvailabilityResponse, GetAllApiResponse, GetOneAppointment } from "../types/appointments"
+import { Appointment, AvailabilityResponse, GetAllAppResponse, GetOneAppointment } from "../types/appointments"
 
 export const getAppointments = async (token: string | null ) => {
   try {
@@ -7,7 +7,7 @@ export const getAppointments = async (token: string | null ) => {
         throw new Error;
     }
 
-    return await apiFetch<GetAllApiResponse<Appointment>>("/appointments?all=true", {
+    return await apiFetch<GetAllAppResponse<Appointment>>("/appointments?all=true", {
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`
@@ -69,9 +69,11 @@ export const getAvailableSlots = async (professionaId: string, year: number, mon
       throw new Error('Missing parameters');
     }
     
-    return await apiFetch(`/professionals/${professionaId}/available-dates?year=${year}&month=${month}`, {
+    const response: AvailabilityResponse | undefined = await apiFetch(`/professionals/${professionaId}/available-dates?year=${year}&month=${month}`, {
     method: "GET"
   })
+
+    return response
   } catch (error) {
     throw error;
   }
