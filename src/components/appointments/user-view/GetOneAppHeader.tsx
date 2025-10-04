@@ -1,7 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { Appointment } from '@/types/appointments'
 import { getStatusColor, getStatusIcon, getStatusText } from '@/types/status'
-import { CalendarIcon } from 'lucide-react'
 import React from 'react'
 
 function GetOneAppHeader({val}: {val: <K extends keyof Appointment>(k: K) => Appointment[K]}) {
@@ -11,9 +10,6 @@ function GetOneAppHeader({val}: {val: <K extends keyof Appointment>(k: K) => App
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-lg flex items-center justify-center">
-                <CalendarIcon className="w-5 h-5 text-white" />
-              </div>
               <span className="ml-3 text-xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
                 Detalles del Turno
               </span>
