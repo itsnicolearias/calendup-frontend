@@ -10,7 +10,7 @@ export default function Footer({ onNavClick }: FooterProps) {
   const navProduct = [
     { label: "Características", section: "inicio" },
     { label: "Precios", section: "precios" },
-    { label: "Demo", href: "#" },
+    { label: "Demo", href: "https://youtu.be/QolPUrXotb4" },
   ];
 
   const navSupport = [

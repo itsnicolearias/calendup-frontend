@@ -42,6 +42,7 @@ const HeroSection = () => {
                 size="lg"
                 variant="outline"
                 className="px-8 py-4 text-lg font-semibold rounded-xl border-2 border-gray-300 hover:border-[#0388bd] hover:text-[#0388bd] transition-all duration-200 bg-transparent"
+                onClick={() => router.push("https://youtu.be/QolPUrXotb4")}
               >
                 Ver Demo
               </Button>
