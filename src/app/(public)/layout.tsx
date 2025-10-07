@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./../globals.css";
 import { Toaster } from "sonner"
 import PublicNavbar from "@/components/landing-page/landing/Navbar";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "CalendUp",
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body>
         <PublicNavbar />
         {children}
+        <Analytics />
         <Toaster richColors position="bottom-right" />
       </body>
     </html>
