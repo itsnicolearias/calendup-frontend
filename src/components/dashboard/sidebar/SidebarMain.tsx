@@ -8,12 +8,13 @@ import { cn } from "@/lib/utils"
 import SidebarContent from "./SidebarContent"
 import { useRouter } from "next/navigation"
 import { SubscriptionAttributes } from "@/types/subscriptions"
+import UpgradeModal from "./UpgradeModal"
 
 interface DashboardSidebarMainProps {
   currentView: "turnos" | "agenda"
   onViewChange: (view: string) => void
   usedAppointments?: number
-  //onUpgrade?: () => void
+  onUpgrade?: () => void
   subscriptionData: SubscriptionAttributes
 }
 
@@ -21,13 +22,14 @@ export default function DashboardSidebarMain({
   currentView,
   onViewChange,
   usedAppointments = 0,
-  //onUpgrade,
+  onUpgrade,
   subscriptionData
 }: DashboardSidebarMainProps) {
   const router = useRouter()
 
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
 
   const menuItems = [
     {
@@ -50,6 +52,13 @@ export default function DashboardSidebarMain({
     router.push(menuItems.find(item => item.id === id)?.path || "/dashboard/appointments")
   }
 
+  const handleUpgradeClick = () => {
+    setShowUpgradeModal(true)
+    if (onUpgrade) {
+      onUpgrade()
+    }
+  }
+
 
 
   return (
@@ -69,7 +78,7 @@ export default function DashboardSidebarMain({
               currentView={currentView}
               usedAppointments={usedAppointments}
               subscriptionData={subscriptionData}
-              //onUpgrade={onUpgrade}
+              onUpgrade={handleUpgradeClick}
               isCollapsed={isCollapsed}
               setIsCollapsed={setIsCollapsed}
             />
@@ -90,11 +99,13 @@ export default function DashboardSidebarMain({
               currentView={currentView}
               usedAppointments={usedAppointments}
               subscriptionData={subscriptionData}
-              //onUpgrade={onUpgrade}
+              onUpgrade={handleUpgradeClick}
               isCollapsed={isCollapsed}
               setIsCollapsed={setIsCollapsed}
             />
       </aside>
+
+       <UpgradeModal open={showUpgradeModal} onOpenChange={setShowUpgradeModal} />
     </>
   )
 }
