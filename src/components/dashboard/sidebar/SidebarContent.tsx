@@ -41,7 +41,10 @@ function SidebarContent({ handleMenuClick, menuItems, currentView, usedAppointme
           plan={subscriptionData.plan} 
         />
       )}
-      <UpgradeButton onClick={onUpgrade} isCollapsed={isCollapsed} />
+      { subscriptionData.planId === process.env.NEXT_PUBLIC_FREE_PLAN_ID && !isCollapsed && (
+        <UpgradeButton onClick={onUpgrade} isCollapsed={isCollapsed} />
+      )}
+
     </div>
 
     {/* Collapse Toggle - Desktop Only */}

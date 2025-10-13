@@ -1,5 +1,5 @@
 export interface PlanAttributes {
-  planId?: number;
+  planId?: string;
   name: string;
   price: number;
   currency: string;
@@ -13,9 +13,9 @@ export interface PlanAttributes {
 }
 
 export interface SubscriptionAttributes {
-  subscriptionId?: number;
-  userId: number;
-  planId: number;
+  subscriptionId?: string;
+  userId: string;
+  planId: string;
   status: "active" | "canceled" | "paused";
   startDate: Date;
   endDate?: Date;
