@@ -7,25 +7,29 @@ import { ExternalLink, Crown, Zap } from "lucide-react"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import { premiumBenefits } from "@/types/subscriptions"
+import { CancelSubscriptionModal } from "./ConfirmCancellationModal"
+import { SubscriptionCancelledModal } from "./CancelledModal"
+import { useState } from "react"
+import { UserWithProfile } from "@/types/settings"
 
 interface PremiumPlanSubscriptionProps {
-  planType: "monthly" | "annual"
-  startDate: Date
-  endDate: Date
-  onManageSubscription: () => void
+  user: UserWithProfile;
+  token: string
 }
 
-export default function PremiumPlanSubscription({
-  planType,
-  startDate,
-  endDate,
-  onManageSubscription,
-}: PremiumPlanSubscriptionProps) {
+export default function PremiumPlanSubscription({ user, token }: PremiumPlanSubscriptionProps) {
+   const [showCancelModal, setShowCancelModal] = useState(false);
+   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const planType = user?.Subscription?.type;
+  const startDate = user?.Subscription.startDate
+  const endDate = user?.Subscription.endDate
 
   const planPrice = planType === "monthly" ? "$10.000/mes" : "$100.000/año"
   const planLabel = planType === "monthly" ? "Mensual" : "Anual"
 
   return (
+
     <div className="space-y-6">
       {/* Plan actual con borde gradiente */}
       <div className="relative">
@@ -63,7 +67,7 @@ export default function PremiumPlanSubscription({
                 <div className="p-4 bg-blue-50 rounded-lg space-y-1 md:col-span-2">
                   <p className="text-sm text-gray-600">Próxima renovación</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {format(new Date(endDate), "dd 'de' MMMM, yyyy", { locale: es })} 
+                    {format(new Date(endDate!), "dd 'de' MMMM, yyyy", { locale: es })} 
                   </p>
                   <p className="text-xs text-gray-500">Se renovará automáticamente</p>
                 </div>
@@ -100,7 +104,7 @@ export default function PremiumPlanSubscription({
 
               {/* Botón de gestión */}
               <Button
-                onClick={onManageSubscription}
+                onClick={() => setShowCancelModal(true)}
                 variant="outline"
                 className="w-full border-gray-300 hover:bg-gray-50 bg-transparent"
                 size="lg"
@@ -138,6 +142,19 @@ export default function PremiumPlanSubscription({
           </div>
         </CardContent>
       </Card>
+
+      <CancelSubscriptionModal
+        open={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        userId={user.userId}
+        token={token}
+        onCancelled={() => setShowSuccessModal(true)}
+      />
+
+      <SubscriptionCancelledModal
+        open={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+      />
     </div>
   )
 }

@@ -16,26 +16,18 @@ export default function SubscriptionPage() {
   const { user } = useUser()
   
   const totalAppointments = user?.Subscription.plan.features.maxAppointmentsPerMonth || 50;
-  const planType = user?.Subscription?.type;
   const hasFreePlan = user?.Subscription.planId === process.env.NEXT_PUBLIC_FREE_PLAN_ID;
-  const startDate = user?.Subscription.startDate
-  const renewalDate = user?.Subscription.endDate
 
   const handleUpgrade = () => {
     setShowUpgradeModal(true)
   }
 
-  const handleManageSubscription = () => {
-    // Aquí iría la redirección a MercadoPago o un modal de gestión
-    window.open("https://www.mercadopago.com.ar/subscriptions", "_blank")
-  }
+  const token = localStorage.getItem('token');
 
    // cargar turnos
     useEffect(() => {
       const getAppointmentsRows = async (): Promise<Appointment[] | undefined> => {
         try {
-          const token = localStorage.getItem('token');
-      
           const appData = await getAppointments(token)
   
           if (appData){
@@ -68,10 +60,8 @@ export default function SubscriptionPage() {
         />
       ) : (
         <PremiumPlanSubscription
-          planType={planType!}
-          startDate={startDate!}
-          endDate={renewalDate!}
-          onManageSubscription={handleManageSubscription}
+          user={user!}
+          token={token!}
         />
       )}
 
