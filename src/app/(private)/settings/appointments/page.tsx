@@ -1,7 +1,7 @@
 "use client"
 
-import ProfileConfig from "@/components/settings/AppointmentsConfig"
-import AppointmentTypesList from "@/components/settings/AppointmentTypesList"
+import ProfileConfig from "@/components/settings/appointments/AppointmentsConfig"
+import AppointmentTypesList from "@/components/settings/appointments/AppointmentTypesList"
 
 export default function AppointmentSettingsPage() {
   return (

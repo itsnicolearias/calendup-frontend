@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
-import { Check, X, Sparkles, CreditCard, Calendar, Video, Zap } from "lucide-react"
+import { Check, X, Sparkles, Calendar, Video, Zap, Star } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 
@@ -26,8 +26,8 @@ export default function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) 
       color: "text-purple-600",
     },
     {
-      icon: CreditCard,
-      text: "Cobros con Mercado Pago",
+      icon: Star,
+      text: "Destacá en el portal de profesionales",
       color: "text-blue-600",
     },
     {
@@ -186,7 +186,7 @@ export default function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) 
                 </div>
                 <div className="flex items-center space-x-2 text-gray-700">
                   <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span>Cobros con MP</span>
+                  <span>Perfil destacado en el portal</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-700">
                   <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
