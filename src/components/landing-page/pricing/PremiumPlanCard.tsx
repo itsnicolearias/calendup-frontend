@@ -17,8 +17,8 @@ const premiumFeatures = [
   },
   {
     icon: CreditCard,
-    text: "Cobros anticipados con Mercado Pago",
-    emoji: "💳",
+    text: "Perfil destacado en el portal de profesionales",
+    emoji: "🌟",
     highlight: true,
   },
   {
