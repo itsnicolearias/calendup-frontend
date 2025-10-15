@@ -62,6 +62,7 @@ export default function AppointmentsPage() {
       setAppointments={setAppointments}
       professional={user}
       refreshProfessional={refreshUser}
+      usedAppThisMonth={usedAppThisMonth}
 
     />
     :

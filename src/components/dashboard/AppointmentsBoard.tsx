@@ -109,7 +109,6 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
           onViewChange={(view) => (view === "turnos" ? null : null)}
           usedAppointments={usedAppThisMonth}
           subscriptionData={professional?.Subscription}
-          //onUpgrade={() => console.log("Upgrade clicked")}
         />
       )}
 
