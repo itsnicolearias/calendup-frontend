@@ -5,7 +5,12 @@ export interface PlanAttributes {
   name: string;
   price: number;
   currency: string;
-  features: {
+  features: PlanFeatures;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export type PlanFeatures = {
     maxAppointmentsPerMonth?: number;
     services: boolean,
     customBranding: boolean,
@@ -14,11 +19,8 @@ export interface PlanAttributes {
     meetAvailable: boolean,
     prioritySupport: boolean,
     appointmentsPays: boolean,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any; // flexibilidad para más features en el futuro
-  };
-  createdAt?: Date;
-  updatedAt?: Date;
+    appointments: boolean
+    //[key: string]: any; // flexibilidad para más features en el futuro
 }
 
 export interface SubscriptionAttributes {

@@ -13,7 +13,7 @@ import {
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { CalendarIcon } from "lucide-react";
-import { useControlledDateTime } from "@/utils/useControlledDateTime";
+import { useControlledDateTime } from "@/hooks/useControlledDateTime";
 
 /**
  * Si pasás selectedDate y selectedHour → el componente se comporta como controlado (ideal para edición).

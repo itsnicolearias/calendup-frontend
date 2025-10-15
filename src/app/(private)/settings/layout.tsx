@@ -12,6 +12,7 @@ const settingsNav = [
   { name: "Suscripción", href: "/settings/subscriptions" },
   { name: "Disponibilidad", href: "/settings/availability" },
   { name: "Configuración de turnos", href: "/settings/appointments" },
+  { name: "Integraciones", href: "/settings/integrations" },
   { name: "Seguridad", href: "/settings/security" },
 ];
 

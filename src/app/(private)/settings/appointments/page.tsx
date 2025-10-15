@@ -2,6 +2,7 @@
 
 import ProfileConfig from "@/components/settings/appointments/AppointmentsConfig"
 import AppointmentTypesList from "@/components/settings/appointments/AppointmentTypesList"
+import { PremiumWrapper } from "@/components/shared/PremiumWrapper"
 
 export default function AppointmentSettingsPage() {
   return (
@@ -24,7 +25,10 @@ export default function AppointmentSettingsPage() {
       {/* Sección Tipos de Turnos */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold mb-2">Servicios</h2>
-        <AppointmentTypesList />
+        <PremiumWrapper feature="services" >
+          <AppointmentTypesList />
+        </PremiumWrapper>
+        
       </section>
     </div>
   )
