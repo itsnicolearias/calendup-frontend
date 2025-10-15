@@ -13,7 +13,7 @@ export default function SubscriptionPage() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [usedAppThisMonth, setUsedAppThisMonth] = useState<number>(0)
 
-  const { user } = useUser()
+  const { user, refreshUser } = useUser()
   
   const totalAppointments = user?.Subscription.plan.features.maxAppointmentsPerMonth || 50;
   const hasFreePlan = user?.Subscription.planId === process.env.NEXT_PUBLIC_FREE_PLAN_ID;
@@ -62,6 +62,7 @@ export default function SubscriptionPage() {
         <PremiumPlanSubscription
           user={user!}
           token={token!}
+          refreshUser={refreshUser}
         />
       )}
 

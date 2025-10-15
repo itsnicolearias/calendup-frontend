@@ -13,13 +13,13 @@ export const SubscriptionCancelledModal = ({ open, onClose }: SubscriptionCancel
       <DialogContent className="sm:max-w-md p-6 rounded-2xl text-center">
         <DialogHeader>
           <div className="flex justify-center mb-2">
-            <CheckCircle className="h-12 w-12 text-[#197387]" />
+            <CheckCircle className="h-12 w-12 text-[#0388bd]" />
           </div>
           <DialogTitle className="text-xl font-semibold text-gray-800">
             Tu suscripción ha sido cancelada
           </DialogTitle>
           <DialogDescription className="text-gray-500 mt-2">
-            Ahora estás en el <strong>plan gratuito</strong>.  
+            Ahora estás en el <strong>Plan Gratuito</strong>.  
             Podrás seguir utilizando Calendup con las funcionalidades básicas y volver a activar tu plan Premium cuando desees.
           </DialogDescription>
         </DialogHeader>
@@ -27,7 +27,7 @@ export const SubscriptionCancelledModal = ({ open, onClose }: SubscriptionCancel
         <DialogFooter className="flex justify-center mt-4">
           <Button
             onClick={onClose}
-            className="bg-[#197387] text-white hover:bg-[#14605E] transition-colors"
+            className="bg-[#0388bd] text-white hover:bg-[#036a92] transition-colors"
           >
             Entendido
           </Button>

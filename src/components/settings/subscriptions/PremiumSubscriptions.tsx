@@ -14,10 +14,11 @@ import { UserWithProfile } from "@/types/settings"
 
 interface PremiumPlanSubscriptionProps {
   user: UserWithProfile;
-  token: string
+  token: string;
+  refreshUser: () => Promise<void>;
 }
 
-export default function PremiumPlanSubscription({ user, token }: PremiumPlanSubscriptionProps) {
+export default function PremiumPlanSubscription({ user, token, refreshUser }: PremiumPlanSubscriptionProps) {
    const [showCancelModal, setShowCancelModal] = useState(false);
    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -27,6 +28,11 @@ export default function PremiumPlanSubscription({ user, token }: PremiumPlanSubs
 
   const planPrice = planType === "monthly" ? "$10.000/mes" : "$100.000/año"
   const planLabel = planType === "monthly" ? "Mensual" : "Anual"
+
+  const closeConfirmationModal = async () => {
+    setShowSuccessModal(false)
+    await refreshUser()
+  }
 
   return (
 
@@ -153,7 +159,7 @@ export default function PremiumPlanSubscription({ user, token }: PremiumPlanSubs
 
       <SubscriptionCancelledModal
         open={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
+        onClose={() => closeConfirmationModal()}
       />
     </div>
   )
