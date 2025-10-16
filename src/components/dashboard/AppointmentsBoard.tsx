@@ -165,6 +165,7 @@ export function AppointmentsBoard({ appointments, onOpen, setAppointments, profe
         open={open} 
         onClose={() => setOpen(false)}
         onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+        professional={professional!}
         />
 
         <p className="text-gray-600 mt-2">

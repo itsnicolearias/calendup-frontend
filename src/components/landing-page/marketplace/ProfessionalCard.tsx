@@ -7,6 +7,7 @@ import { Dialog, DialogTrigger } from "../../ui/dialog";
 import { getAverageRating } from "@/utils/getAverageRating";
 import { State } from "country-state-city";
 import { UserWithProfileWithAvailability } from "@/types/landing-page";
+import { getModeText } from "@/types/appointments";
 
 interface ProfessionalCardProps {
   professional: UserWithProfileWithAvailability;
@@ -65,10 +66,26 @@ export default function ProfessionalCard({
             <div className={`${isListView ? "flex justify-between items-start" : ""}`}>
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1">{name}</h3>
-                <p className="text-[#0388bd] font-medium mb-2">{professional.profile?.jobTitle}</p>
+                <p className="text-[#0388bd] font-medium mb-2">
+                  {professional.profile?.jobTitle + "  "}
+
+                  {professional.profile?.appMode && professional.profile?.appMode !== "combined" && (
+                    <Badge
+                    className={`text-xs ${
+                      professional.profile?.appMode === "online"
+                        ? "bg-blue-100 text-blue-800 border-green-200"
+                        : "bg-orange-100 text-orange-500 border-yellow-200"
+                    }`}
+                  >
+                    Atiende {getModeText(professional.profile?.appMode)}
+                  </Badge>
+                  )}
+                  </p>
                 <div className="flex items-center text-gray-600 text-sm mb-2">
                   <MapPin className="w-4 h-4 mr-1" />
                   {location}
+
+                  
                 </div>
                 <div className="flex items-center mb-3">
                   <div className="flex items-center mr-4">
@@ -87,7 +104,7 @@ export default function ProfessionalCard({
                   >
                     {professional.availabilityTag}
                   </Badge>
-                  )}
+                  )}          
                   
                 </div>
               </div>

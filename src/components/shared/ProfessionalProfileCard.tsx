@@ -70,7 +70,7 @@ function ProfessionalProfileCard({ professional, rating }: { professional: Parti
                   <h3 className="font-semibold mb-3">Sobre el profesional</h3>
                   
                     <>
-                    <p className="text-gray-600 text-sm leading-relaxed">{user?.bio ?? user?.bio }</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{user?.bio}</p>
                   :
                     <p className="text-gray-600 text-sm leading-relaxed">No hay informacion disponible</p>
                     </>

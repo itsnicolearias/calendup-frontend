@@ -21,6 +21,7 @@ export function OnboardingChecklist({ profile }: OnboardingChecklistProps) {
     { key: "name", label: "Nombre", path: "personal" },
     { key: "lastName", label: "Apellido", path: "personal" },
     { key: "jobTitle", label: "Profesión", path: "appointments" },
+    { key: "appMode", label: "Modalidad de turnos", path: "appointments" },
     { key: "availability", label: "Disponibilidad", path: "availability" },
     { key: "country", label: "País", path: "personal" },
     { key: "province", label: "Provincia", path: "personal" },

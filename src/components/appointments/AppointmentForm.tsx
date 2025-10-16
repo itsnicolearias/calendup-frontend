@@ -43,6 +43,7 @@ export default function Component() {
       time: "",
       phone: "",
       appointmentTypeId: "",
+      selectedAppMode: ""
     });
 
 
@@ -105,7 +106,7 @@ export default function Component() {
 
       await createAppointment({
         ...formData,
-        appointmentTypeId: formData.appointmentTypeId === "" ? null : formData.appointmentTypeId,
+        appointmentTypeId: formData.appointmentTypeId === "" ? null : formData.appointmentTypeId
       })
       setBookingConfirmed(true)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -136,6 +137,7 @@ export default function Component() {
       time: "",
       phone: "",
       appointmentTypeId: "",
+      selectedAppMode: "in_person"
     })
     setBookingConfirmed(false)
   }
@@ -184,18 +186,21 @@ export default function Component() {
               { professional.AppointmentTypes && professional.AppointmentTypes.length > 0 && (
                 <ServiceSelection appointmentTypes={professional.AppointmentTypes} selectedTypeId={selectedType ? selectedType : null} setSelectedType={setSelectedType} isModal={false} />
               )}
-              
-
-             
+         
               {/* Date and Time Selection */}
               <AvailableCalendar onSelect={handleSelect} professionalId={professional.userId!} isModal={false}  />
 
               {/* Personal Information */}
-              <PersonalInformation formData={formData} handleInputChange={handleInputChange} />
+              <PersonalInformation 
+              formData={formData} 
+              handleInputChange={handleInputChange}
+              professional={professional!}
+              setFormData={setFormData} 
+              />
 
               {/* Booking Summary */}
               {dateF && time && (
-                <BookingSummary professional={professional} selectedType={selectedType} selectedDate={dateF!} selectedTime={time} />
+                <BookingSummary professional={professional} selectedType={selectedType} selectedDate={dateF!} selectedTime={time} selectedMode={formData.selectedAppMode} />
               )}
 
               {/* Submit Button */}

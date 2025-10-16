@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { FileText, Mail, Phone, User } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { AppointmentMode } from '@/types/appointments'
+import { UserWithProfile } from '@/types/settings'
 
 interface PersonalInformationProps {
   formData: {
@@ -11,11 +15,14 @@ interface PersonalInformationProps {
     email: string
     phone: string
     reason: string
+    selectedAppMode: AppointmentMode | string
   }
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  professional: Partial<UserWithProfile>
+  setFormData: any
 }
 
-function PersonalInformation({ formData, handleInputChange}: PersonalInformationProps) {
+function PersonalInformation({ formData, handleInputChange, professional, setFormData}: PersonalInformationProps) {
   return (
     <div>
          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
@@ -115,7 +122,37 @@ function PersonalInformation({ formData, handleInputChange}: PersonalInformation
                           className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                         />
                       </div>
+
+
                     </div>
+
+                    {/* Tipo de modalidad */}
+                    { professional.profile?.appMode === "combined" && (
+                    <>
+                      <div className='md:col-span-2 space-y-2'>
+                      <label className="text-sm font-medium text-gray-700">Modalidad de turno</label>
+                      <Select
+                        defaultValue={formData.selectedAppMode}
+                        required={true}
+                        
+                        onValueChange={(value: string) => {
+                          setFormData((prev: any) => ({
+                            ...prev,
+                            selectedAppMode: value,
+                          }));
+                        }}
+                      >
+                        <SelectTrigger className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                          <SelectValue placeholder="Seleccionar modalidad" />
+                        </SelectTrigger>
+                        <SelectContent >
+                            <SelectItem value="in_person">Presencial</SelectItem>
+                            <SelectItem value="online">Online</SelectItem>                    
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    </>
+                    )}
                   </div>
                 </CardContent>
               </Card>

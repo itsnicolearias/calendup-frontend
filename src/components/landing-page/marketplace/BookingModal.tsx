@@ -13,6 +13,8 @@ import { createAppointment } from "@/services/appointments";
 import { toast } from "sonner";
 import { State } from "country-state-city";
 import ServiceSelection from "@/components/shared/ServiceSelection";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getModeText } from "@/types/appointments";
 
 interface BookingModalProps {
     open: boolean;
@@ -40,6 +42,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       time: "",
       phone: "",
       appointmentTypeId: "",
+      selectedAppMode: "Presencial",
       })
 
     const handleBookingFormChange = (field: string, value: string) => {
@@ -138,6 +141,8 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                             <ServiceSelection  appointmentTypes={professional.AppointmentTypes} selectedTypeId={selectedType} setSelectedType={setSelectedType} isModal={true} />
                           </div>
                         )}
+
+                         
                          
                         
                         {/* Calendar and Time Selection */}
@@ -148,6 +153,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                     
         
                         </div>
+
         
                         {/* Form Fields */}
                         <div className="space-y-6">
@@ -219,6 +225,33 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                                     //rows={3}
                                   />
                                 </div>
+
+                                {/* Tipo de modalidad */}
+                                { professional.profile?.appMode === "combined" && (
+                                <>
+                                  <div className="">
+                                  <label className="" htmlFor="booking-mode">Modalidad de turno</label>
+                                  <Select
+                                    defaultValue={bookingForm.selectedAppMode}
+                                    required={true}
+                                    onValueChange={(value: string) => {
+                                      setBookingForm((prev) => ({
+                                        ...prev,
+                                        selectedAppMode: value,
+                                      }));
+                                    }}
+                                  >
+                                    <SelectTrigger className="mt-1">
+                                      <SelectValue placeholder="Seleccionar modalidad" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="in_person">Presencial</SelectItem>
+                                        <SelectItem value="online">Online</SelectItem>                    
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                                </>
+                                )}
                               </div>
                             </CardContent>
                           </Card>
@@ -242,6 +275,12 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                                   <p>
                                     <strong>Servicio:</strong> {professional.profile?.jobTitle}
                                   </p>
+                                  { professional?.profile?.appMode && (
+                                    <p>
+                                      <strong>Modalidad:</strong> {bookingForm.selectedAppMode ? bookingForm.selectedAppMode : getModeText(professional.profile.appMode!)}
+                                    </p>
+                                  )}
+                                  
                                 </div>
                               </CardContent>
                             </Card>

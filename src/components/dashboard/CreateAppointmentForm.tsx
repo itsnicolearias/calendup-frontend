@@ -11,13 +11,16 @@ import { createAppointment } from "@/services/appointments"
 import { Appointment } from "@/types/appointments"
 import { useUser } from "@/contexts/UserContext"
 import AppointmentTypesSelect from "../appointments/AppointmentTypesSelect"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { UserWithProfile } from "@/types/settings"
 
 interface Props {
   onCreated?: (appointment: Appointment) => void
   onClose?: () => void
+  professional: UserWithProfile;
 }
 
-export function AppointmentForm({ onCreated, onClose }: Props) {
+export function AppointmentForm({ onCreated, onClose, professional }: Props) {
   const [dateF, setDateF] = useState<string>()
   const [time, setTime] = useState<string>("")
   const [selectedType, setSelectedType] = useState<string | null>(null)
@@ -32,6 +35,7 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
     time: "",
     phone: "",
     appointmentTypeId: "",
+    selectedAppMode: "",
   })
 
   const userContext = useUser();
@@ -114,6 +118,33 @@ export function AppointmentForm({ onCreated, onClose }: Props) {
             <Label htmlFor="reason">Motivo</Label>
             <Input id="reason" name="reason" value={formData.reason} onChange={handleInputChange} />
           </div>
+
+           {/* Tipo de modalidad */}
+          { professional.profile?.appMode === "combined" && (
+          <>
+            <div className="space-y-2">
+            <label className="block text-sm font-medium mb-1">Modalidad de turno</label>
+            <Select
+              defaultValue={formData.selectedAppMode}
+              required={true}
+              onValueChange={(value: string) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  selectedAppMode: value,
+                }));
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Seleccionar modalidad" />
+              </SelectTrigger>
+              <SelectContent>
+                  <SelectItem value="in_person">Presencial</SelectItem>
+                  <SelectItem value="online">Online</SelectItem>                    
+              </SelectContent>
+            </Select>
+          </div>
+          </>
+          )}
 
           <AppointmentTypesSelect
             types={user?.AppointmentTypes || []}

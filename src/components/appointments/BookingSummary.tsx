@@ -5,15 +5,17 @@ import { UserWithProfile } from '@/types/settings'
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { parseLocalDate } from '@/utils/date';
+import { AppointmentMode } from '@/types/appointments';
 
 interface BookingSummaryProps {
     professional: Partial<UserWithProfile>;
     selectedType: string | null;
     selectedDate: string;
     selectedTime: string;
+    selectedMode?: AppointmentMode | string | undefined
 }
 
-function BookingSummary({ professional, selectedType, selectedDate, selectedTime }: BookingSummaryProps) {
+function BookingSummary({ professional, selectedType, selectedDate, selectedTime, selectedMode = professional.profile?.appMode }: BookingSummaryProps) {
   const user = professional.profile;
   
   const getSelectedTypeDetails = () => { 
@@ -51,6 +53,10 @@ function BookingSummary({ professional, selectedType, selectedDate, selectedTime
                         </p>
                         <p>
                           <strong>Hora:</strong> {selectedTime}
+                        </p>
+
+                        <p>
+                          <strong>Modalidad:</strong> {selectedMode === "in_person" ? "Presencial" : "Online"}
                         </p>
                       </div>
                     </div>

@@ -13,6 +13,7 @@ import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useUser } from "@/contexts/UserContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function ProfileConfig() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export default function ProfileConfig() {
       defaultAppConfirmation: true,
       markAppAsCompleted: true,
       address: "",
+      appMode: "",
     },
     mode: "onChange",
   });
@@ -57,6 +59,7 @@ export default function ProfileConfig() {
           defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
           markAppAsCompleted: profile?.profile?.markAppAsCompleted ?? true,
           address: profile?.profile?.address ?? "",
+          appMode: profile?.profile?.appMode ?? "",
         });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -116,8 +119,8 @@ export default function ProfileConfig() {
           <div>
             <Label>Direccion profesional</Label>
             <Input {...register("address")} />
-            {errors.bio && (
-              <p className="text-sm text-red-500">{errors.bio.message}</p>
+            {errors.address && (
+              <p className="text-sm text-red-500">{errors.address.message}</p>
             )}
           </div>
 
@@ -156,6 +159,24 @@ export default function ProfileConfig() {
               <p className="text-sm text-red-500">{errors.appointmentDuration.message}</p>
             )}
           </div>
+
+          {/* Tipo de modalidad */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Modalidad de turnos</label>
+                  <Select
+                    value={watch("appMode")}
+                    onValueChange={(value: string) => form.setValue("appMode", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar modalidad" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="in_person">Presencial</SelectItem>
+                      <SelectItem value="online">Online</SelectItem>
+                      <SelectItem value="combined">Combinada</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
           <Button type="submit" disabled={loading} className="bg-[#0388bd]" >
             {loading ? "Guardando..." : "Guardar cambios"}

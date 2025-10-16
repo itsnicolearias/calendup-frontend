@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AppointmentType } from "@/types/appointments";
 
 
@@ -23,7 +22,6 @@ export default function AppointmentTypeForm({ initialData, onSubmit, onCancel }:
       name: "",
       description: "",
       price: undefined,
-      sessionType: "in person",
     },
 
 
@@ -55,22 +53,6 @@ export default function AppointmentTypeForm({ initialData, onSubmit, onCancel }:
         )}
       </div>
 
-      {/* Tipo de sesión */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Tipo de sesión</label>
-        <Select
-          defaultValue={form.getValues("sessionType")}
-          onValueChange={(value) => form.setValue("sessionType", value as "in person" | "online")}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Seleccionar tipo" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="in person">Presencial</SelectItem>
-            <SelectItem value="online">Online</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
 
       {/* Botones */}
       <div className="flex gap-2">

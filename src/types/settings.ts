@@ -1,5 +1,5 @@
 import z from "zod"
-import { AppointmentType } from "./appointments"
+import { AppointmentMode, AppointmentType } from "./appointments"
 import { Review } from "./review"
 import { SubscriptionAttributes } from "./subscriptions"
 
@@ -58,6 +58,7 @@ export const profileSchema = z.object({
   country: z.string().optional(),
   province: z.string().optional(),
   city: z.string().optional(),
+  appMode: z.string().optional(),
   isNewUser: z.boolean().optional(),
   pcModalShowed: z.boolean().optional(),
 })
@@ -106,6 +107,7 @@ export interface Profile {
     profileCompleted: boolean
     isNewUser: boolean
     pcModalShowed: boolean
+    appMode?: AppointmentMode
 }
 
 export type Education = {

@@ -124,7 +124,6 @@ export default function AppointmentTypesList() {
             <CardContent className="space-y-2">
               <p>{type.description || "Sin descripción"}</p>
               <p>Precio: {type.price ? `$${type.price}` : "No especificado"}</p>
-              <p>Modalidad: {type.sessionType === "in person" ? "Presencial" : "Online"}</p>
 
               <div className="flex flex-col sm:flex-row gap-2 mt-2">
                 {/* Modal para editar */}
