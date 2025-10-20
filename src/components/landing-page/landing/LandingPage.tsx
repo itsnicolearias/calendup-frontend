@@ -7,6 +7,7 @@ import BenefitsSection from "./BenefitsSection";
 import FAQSection from "./FAQSection";
 import CTASection from "./CTASection";
 import Footer from "./Footer";
+import FloatingCalculatorButton from "../benefits/FloatingCalculatorButton";
 
 export default function LandingPage() {
   const [currentSection, setCurrentSection] = useState("inicio");
@@ -18,6 +19,7 @@ export default function LandingPage() {
 
   const MainContent = () => (
     <>
+      <FloatingCalculatorButton />
       <HeroSection />
       <FeaturesSection />
       <BenefitsSection />
