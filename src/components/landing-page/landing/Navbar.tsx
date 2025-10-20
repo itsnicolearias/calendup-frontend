@@ -13,6 +13,7 @@ export default function PublicNavbar() {
     { label: "Inicio", section: "" },
     { label: "Portal de Profesionales", section: "professionals-marketplace" },
     { label: "Precios", section: "pricing" },
+    { label: "Calculadora", section: "benefits-calculator" },
     { label: "Contacto", section: "contact" },
   ];
 

@@ -3,6 +3,7 @@ import "./../globals.css";
 import { Toaster } from "sonner"
 import PublicNavbar from "@/components/landing-page/landing/Navbar";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "CalendUp",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <PublicNavbar />
         {children}
         <Analytics />
+        <SpeedInsights />
         <Toaster richColors position="bottom-right" />
       </body>
     </html>
