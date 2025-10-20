@@ -52,6 +52,6 @@ export const shareText = (result: CalculatorResult) =>  `¡Ahorraría ${result.h
 
 Eso significa ${result.hoursPerYear.toFixed(0)} horas al año que podría usar para atender más clientes o disfrutar tiempo libre.
 
-Calculá tu ahorro en calendup.com/beneficios`
+Calculá tu ahorro en `
 
 export const benefitsShareUrl = `${process.env.NEXT_PUBLIC_FRONT_URL}/benefits-calculator`
