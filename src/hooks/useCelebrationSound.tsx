@@ -5,6 +5,7 @@ import { useCallback } from "react"
 export function useCelebrationSound() {
   const playSuccess = useCallback(() => {
     // Crear un contexto de audio
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
 
     // Secuencia de notas para un sonido de éxito
@@ -16,7 +17,7 @@ export function useCelebrationSound() {
 
     let startTime = audioContext.currentTime
 
-    notes.forEach((note, index) => {
+    notes.forEach((note) => {
       const oscillator = audioContext.createOscillator()
       const gainNode = audioContext.createGain()
 
