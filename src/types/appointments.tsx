@@ -78,6 +78,7 @@ export interface GetAllAppResponse<T> {
       rows: T[]
     },
     createdThisMonth: number;
+    googleEvents?: []
     
 }
 
