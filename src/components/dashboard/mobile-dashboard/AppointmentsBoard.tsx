@@ -164,6 +164,7 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         open={open} 
         onClose={() => setOpen(false)} 
         onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+        professional={professional!}
         />
 
       <StatusTabs 
