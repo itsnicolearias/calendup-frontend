@@ -1,3 +1,4 @@
+import { SupportFormData } from "@/components/shared/SupportForm";
 
 export async function apiFetch<T>(
   endpoint: string,
@@ -24,4 +25,16 @@ export async function apiFetch<T>(
         throw error
        // Sentry.captureException(error);
     }
+}
+
+export const RequestSupport = async (data: SupportFormData): Promise<{ success: boolean } | undefined> => {
+  try {
+    return await apiFetch(`/settings/support`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+  } catch (error) {
+    throw error;
+  }
+  
 }

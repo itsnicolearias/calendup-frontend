@@ -103,6 +103,9 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => { router.push("/settings/personal"); setMobileMenuOpen(false) }}>
                     <Settings className="mr-2 h-4 w-4" /> Configuración
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => { router.push("/dashboard/support"); setMobileMenuOpen(false) }}>
+                    <Info className="mr-2 h-4 w-4" /> Contactar soporte
+                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Palette className="mr-2 h-4 w-4" /> Tema
                   </DropdownMenuItem>
