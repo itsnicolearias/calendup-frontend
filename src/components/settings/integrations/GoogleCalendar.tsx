@@ -8,9 +8,10 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
-import { deleteIntegration, integrateGoogle } from "@/services/integrations"
+import { deleteIntegration, integrateGoogle, updateIntegration } from "@/services/integrations"
 import { useSearchParams } from "next/navigation"
 import { IntegrationParams } from "@/types/integrations"
+import { format } from "date-fns"
 
 interface GoogleCalendarParams {
     token: string
@@ -81,6 +82,25 @@ export default function GoogleCalendarIntegration({ token, isConnected, setIsCon
     }, 2000)
   }
 
+  const saveChanges = async (data: Partial<IntegrationParams>) => {
+    try {
+      await updateIntegration(data, token, integrationData.integrationId)
+    
+        if (data.showEventsInAgenda){
+          setShowGoogleEvents(true)
+        }
+    
+        if (data.syncAppWithCalendar){
+          setSyncAppointments(true)
+        }
+      toast.success("Integracion actualizada correctamente");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error al actualizar la integración");
+    }
+      
+    }
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -132,14 +152,26 @@ export default function GoogleCalendarIntegration({ token, isConnected, setIsCon
               <Label htmlFor="sync-appointments" className="flex-1 text-sm cursor-pointer">
                 Sincronizar mis turnos con Google Calendar
               </Label>
-              <Switch id="sync-appointments" checked={syncAppointments} onCheckedChange={setSyncAppointments} />
+              <Switch 
+                id="sync-appointments" 
+                checked={syncAppointments} 
+                onCheckedChange={(checked: boolean) => {
+                  void saveChanges({ syncAppWithCalendar: checked })
+                }}
+                />
             </div>
 
             <div className="flex items-center justify-between space-x-2">
               <Label htmlFor="show-google-events" className="flex-1 text-sm cursor-pointer">
                 Mostrar mis eventos de Google Calendar en la agenda
               </Label>
-              <Switch id="show-google-events" checked={showGoogleEvents} onCheckedChange={setShowGoogleEvents} />
+              <Switch 
+                id="show-google-events" 
+                checked={showGoogleEvents} 
+                onCheckedChange={(checked: boolean) => {
+                  void saveChanges({ showEventsInAgenda: checked })
+                }}
+                />
             </div>
 
             {/** 
@@ -163,7 +195,7 @@ export default function GoogleCalendarIntegration({ token, isConnected, setIsCon
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-muted rounded-lg">
               <div>
                 <p className="text-sm font-medium">Última sincronización</p>
-                <p className="text-xs text-muted-foreground">{lastSync ? lastSync.toLocaleString("es-AR") : "Nunca"}</p>
+                <p className="text-xs text-muted-foreground">{lastSync ? format(lastSync, "yyyy-MM-dd") : "Nunca"}</p>
               </div>
               <Button
                 onClick={handleManualSync}

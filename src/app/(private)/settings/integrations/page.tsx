@@ -14,10 +14,11 @@ export  default function IntegrationsPage() {
     const [isZoomConnected, setIsZoomConnected] = useState(false)
     const [zoomIntegration, setzoomIntegration] = useState<IntegrationParams>()
     const [googleIntegration, setGoogleIntegration] = useState<IntegrationParams>()
+    const [defaultMeetIntegration, setDefaultMeetIntegration] = useState<IntegrationParams>()
 
     const token = localStorage.getItem('token');
 
-    const { user, refreshUser } = useUser()
+    const { user } = useUser()
 
 
     useEffect(() => {
@@ -25,7 +26,7 @@ export  default function IntegrationsPage() {
 
     const integrations =  user?.Integrations;
     const google = integrations?.find((i) => i.provider === "google")
-    const zoom = integrations?.find((i) => i.provider === "zoom")     
+    const zoom = integrations?.find((i) => i.provider === "zoom")  
 
     if (google && !isGoogleConnected){
 
@@ -37,6 +38,9 @@ export  default function IntegrationsPage() {
         setIsZoomConnected(true)
         setzoomIntegration(zoom)
     }
+
+      const i = integrations.find((i) => (i.provider === "google" || i.provider === "zoom") && i.active === true)
+      setDefaultMeetIntegration(i)
 
     }, [user?.Integrations])
     
@@ -72,7 +76,15 @@ export  default function IntegrationsPage() {
             setIsConnected={setIsZoomConnected} 
             integrationData={zoomIntegration!}
         />
-        <MeetingPreferences />
+        { isGoogleConnected && isZoomConnected && googleIntegration && zoomIntegration && (
+          <MeetingPreferences
+            googleIntegrationId={googleIntegration?.integrationId}
+            zoomIntegrationId={zoomIntegration?.integrationId}
+            defaultIntegration={defaultMeetIntegration?.provider === "google" ? "google-meet" : "zoom"}
+            token={token} 
+          />
+        )}
+        
       </div>
 
       {/* Mensaje informativo */}

@@ -5,10 +5,36 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Settings } from "lucide-react"
+import { updateIntegration } from "@/services/integrations"
+import { toast } from "sonner"
 
-export default function MeetingPreferences() {
-  const [defaultPlatform, setDefaultPlatform] = useState<"google-meet" | "zoom">("google-meet")
+interface MeetingPreferencesProps {
+  googleIntegrationId: string
+  zoomIntegrationId: string
+  defaultIntegration: "google-meet" | "zoom"
+  token: string | null
+}
+export default function MeetingPreferences({ googleIntegrationId, zoomIntegrationId, defaultIntegration, token}: MeetingPreferencesProps) {
+  const [defaultPlatform, setDefaultPlatform] = useState<"google-meet" | "zoom">(defaultIntegration)
 
+  const updateActiveIntegration = async (value: "google-meet" | "zoom") => {
+    try {
+      setDefaultPlatform(value)
+
+      const updateIntegrationId = value === "google-meet" ? googleIntegrationId : zoomIntegrationId;
+      const updateOtherId = value !== "google-meet" ? googleIntegrationId : zoomIntegrationId;
+
+      await updateIntegration({active: true}, token, updateIntegrationId);
+      await updateIntegration({active: false}, token, updateOtherId);
+
+      toast.success("Preferencias actualizadas correctamente");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error al actualizar las preferencias");
+    }
+    
+
+  }
   return (
     <Card className="w-full">
       <CardHeader>
@@ -26,7 +52,7 @@ export default function MeetingPreferences() {
       <CardContent>
         <RadioGroup
           value={defaultPlatform}
-          onValueChange={(value) => setDefaultPlatform(value as "google-meet" | "zoom")}
+          onValueChange={(value) => updateActiveIntegration(value as  "google-meet" | "zoom")}
         >
           <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer">
             <RadioGroupItem value="google-meet" id="google-meet" />

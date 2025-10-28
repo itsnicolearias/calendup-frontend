@@ -22,6 +22,7 @@ export interface Appointment {
     appointmentCode: string;
     AppointmentType?: AppointmentType | null;
     selectedAppMode?: AppointmentMode | string;
+    meetingLink: string | null;
 }
 
 export type AppointmentMode = "in_person" | "online" | "combined" ;

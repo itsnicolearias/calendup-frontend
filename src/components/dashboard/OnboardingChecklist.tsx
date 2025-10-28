@@ -28,7 +28,12 @@ export function OnboardingChecklist({ profile }: OnboardingChecklistProps) {
     { key: "city", label: "Ciudad", path: "personal" },   
   ];
 
-  const completedSteps = steps.filter((step) => profile[step.key as keyof Profile]);
+
+  if (profile.appMode === "in_person" || profile.appMode === "combined") {
+    steps.push({ key: "address", label: "Dirección profesional", path: "appointments" });
+  } 
+   const completedSteps = steps.filter((step) => profile[step.key as keyof Profile]);
+
   const progress = Math.round((completedSteps.length / steps.length) * 100);
 
   const profileCompleted = profile?.profileCompleted;
@@ -79,7 +84,7 @@ export function OnboardingChecklist({ profile }: OnboardingChecklistProps) {
                       variant="outline"
                       onClick={() => {
                         setOpen(false);
-                        router.push(`/settings/${step.path}`); // 🔹 ajusta la ruta
+                        router.push(`/settings/${step.path}`);
                       }}
                     >
                       Completar

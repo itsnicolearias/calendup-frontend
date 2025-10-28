@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Video } from "lucide-react"
 import { toast } from "sonner"
-import { deleteIntegration, integrateZoom } from "@/services/integrations"
+import { deleteIntegration, integrateZoom, updateIntegration } from "@/services/integrations"
 import { IntegrationParams } from "@/types/integrations"
 import { useSearchParams } from "next/navigation"
 
@@ -23,7 +23,7 @@ export default function ZoomIntegration({ token, isConnected, setIsConnected, in
   //const [isConnected, setIsConnected] = useState(false)
   const [connectedEmail, setConnectedEmail] = useState("")
   const [autoCreateMeetings, setAutoCreateMeetings] = useState<boolean | undefined>(false)
-  const [includeInEmails, setIncludeInEmails] = useState<boolean | undefined>(false)
+  const [includeInEmails, setIncludeInEmails] = useState<boolean | undefined>(false )
    
   const searchParams = useSearchParams()
   const success = searchParams.get("success")
@@ -63,6 +63,25 @@ export default function ZoomIntegration({ token, isConnected, setIsConnected, in
     setIsConnected(false)
     setConnectedEmail("")
     toast.success("Desconectado de Zoom")
+  }
+
+  const saveChanges = async (data: Partial<IntegrationParams>) => {
+    try {
+      await updateIntegration(data, token, integrationData.integrationId)
+
+      if (data.autoCreateMeetLinks){
+        setAutoCreateMeetings(true)
+      }
+
+      if (data.autoSendMeetLinks){
+        setIncludeInEmails(true)
+      }
+      toast.success("Integracion actualizada correctamente");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error al actualizar la integración");
+    }
+    
   }
 
   return (
@@ -116,14 +135,28 @@ export default function ZoomIntegration({ token, isConnected, setIsConnected, in
               <Label htmlFor="auto-create-zoom" className="flex-1 text-sm cursor-pointer">
                 Crear reuniones en Zoom para turnos online
               </Label>
-              <Switch id="auto-create-zoom" checked={autoCreateMeetings} onCheckedChange={setAutoCreateMeetings} />
+              <Switch 
+                id="auto-create-zoom" 
+                checked={autoCreateMeetings} 
+                onCheckedChange={(checked: boolean) => {
+                  setIncludeInEmails(checked)
+                  void saveChanges({ autoCreateMeetLinks: checked })
+                }}
+                />
             </div>
 
             <div className="flex items-center justify-between space-x-2">
               <Label htmlFor="include-zoom-emails" className="flex-1 text-sm cursor-pointer">
                 Incluir enlace en los emails de confirmación
               </Label>
-              <Switch id="include-zoom-emails" checked={includeInEmails} onCheckedChange={setIncludeInEmails} />
+              <Switch
+                id="include-zoom-emails"
+                checked={includeInEmails}
+                onCheckedChange={(checked: boolean) => {
+                  setIncludeInEmails(checked)
+                  void saveChanges({ autoSendMeetLinks: checked })
+                }}
+              />
             </div>
           </div>
         )}

@@ -32,7 +32,7 @@ export default function ProfileConfig() {
       defaultAppConfirmation: true,
       markAppAsCompleted: true,
       address: "",
-      appMode: "",
+      appMode: "in_person",
     },
     mode: "onChange",
   });
@@ -59,7 +59,7 @@ export default function ProfileConfig() {
           defaultAppConfirmation: profile?.profile?.defaultAppConfirmation ?? true,
           markAppAsCompleted: profile?.profile?.markAppAsCompleted ?? true,
           address: profile?.profile?.address ?? "",
-          appMode: profile?.profile?.appMode ?? "",
+          appMode: profile?.profile?.appMode ?? "in_person",
         });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -164,8 +164,9 @@ export default function ProfileConfig() {
                 <div>
                   <label className="block text-sm font-medium mb-1">Modalidad de turnos</label>
                   <Select
-                    value={watch("appMode")}
-                    onValueChange={(value: string) => form.setValue("appMode", value)}
+                    defaultValue={form.getValues("appMode") as string}
+                    value={watch("appMode") ?? undefined}
+                    onValueChange={(value:  string) => form.setValue("appMode", value as "in_person" | "combined" | "online")}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Seleccionar modalidad" />

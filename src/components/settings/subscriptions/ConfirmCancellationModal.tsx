@@ -28,8 +28,8 @@ export const CancelSubscriptionModal = ({ open, onClose, onCancelled, userId, to
         onCancelled(); // abre el modal de éxito
       }
       
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error(error);
       setLoading(false);
 
     }

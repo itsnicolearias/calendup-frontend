@@ -1,7 +1,7 @@
 "use client"
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { CalendarIcon, Clock, Mail, Phone, User } from "lucide-react"
+import { CalendarIcon, Clock, LocateIcon, Mail, Phone, User } from "lucide-react"
 import { format } from "date-fns"
 import { parseLocalDate } from "@/utils/date"
 import { Appointment, AppointmentStatus } from "@/types/appointments"
@@ -65,6 +65,7 @@ export function AppointmentModal({ appointment, handleClose }: { appointment: Ap
                 { icon: <Phone className="w-5 h-5 mr-3 text-gray-600" />, label: "Celular", value: appointment.phone },
                 { icon: <CalendarIcon className="w-5 h-5 mr-3 text-gray-600" />, label: "Fecha", value: format(parseLocalDate(appointment.date), "dd-MM-yyyy") },
                 { icon: <Clock className="w-5 h-5 mr-3 text-gray-600" />, label: "Hora", value: appointment.time },
+                { icon: <LocateIcon className="w-5 h-5 mr-3 text-gray-600" />, label: "Modalidad", value: appointment.selectedAppMode === "in_person" ? "Presencial" : "Online" },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center p-3 bg-gray-50 rounded-lg">
                   {item.icon}
@@ -74,6 +75,14 @@ export function AppointmentModal({ appointment, handleClose }: { appointment: Ap
                   </div>
                 </div>
               ))}
+
+              {/* Link para reuniones online */}
+              {appointment.selectedAppMode === "online" && appointment.meetingLink && (
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <p className="text-sm font-medium text-gray-900 mb-1">Ingresar a reunion online</p>
+                  <p className="text-sm text-gray-600 break-words">{appointment.meetingLink}</p>
+                </div>
+              )}
 
               {/* Motivo del turno */}
               {appointment.reason && (

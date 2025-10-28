@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Video } from "lucide-react"
 import { IntegrationParams } from "@/types/integrations"
+import { updateIntegration } from "@/services/integrations"
+import { toast } from "sonner"
 
 interface GoogleMeetParams {
     token: string
@@ -27,6 +29,24 @@ export default function GoogleMeetIntegration({ token, isConnected, integrationD
 }, [integrationData])
 
 
+  const saveChanges = async (data: Partial<IntegrationParams>) => {
+    try {
+      await updateIntegration(data, token, integrationData.integrationId)
+  
+      if (data.autoCreateMeetLinks){
+        setAutoCreateLinks(true)
+      }
+  
+      if (data.autoSendMeetLinks){
+        setIncludeInEmails(true)
+      }
+      toast.success("Integracion actualizada correctamente");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Ha ocurrido un error al actualizar la integración");
+    }
+      
+  }
   
 
   return (
@@ -81,14 +101,28 @@ export default function GoogleMeetIntegration({ token, isConnected, integrationD
               <Label htmlFor="auto-create-meet" className="flex-1 text-sm cursor-pointer">
                 Crear enlaces de Google Meet automáticamente para turnos online
               </Label>
-              <Switch id="auto-create-meet" checked={autoCreateLinks} onCheckedChange={setAutoCreateLinks} />
+              <Switch 
+                id="auto-create-meet" 
+                checked={autoCreateLinks} 
+                onCheckedChange={(checked: boolean) => {
+                  setIncludeInEmails(checked)
+                  void saveChanges({ autoCreateMeetLinks: checked })
+                }}
+                />
             </div>
 
             <div className="flex items-center justify-between space-x-2">
               <Label htmlFor="include-meet-emails" className="flex-1 text-sm cursor-pointer">
                 Incluir enlace en los emails de confirmación
               </Label>
-              <Switch id="include-meet-emails" checked={includeInEmails} onCheckedChange={setIncludeInEmails} />
+              <Switch 
+                id="include-meet-emails" 
+                checked={includeInEmails} 
+                onCheckedChange={(checked: boolean) => {
+                  setIncludeInEmails(checked)
+                  void saveChanges({ autoSendMeetLinks: checked })
+                }}
+                />
             </div>
           </div>
         )}

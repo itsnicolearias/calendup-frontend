@@ -29,6 +29,8 @@ const availabilitySchema = z.object({
   sunday: z.array(timeRangeSchema).optional(),
 })
 
+export const AppointmentModeConst = ["in_person", "online", "combined"] as const ;
+
 const insuranceProviders = z.object({
   name: z.string().optional(),
   plan: z.string().optional(),
@@ -59,9 +61,9 @@ export const profileSchema = z.object({
   country: z.string().optional(),
   province: z.string().optional(),
   city: z.string().optional(),
-  appMode: z.string().optional(),
   isNewUser: z.boolean().optional(),
   pcModalShowed: z.boolean().optional(),
+  appMode: z.enum(AppointmentModeConst).optional().nullable(),
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
