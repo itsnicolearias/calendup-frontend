@@ -4,6 +4,7 @@ import GoogleCalendarIntegration from "@/components/settings/integrations/Google
 import GoogleMeetIntegration from "@/components/settings/integrations/GoogleMeet"
 import MeetingPreferences from "@/components/settings/integrations/MeetingPreferences"
 import ZoomIntegration from "@/components/settings/integrations/Zoom"
+import { PremiumWrapper } from "@/components/shared/PremiumWrapper"
 import { useUser } from "@/contexts/UserContext"
 import { IntegrationParams } from "@/types/integrations"
 import { useEffect, useState } from "react"
@@ -59,23 +60,32 @@ export  default function IntegrationsPage() {
 
       {/* Lista de integraciones */}
       <div className="space-y-6">
-        <GoogleCalendarIntegration 
+        <PremiumWrapper feature="calendarAvailable" asDisabled={false} > 
+          <GoogleCalendarIntegration 
             token={token!}
             isConnected={isGoogleConnected}
             setIsConnected={setIsGoogleConnected}
             integrationData={googleIntegration!}
         />
-        <GoogleMeetIntegration 
+        </PremiumWrapper>
+
+        <PremiumWrapper feature="meetAvailable" asDisabled={false} >
+          <GoogleMeetIntegration 
             token={token!}
             isConnected={isGoogleConnected}
             integrationData={googleIntegration!}
         />
-        <ZoomIntegration
+        </PremiumWrapper>
+        
+        <PremiumWrapper feature="zoomAvailable"asDisabled={false}  >
+          <ZoomIntegration
             token={token!}
             isConnected={isZoomConnected}
             setIsConnected={setIsZoomConnected} 
             integrationData={zoomIntegration!}
         />
+        </PremiumWrapper>
+        
         { isGoogleConnected && isZoomConnected && googleIntegration && zoomIntegration && (
           <MeetingPreferences
             googleIntegrationId={googleIntegration?.integrationId}

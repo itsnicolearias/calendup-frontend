@@ -25,7 +25,7 @@ export default function AppointmentSettingsPage() {
       {/* Sección Tipos de Turnos */}
       <section className="space-y-4">
         <h2 className="text-xl font-semibold mb-2">Servicios</h2>
-        <PremiumWrapper feature="services" >
+        <PremiumWrapper feature="services">
           <AppointmentTypesList />
         </PremiumWrapper>
         
