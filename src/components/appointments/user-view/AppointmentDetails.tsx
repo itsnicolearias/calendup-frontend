@@ -56,7 +56,8 @@ function AppointmentDetails({
               <AppointmentSummary 
                 appointment={appointment} 
                 onEdit={onEdit}
-                disableButton={isCancelled} 
+                disableButton={isCancelled}
+                address={appointment.professional.profile?.address || ""} 
                 />
 
               {/* Patient Information */}

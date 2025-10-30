@@ -3,10 +3,11 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Appointment } from '@/types/appointments'
 import { parseLocalDate } from '@/utils/date'
 import { format } from 'date-fns'
-import { CalendarIcon, CircleChevronRight, Clock, Edit3 } from 'lucide-react'
+import { CalendarIcon, CircleChevronRight, Clock, Edit3, LocationEdit } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
-function AppointmentSummary({appointment, onEdit, disableButton}: {appointment: Appointment, onEdit: (field: keyof Appointment) => void, disableButton: boolean}) {
+function AppointmentSummary({appointment, onEdit, disableButton, address}: {appointment: Appointment, onEdit: (field: keyof Appointment) => void, disableButton: boolean, address: string}) {
   return (
     <div>
         {/* Card fecha y hora */}
@@ -42,7 +43,6 @@ function AppointmentSummary({appointment, onEdit, disableButton}: {appointment: 
                         Cambiar Fecha/Hora
                       </Button>
                     </div>
-
 
                     
                   </div>
@@ -83,8 +83,48 @@ function AppointmentSummary({appointment, onEdit, disableButton}: {appointment: 
               </div>
             </CardContent>
           </Card>
-      </>
+        </>
       )}
+
+      
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200 shadow-lg">
+        <CardContent className="p-6">
+          <div className="flex flex-col sm:flex-row gap-6">
+            {/* Bloque 1 */}
+            <div className="flex items-center flex-1">
+              <LocationEdit className="w-5 h-5 text-[#0388bd] mr-3" />
+              <div>
+                <p className="text-sm text-gray-600">Modalidad</p>
+                <p className="font-semibold text-lg">
+                  {appointment.selectedAppMode === "online" ? "Online" : "Presencial"}
+                </p>
+              </div>
+            </div>
+
+            {/* Bloque 2 */}
+            <div className="flex items-center flex-1">
+              <div>
+                
+                {appointment.selectedAppMode === "online" &&  appointment.meetingLink ? (
+                  <>
+                  
+                    <p className="text-sm text-gray-600">Link de reunión</p>
+                    <p className="font-semibold text-lg break-words text-[#0388bd] ">
+                      <Link href={  appointment.meetingLink!  } rel="noopener noreferrer" > {appointment.meetingLink}</Link>
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-600">Dirección</p>
+                    <p className="font-semibold text-lg">{address}</p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
     </div>
   )
 }

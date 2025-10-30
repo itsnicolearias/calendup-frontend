@@ -42,7 +42,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       time: "",
       phone: "",
       appointmentTypeId: "",
-      selectedAppMode: "Presencial",
+      selectedAppMode: "",
       })
 
     const handleBookingFormChange = (field: string, value: string) => {
@@ -69,7 +69,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
       }
 
       bookingForm.professionalId = professional?.userId || ""
-
+console.log(bookingForm)
       await createAppointment(bookingForm);
       toast.success("Turno solicitado con éxito", {
         description: "Te enviaremos un email con los detalles.",

@@ -164,9 +164,8 @@ export default function ProfileConfig() {
                 <div>
                   <label className="block text-sm font-medium mb-1">Modalidad de turnos</label>
                   <Select
-                    defaultValue={form.getValues("appMode") as string}
                     value={watch("appMode") ?? undefined}
-                    onValueChange={(value:  string) => form.setValue("appMode", value as "in_person" | "combined" | "online")}
+                    onValueChange={(value) => setValue("appMode", value as "in_person" | "combined" | "online", { shouldValidate: true })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Seleccionar modalidad" />
@@ -177,6 +176,7 @@ export default function ProfileConfig() {
                       <SelectItem value="combined">Combinada</SelectItem>
                     </SelectContent>
                   </Select>
+
                 </div>
 
           <Button type="submit" disabled={loading} className="bg-[#0388bd]" >
