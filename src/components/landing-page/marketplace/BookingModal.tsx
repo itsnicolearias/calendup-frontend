@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { State } from "country-state-city";
 import ServiceSelection from "@/components/shared/ServiceSelection";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getModeText } from "@/types/appointments";
+import { AppointmentMode, getModeText } from "@/types/appointments";
 
 interface BookingModalProps {
     open: boolean;
@@ -277,7 +277,7 @@ export default function BookingModal({ open, onOpenChange, professional }: Booki
                                   </p>
                                   { professional?.profile?.appMode && (
                                     <p>
-                                      <strong>Modalidad:</strong> {bookingForm.selectedAppMode ? bookingForm.selectedAppMode : getModeText(professional.profile.appMode!)}
+                                      <strong>Modalidad:</strong> {bookingForm.selectedAppMode ? getModeText(bookingForm.selectedAppMode as AppointmentMode) : getModeText(professional.profile.appMode!)}
                                     </p>
                                   )}
                                   
