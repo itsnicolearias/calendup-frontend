@@ -16,9 +16,13 @@ export  default function IntegrationsPage() {
     const [zoomIntegration, setzoomIntegration] = useState<IntegrationParams>()
     const [googleIntegration, setGoogleIntegration] = useState<IntegrationParams>()
     const [defaultMeetIntegration, setDefaultMeetIntegration] = useState<IntegrationParams>()
+    const [token, setToken] = useState<string | null>(null)
 
-    const token = localStorage.getItem('token');
-
+     useEffect(() => {
+    const storedToken = localStorage.getItem("token")
+    setToken(storedToken)
+  }, [])
+  
     const { user } = useUser()
 
 
