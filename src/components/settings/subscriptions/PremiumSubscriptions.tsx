@@ -66,14 +66,14 @@ export default function PremiumPlanSubscription({ user, token, refreshUser }: Pr
                 <div className="p-4 bg-gray-50 rounded-lg space-y-1">
                   <p className="text-sm text-gray-600">Fecha de inicio</p>
                   <p className="text-lg font-semibold text-gray-900">
-                     {format(new Date(startDate), "dd 'de' MMMM, yyyy", { locale: es })} 
+                    {startDate ? format(startDate, "dd 'de' MMMM, yyyy", { locale: es }) : '—'}
                   </p>
                 </div>
 
                 <div className="p-4 bg-blue-50 rounded-lg space-y-1 md:col-span-2">
                   <p className="text-sm text-gray-600">Próxima renovación</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {format(new Date(endDate!), "dd 'de' MMMM, yyyy", { locale: es })} 
+                    {endDate ? format(endDate, "dd 'de' MMMM, yyyy", { locale: es }) : '—'}
                   </p>
                   <p className="text-xs text-gray-500">Se renovará automáticamente</p>
                 </div>
