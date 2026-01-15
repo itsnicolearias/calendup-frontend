@@ -12,8 +12,9 @@ interface BookingConfirmed {
     selectedService: string;
     selectedTime: string;
     resetBooking: () => void;
+    selectedMode?: string;
 }
-function BookingConfirmed({ professional, selectedDate, selectedService, selectedTime, resetBooking }: BookingConfirmed) {
+function BookingConfirmed({ professional, selectedDate, selectedService, selectedTime, resetBooking, selectedMode }: BookingConfirmed) {
     const user = professional.profile;
 
     const name = `${user?.name || ""} ${user?.lastName || ""}`
@@ -62,12 +63,19 @@ function BookingConfirmed({ professional, selectedDate, selectedService, selecte
                   <p>
                     <strong>Hora:</strong> {selectedTime}
                   </p>
-                  { user?.address && (
+                  { selectedMode && (
                     <p>
-                    <strong>Ubicación:</strong> {user.address}
-                  </p>
-                  )}
-                  
+                      <strong>Modalidad:</strong> { selectedMode === "in_person" ? "Presencial" : "Online" }
+                    </p>
+                    )}
+                  { selectedMode === "online" && (
+                    <p>
+                      <strong>Link de la reunión:</strong> Se enviará por email antes de la cita.
+                    </p> )}     
+                  { selectedMode === "in_person" && (
+                    <p>
+                      <strong>Direccion:</strong> {user?.address || "No disponible"}
+                    </p> )}              
                 </div>
               </div>
 

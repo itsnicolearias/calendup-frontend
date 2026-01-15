@@ -35,6 +35,8 @@ export function AppointmentDetails({
   const val = <K extends keyof Appointment>(k: K) =>
     (draft[k] ?? appointment[k]) as Appointment[K];
 
+  const address = appointment.professional.profile?.address || "";
+
   return (
     <div className="container mx-auto py-4">
       <Card className="max-w-2xl">
@@ -118,6 +120,16 @@ export function AppointmentDetails({
                 value={String(val("reason") ?? "")}
                 onChange={(e) => onDraftChange({ reason: e.target.value })}
               />
+            </div>
+          </div>
+
+          {/* Modalidad y direccion */}
+          <div className="flex items-center justify-between border-b pb-3">
+            <div className="w-full">
+              <p className="text-sm text-gray-500">Modalidad</p>
+              <p className="text-sm text-gray-700"> {val("selectedAppMode") === "in_person" ? "Presencial" : "Online"} </p>
+              <p className="text-sm text-gray-700"> {val("selectedAppMode") === "online" ? val("meetingLink") : address} </p>
+
             </div>
           </div>
 

@@ -7,7 +7,7 @@ import { Appointment } from "@/types/appointments"
 import { getAppointments } from "@/services/appointments"
 import { useUser } from "@/contexts/UserContext"
 import { toast } from "sonner"
-import { useIsMobile } from "@/utils/isDeviceMobile"
+import { useIsMobile } from "@/hooks/isDeviceMobile"
 import { MobileAppointmentsBoard } from "@/components/dashboard/mobile-dashboard/AppointmentsBoard"
 
 export default function AppointmentsPage() {
@@ -62,6 +62,7 @@ export default function AppointmentsPage() {
       setAppointments={setAppointments}
       professional={user}
       refreshProfessional={refreshUser}
+      usedAppThisMonth={usedAppThisMonth}
 
     />
     :

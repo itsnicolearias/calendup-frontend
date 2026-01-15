@@ -1,5 +1,5 @@
 "use client";
-import ChangePasswordForm from "@/components/settings/ChangePasswordForm";
+import ChangePasswordForm from "@/components/settings/security/ChangePasswordForm";
 import { changePassword } from "@/services/settings";
 import { useEffect, useState } from "react";
 

@@ -31,9 +31,9 @@ export default function FloatingCalculatorButton() {
                 repeatType: "reverse",
               }}
             >
-              <Button
+              <div
                 onClick={() => setIsModalOpen(true)}
-                className="w-full sm:w-auto bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:opacity-90 text-white shadow-2xl rounded-full px-6 py-6 sm:px-8 sm:py-7 text-base sm:text-lg font-bold relative overflow-hidden group"
+                className="w-auto sm:w-auto min-w-[200px] bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:opacity-90 text-white shadow-2xl rounded-full px-4 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-bold relative overflow-hidden group cursor-pointer"
               >
                 {/* Animated background */}
                 <motion.div
@@ -88,7 +88,7 @@ export default function FloatingCalculatorButton() {
                 >
                   <X className="w-4 h-4" />
                 </button>
-              </Button>
+              </div>
             </motion.div>
           </motion.div>
         )}

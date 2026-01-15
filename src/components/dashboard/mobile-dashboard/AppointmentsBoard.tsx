@@ -4,7 +4,6 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
-  CalendarIcon,
   Plus,
   Copy,
 } from "lucide-react"
@@ -18,6 +17,7 @@ import { OnboardingChecklist } from "../OnboardingChecklist"
 import WelcomeWizard from "../WelcomeWizard"
 import { updateProfile } from "@/services/settings"
 import ProfileCompletedModal from "../ProfileCompletedModal"
+import MobileBottomBar from "./BottomBar"
 
 
 interface Props {
@@ -26,10 +26,11 @@ interface Props {
   setAppointments: React.Dispatch<React.SetStateAction<Appointment[]>>
   professional: UserWithProfile | null;
   refreshProfessional: () => Promise<void>
+  usedAppThisMonth: number;
 }
 
 
-export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional }: Props) {
+export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments, professional, refreshProfessional, usedAppThisMonth }: Props) {
   const [activeTab, setActiveTab] = useState("all")
   const [open, setOpen] = useState(false)
   const [openPCModal, setopenPCModal] = useState(false);
@@ -120,19 +121,16 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
             <ProfileCompletedModal open={openPCModal} onClose={handleClosePCModal} schedulingLink={appointmentLink} />
     )}
 
-          <div className="min-h-screen">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-[#ac043f] to-[#0388bd] rounded-lg flex items-center justify-center">
-                <CalendarIcon className="w-5 h-5 text-white" />
-              </div>
+
               <h1 className="ml-3 text-xl sm:text-2xl font-bold bg-gradient-to-r from-[#ac043f] to-[#0388bd] bg-clip-text text-transparent">
                 Mis Turnos
               </h1>
-            </div>
+
             <div className="flex items-center space-x-2">
 
 
@@ -166,6 +164,7 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         open={open} 
         onClose={() => setOpen(false)} 
         onCreated={(appointment) => setAppointments((prev) => [appointment, ...prev])} 
+        professional={professional!}
         />
 
       <StatusTabs 
@@ -177,6 +176,14 @@ export function MobileAppointmentsBoard({ appointments, onOpen, setAppointments,
         handleStatusChange={handleStatusChange}
         statusCounts={statusCounts}
          />
+
+        {professional?.Subscription?.plan && (
+          <MobileBottomBar 
+            currentPlan={professional.Subscription.plan}
+            usedAppointments={usedAppThisMonth} 
+            totalAppointments={professional?.Subscription?.plan?.features?.maxAppointmentsPerMonth}
+          />
+        )}
     </div>
     </>
   )

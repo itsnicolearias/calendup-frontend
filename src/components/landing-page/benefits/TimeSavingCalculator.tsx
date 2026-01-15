@@ -29,6 +29,7 @@ import confetti from "canvas-confetti"
 import { BookingMethod, bookingMethods, CalculatorResult, ProfessionalType, professionalTypes } from "@/types/calculator"
 import { useCelebrationSound } from "@/hooks/useCelebrationSound"
 import CalculatorResultCard from "./CalculatorResultCard"
+import { toast } from "sonner"
 
 const iconMap = {
   Brain,
@@ -146,8 +147,9 @@ export default function TimeSavingsCalculator() {
           title: "Mi ahorro con CalendUp",
           text: text,
         })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.log("Error sharing:", error)
+        toast.error("No se pudo compartir el resultado.")
       }
     } else {
       navigator.clipboard.writeText(text)

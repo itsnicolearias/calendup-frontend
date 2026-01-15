@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import type { LucideIcon } from "lucide-react"
 import { SubscriptionAttributes } from '@/types/subscriptions'
 
-function SidebarContent({ handleMenuClick, menuItems, currentView, usedAppointments = 0, subscriptionData, isCollapsed, setIsCollapsed }: {
+function SidebarContent({ handleMenuClick, menuItems, currentView, usedAppointments = 0, subscriptionData, isCollapsed, setIsCollapsed, onUpgrade }: {
   handleMenuClick: (id: string) => void
   menuItems: { id: string; icon: LucideIcon; label: string }[]
   currentView: string
@@ -41,7 +41,10 @@ function SidebarContent({ handleMenuClick, menuItems, currentView, usedAppointme
           plan={subscriptionData.plan} 
         />
       )}
-      <UpgradeButton isCollapsed={isCollapsed} />
+      { subscriptionData.planId === process.env.NEXT_PUBLIC_FREE_PLAN_ID && !isCollapsed && (
+        <UpgradeButton onClick={onUpgrade} isCollapsed={isCollapsed} />
+      )}
+
     </div>
 
     {/* Collapse Toggle - Desktop Only */}

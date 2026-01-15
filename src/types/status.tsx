@@ -5,7 +5,8 @@ export const STATUS_CONFIG = {
   confirmed: { color: "bg-green-100 text-green-800 border-green-200", label: "Confirmados", icon: <CheckCircle className="w-4 h-4" /> },
   completed: { color: "bg-blue-100 text-blue-800 border-blue-200", label: "Completados", icon: <CalendarCheck className="w-4 h-4" /> },
   pending:   { color: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "Pendientes", icon: <Clock className="w-4 h-4" />  },
-  cancelled: { color: "bg-red-100 text-red-800 border-red-200", label: "Rechazados", icon: <X className="w-4 h-4" /> }
+  cancelled: { color: "bg-red-100 text-red-800 border-red-200", label: "Rechazados", icon: <X className="w-4 h-4" /> },
+  cancelledByUser: { color: "bg-red-100 text-red-800 border-red-200", label: "Cancelado por el usuario", icon: <X className="w-4 h-4" /> }
 } as const
 
 export function getStatusColor(status: AppointmentStatus) {

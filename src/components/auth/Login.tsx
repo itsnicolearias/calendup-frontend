@@ -207,7 +207,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 type="button"
                 variant="outline"
                 onClick={() => handleSocialLogin("facebook")}
-                //disabled={true}
+                disabled={true}
                 className="w-full h-12 border-gray-200 hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">

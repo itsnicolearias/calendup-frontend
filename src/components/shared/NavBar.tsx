@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, Home, Info, LogOut, Palette, Search, Settings, Menu, X, CalendarIcon } from "lucide-react"
+import { Calendar, Home, Info, LogOut, Palette, Search, Settings, Menu, X, CalendarIcon, HelpCircleIcon, BadgeHelp, HelpCircle } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Button } from "../ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
@@ -103,11 +103,14 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => { router.push("/settings/personal"); setMobileMenuOpen(false) }}>
                     <Settings className="mr-2 h-4 w-4" /> Configuración
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => { router.push("/dashboard/support"); setMobileMenuOpen(false) }}>
+                    <Info className="mr-2 h-4 w-4" /> Contactar soporte
+                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Palette className="mr-2 h-4 w-4" /> Tema
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => { setOpenWizard(true); setMobileMenuOpen(false) }}>
-                    <Info className="mr-2 h-4 w-4" /> Ayuda
+                    <HelpCircle className="mr-2 h-4 w-4" /> Ayuda
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="text-red-600" onClick={handleLogout}>

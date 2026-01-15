@@ -9,13 +9,13 @@ import { languageOptions, ProfileFormValues, profileSchema } from "@/types/setti
 import { updateProfile } from "@/services/settings";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import UploadImage from "../shared/UploadFiles";
 import { useS3Upload } from "@/services/s3-upload";
 import { MultiValue } from "react-select";
 import { useFieldArray } from "react-hook-form";
 import dynamic from "next/dynamic";
-import LocationSelect from "../shared/LocationSelect";
 import { useUser } from "@/contexts/UserContext";
+import LocationSelect from "@/components/shared/LocationSelect";
+import UploadImage from "@/components/shared/UploadFiles"
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
 

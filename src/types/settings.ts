@@ -1,7 +1,8 @@
 import z from "zod"
-import { AppointmentType } from "./appointments"
+import { AppointmentMode, AppointmentType } from "./appointments"
 import { Review } from "./review"
 import { SubscriptionAttributes } from "./subscriptions"
+import { IntegrationParams } from "./integrations"
 
 const timeRangeSchema = z.object({
   start: z
@@ -27,6 +28,8 @@ const availabilitySchema = z.object({
   saturday: z.array(timeRangeSchema).optional(),
   sunday: z.array(timeRangeSchema).optional(),
 })
+
+export const AppointmentModeConst = ["in_person", "online", "combined"] as const ;
 
 const insuranceProviders = z.object({
   name: z.string().optional(),
@@ -60,6 +63,7 @@ export const profileSchema = z.object({
   city: z.string().optional(),
   isNewUser: z.boolean().optional(),
   pcModalShowed: z.boolean().optional(),
+  appMode: z.enum(AppointmentModeConst).optional().nullable(),
 })
 
 export type ProfileFormValues = z.infer<typeof profileSchema>
@@ -78,6 +82,7 @@ export interface UserWithProfile {
   AppointmentTypes?: AppointmentType[],
   Reviews?: Review[]
   Subscription: SubscriptionAttributes
+  Integrations: IntegrationParams[]
 }
 
 export interface Profile {
@@ -106,6 +111,7 @@ export interface Profile {
     profileCompleted: boolean
     isNewUser: boolean
     pcModalShowed: boolean
+    appMode?: AppointmentMode
 }
 
 export type Education = {

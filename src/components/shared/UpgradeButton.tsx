@@ -6,15 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Sparkles } from "lucide-react"
 
 interface UpgradeButtonProps {
-  //onClick?: () => void
+  onClick?: () => void
   isCollapsed?: boolean
 }
 
-export default function UpgradeButton({ isCollapsed = false }: UpgradeButtonProps) {
+export default function UpgradeButton({ isCollapsed = false, onClick }: UpgradeButtonProps) {
   return (
     <Button
-      //onClick={onClick}
-      disabled={true}
+      onClick={onClick}
       className={cn(
         "w-full bg-gradient-to-r from-[#ac043f] to-[#0388bd] hover:from-[#79022b] hover:to-[#02455f]",
         "text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200",
@@ -25,5 +24,6 @@ export default function UpgradeButton({ isCollapsed = false }: UpgradeButtonProp
       <Sparkles className="w-4 h-4 mr-2" />
       {!isCollapsed && "Mejorar Suscripción"}
     </Button>
+    
   )
 }

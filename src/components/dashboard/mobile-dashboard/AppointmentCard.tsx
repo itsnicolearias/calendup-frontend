@@ -17,7 +17,9 @@ interface Props {
 }
 
 function AppointmentCard({ appointment, onOpen, handleStatusChange }: Props) {
-  const statusInfo = statusConfig[appointment.status]
+  const statusKey: keyof typeof statusConfig =
+    appointment.status === 'cancelledByUser' ? 'cancelled' : (appointment.status as keyof typeof statusConfig)
+  const statusInfo = statusConfig[statusKey]
   const StatusIcon = statusInfo.icon
 
   return (

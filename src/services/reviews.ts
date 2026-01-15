@@ -1,7 +1,7 @@
 import { apiFetch } from "./api"
 import { GetAllApiResponse, ReviewBody } from "../types/appointments"
 
-export const getAppointments = async (token: string | null ) => {
+export const getReviews = async (token: string | null ) => {
   try {
     if (!token) {
         throw new Error;

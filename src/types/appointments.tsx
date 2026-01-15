@@ -1,7 +1,8 @@
+import { CalendarCheck, CheckCircle, Clock } from "lucide-react";
 import { RatingResponse } from "./review";
 import { UserWithProfile } from "./settings";
 
-export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed";
+export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed"| "cancelledByUser" ;
 
 export interface Appointment {
     appointmentId: string
@@ -20,7 +21,11 @@ export interface Appointment {
     appointmentTypeId: string | null;
     appointmentCode: string;
     AppointmentType?: AppointmentType | null;
+    selectedAppMode?: AppointmentMode | string;
+    meetingLink: string | null;
 }
+
+export type AppointmentMode = "in_person" | "online" | "combined" ;
 
 export interface GetOneAppointment {
   appointment: Appointment
@@ -53,7 +58,6 @@ export interface AppointmentType {
   name: string;
   description?: string;
   price?: number | null;
-  sessionType: "in person" | "online";
   deleted: boolean;
 }
 
@@ -75,5 +79,17 @@ export interface GetAllAppResponse<T> {
       rows: T[]
     },
     createdThisMonth: number;
+    googleEvents?: []
     
+}
+
+export const ModesConfig = {
+  combined: { color: "bg-green-100 text-green-800 border-green-200", label: "Modalidad combinada", icon: <CheckCircle className="w-4 h-4" /> },
+  in_person: { color: "bg-blue-100 text-blue-800 border-blue-200", label: "presencial", icon: <CalendarCheck className="w-4 h-4" /> },
+  online:   { color: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "online", icon: <Clock className="w-4 h-4" />  },
+} as const
+
+
+export function getModeText(mode: AppointmentMode) {
+  return ModesConfig[mode]?.label ?? mode
 }
